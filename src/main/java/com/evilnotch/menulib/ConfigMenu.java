@@ -38,7 +38,7 @@ public class ConfigMenu {
 	 */
 	public static void loadMenuLib(File d) 
 	{
-		cfgmenu = d;
+		cfgmenu = new File(d, "menulib/menulib.cfg");
 		
 		Configuration config = new Configuration(cfgmenu);
 		
@@ -101,14 +101,6 @@ public class ConfigMenu {
 		Configuration config = new Configuration(cfgmenu);
 		config.load();
 		
-		//set the initial index to the first menu when generating the config
-		if(currentMenuIndex.getResourcePath().isEmpty())
-		{
-			currentMenuIndex = mainMenus.get(0).getResourceLocation();
-			Property prop = config.get("menulib", "currentMenuIndex", "");
-			prop.set(currentMenuIndex.toString());
-		}
-		
 		List<String> list = new ArrayList();
 		for(LineArray line : mainMenus)
 		{
@@ -126,7 +118,7 @@ public class ConfigMenu {
 			}
 		}
 		
-		setConfigIndex(config,currentMenuIndex);
+		setConfigIndex(config, currentMenuIndex);
 		
 		//fix comment dissapearing
 		String[] strlist = JavaUtil.toStaticStringArray(list);

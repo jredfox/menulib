@@ -2,6 +2,9 @@ package com.evilnotch.menulib.asm;
 
 import java.util.Map;
 
+import com.evilnotch.lib.asm.ConfigCore;
+import com.evilnotch.lib.asm.FMLCorePlugin;
+
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
@@ -11,6 +14,11 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
 @TransformerExclusions("com.evilnotch.menulib.asm.")
 public class MenuLibPlugin implements IFMLLoadingPlugin
 {
+	static
+	{
+		ConfigMenuCore.loadConfig();
+	}
+	
 	@Override
 	public String[] getASMTransformerClass()
 	{

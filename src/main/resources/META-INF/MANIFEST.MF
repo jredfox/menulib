@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+FMLCorePluginContainsFMLMod: false
+FMLCorePlugin: com.evilnotch.menulib.asm.MenuLibPlugin
+

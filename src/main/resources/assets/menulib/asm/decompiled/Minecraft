@@ -1,0 +1,19 @@
+package net.minecraft.client;
+
+import com.evilnotch.menulib.asm.ConfigMenuCore;
+
+import net.minecraft.client.settings.GameSettings;
+
+public class Minecraft {
+	private GameSettings gameSettings;
+	
+	/**
+	 * this get's injected into the Minecraft.class
+	 */
+	public int getMainMenuFrameRate() 
+	{
+		if(ConfigMenuCore.lockMenuFrameRate)
+			return ConfigMenuCore.lockedMenuFrameRate;
+		return this.gameSettings.limitFramerate < ConfigMenuCore.vanillaMainMenuLock ? ConfigMenuCore.vanillaMainMenuLock : this.gameSettings.limitFramerate;
+	}
+}
