@@ -5,10 +5,7 @@ import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.event.MenuMusicEvent;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MusicEventHandler {

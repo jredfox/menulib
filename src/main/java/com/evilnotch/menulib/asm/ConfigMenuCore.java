@@ -5,6 +5,7 @@ import java.io.File;
 import com.evilnotch.lib.asm.ConfigCore;
 import com.evilnotch.lib.main.Config;
 import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.menulib.compat.ProxyMod;
 
 import net.minecraftforge.common.config.Configuration;
 
@@ -31,6 +32,7 @@ public class ConfigMenuCore {
 			lockedMenuFrameRate = vanillaMainMenuLock;
 			System.out.println("Main Menu Framerate Limit cannot be below 30");
 		}
+		ProxyMod.flagCMMJson(dir);
 		cfg.save();
 	}
 

@@ -25,6 +25,7 @@ public class ConfigMenu {
 	public static List<Class> musicDeny = new ArrayList();
 	public static boolean fancyPage = false;
 	public static boolean displayNewMenu = true;
+	public static boolean debugFrameRate = false;
 	public static ResourceLocation currentMenuIndex = null;
 	public static File cfgmenu = null;
 	
@@ -45,6 +46,7 @@ public class ConfigMenu {
 		config.load();
 		fancyPage = config.get("menulib","fancyMenuPage",false).getBoolean();
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
+		debugFrameRate = config.get("debug","debugFrameRate", debugFrameRate).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
 		leftButtonId = config.get("menulib","buttonLeftId", leftButtonId).getInt();
 		rightButtonId = config.get("menulib","buttonRightId", rightButtonId).getInt();
