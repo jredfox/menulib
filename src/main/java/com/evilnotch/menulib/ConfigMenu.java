@@ -46,8 +46,8 @@ public class ConfigMenu {
 		fancyPage = config.get("menulib","fancyMenuPage",false).getBoolean();
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
-		leftButtonId = config.get("menulib","buttonLeftId",leftButtonId).getInt();
-		rightButtonId = config.get("menulib","buttonRightId",rightButtonId).getInt();
+		leftButtonId = config.get("menulib","buttonLeftId", leftButtonId).getInt();
+		rightButtonId = config.get("menulib","buttonRightId", rightButtonId).getInt();
 
 		String[] order = config.get("menulib", "menus", new String[]{""},menu_comment).getStringList();
 		resetMenus(order);

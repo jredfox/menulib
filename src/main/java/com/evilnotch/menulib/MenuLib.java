@@ -2,7 +2,10 @@ package com.evilnotch.menulib;
 
 import java.io.File;
 
+import org.ralleytn.simple.json.JSONObject;
+
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
+import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.menulib.compat.ProxyMod;
 import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
@@ -33,9 +36,9 @@ public class MenuLib {
 		registerMenus();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
-//		TickRegistry.register(new TickTest(), Side.CLIENT);
+		TickRegistry.register(new TickTest(), Side.CLIENT);
 	}
-	
+
 	@EventHandler
 	public void postinit(FMLPostInitializationEvent event)
 	{

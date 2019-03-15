@@ -18,8 +18,8 @@ public class MenuCMM implements IMenu{
 	public static Class guiCustom;
 	public static Method loadSplashTexts;
 	
-	public static Object configInstance;
 	public static Method getGui;
+	private static Object modInstance;
 	
 	public GuiScreen gui;
 	
@@ -36,8 +36,7 @@ public class MenuCMM implements IMenu{
 			loadSplashTexts = guiCustom.getDeclaredMethod("loadSplashTexts");
 			loadSplashTexts.setAccessible(true);
 			
-			Object instance = ReflectionUtil.getObject(null, cmm, "INSTANCE");
-			configInstance = ReflectionUtil.getObject(instance, cmm, "config");
+			modInstance = ReflectionUtil.getObject(null, cmm, "INSTANCE");
 			getGui = ReflectionUtil.getMethod(configClass, "getGUI", String.class);
 			getGui.setAccessible(true);
 		} 
@@ -50,20 +49,20 @@ public class MenuCMM implements IMenu{
 	@Override
 	public void onClose() 
 	{
-		
-	}
-
-	@Override
-	public void onOpen() 
-	{
 		try 
 		{
-			loadSplashTexts.invoke(MenuRegistry.getCurrentGui());
+//			loadSplashTexts.invoke(MenuRegistry.getCurrentGui());
 		} 
 		catch (Throwable t) 
 		{
 			t.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onOpen() 
+	{
+		
 	}
 
 	@Override
@@ -77,6 +76,7 @@ public class MenuCMM implements IMenu{
 	{
 		try 
 		{
+			Object configInstance = ReflectionUtil.getObject(modInstance, cmm, "config");
 			GuiScreen gui = (GuiScreen) getGui.invoke(configInstance, "mainmenu");
 			this.gui = gui;
 			return this.getGui();
