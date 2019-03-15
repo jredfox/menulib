@@ -36,7 +36,7 @@ public class MenuLib {
 		registerMenus();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
-		TickRegistry.register(new TickTest(), Side.CLIENT);
+//		TickRegistry.register(new TickTest(), Side.CLIENT);
 	}
 
 	@EventHandler

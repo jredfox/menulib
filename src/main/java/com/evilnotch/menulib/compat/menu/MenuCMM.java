@@ -19,7 +19,7 @@ public class MenuCMM implements IMenu{
 	public static Method loadSplashTexts;
 	
 	public static Method getGui;
-	private static Object modInstance;
+	public static Object modInstance;
 	
 	public GuiScreen gui;
 	
@@ -51,7 +51,7 @@ public class MenuCMM implements IMenu{
 	{
 		try 
 		{
-//			loadSplashTexts.invoke(MenuRegistry.getCurrentGui());
+			loadSplashTexts.invoke(MenuRegistry.getCurrentGui());
 		} 
 		catch (Throwable t) 
 		{
