@@ -73,7 +73,7 @@ public class MusicTicker implements ITickable
      */
     public boolean isMenu(GuiScreen gui) 
     {
-    	MenuMusicEvent e = MenuMusicEvent.fireMusicEvent(gui);
+    	MenuMusicEvent e = MenuMusicEvent.fireMusicEvent(gui, MusicTicker.class);
 		return e.canPlay;
 	}
 
