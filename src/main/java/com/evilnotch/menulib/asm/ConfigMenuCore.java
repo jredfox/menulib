@@ -30,7 +30,7 @@ public class ConfigMenuCore {
 		if(lockedMenuFrameRate < vanillaMainMenuLock)
 		{
 			lockedMenuFrameRate = vanillaMainMenuLock;
-			System.out.println("Main Menu Framerate Limit cannot be below 30");
+			System.out.println("Main Menu Framerate Limit cannot be below" + vanillaMainMenuLock);
 		}
 		ProxyMod.flagCMMJson(dir);
 		cfg.save();
