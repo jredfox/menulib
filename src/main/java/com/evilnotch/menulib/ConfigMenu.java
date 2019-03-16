@@ -25,6 +25,7 @@ public class ConfigMenu {
 	public static List<Class> musicDeny = new ArrayList();
 	public static boolean fancyPage = false;
 	public static boolean displayNewMenu = true;
+	public static boolean cmmAndVanilla = false;	
 	public static boolean debugFrameRate = false;
 	public static ResourceLocation currentMenuIndex = null;
 	public static File cfgmenu = null;
@@ -46,6 +47,7 @@ public class ConfigMenu {
 		config.load();
 		fancyPage = config.get("menulib","fancyMenuPage",false).getBoolean();
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
+		cmmAndVanilla = config.get("menulib", "cmmAndVanilla", cmmAndVanilla).getBoolean();
 		debugFrameRate = config.get("debug","debugFrameRate", debugFrameRate).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
 		leftButtonId = config.get("menulib","buttonLeftId", leftButtonId).getInt();
@@ -169,6 +171,22 @@ public class ConfigMenu {
 			addedMenus = true;
 		}
 	}
+	
+	/**
+	 * don't call this till after the config has loaded
+	 */
+	public static void saveMenuToConfig(int index, ResourceLocation loc) 
+	{
+		if(!hasMenu(loc))
+		{
+			if(!addedMenus)
+				addedMenus = index == mainMenus.size();
+			isDirty = true;
+			
+			mainMenus.add(index, new LineArray(loc.toString() + " = " + true));
+		}
+	}
+	
 	/**
 	 *  don't call this till after the config is loaded. Use this method if you choose not to register the IMenu directly. 
 	 *  Currently only in use for the betweenlands to show people they can input custom entries
@@ -180,6 +198,22 @@ public class ConfigMenu {
 			mainMenus.add(new LineArray(loc + " <" + clazz + ">" + " = " + enabled));
 			isDirty = true;
 			addedMenus = true;
+		}
+	}
+	
+	/**
+	 *  don't call this till after the config is loaded. Use this method if you choose not to register the IMenu directly. 
+	 *  Currently only in use for the betweenlands to show people they can input custom entries
+	 */
+	public static void saveMenuToConfig(int index, ResourceLocation loc, String clazz, boolean enabled) 
+	{
+		if(!hasMenu(loc))
+		{
+			if(!addedMenus)
+				addedMenus = index == mainMenus.size();
+			isDirty = true;
+			
+			mainMenus.add(index, new LineArray(loc + " <" + clazz + ">" + " = " + enabled));
 		}
 	}
 	

@@ -26,6 +26,12 @@ public class MenuRegistry {
 		ConfigMenu.saveMenuToConfig(menu.getId());
 	}
 	
+	public static void registerIMenu(int index, IMenu menu)
+	{
+		menus.add(menu);
+		ConfigMenu.saveMenuToConfig(index, menu.getId());
+	}
+	
 	/**
 	 * Returns menu so you can manipulate data after adding one
 	 * to make an IMenu method use register IMenu
@@ -36,6 +42,14 @@ public class MenuRegistry {
 		IMenu menu = new Menu(guiClazz,id);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(id);
+		return menu;
+	}
+	
+	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz,ResourceLocation id)
+	{
+		IMenu menu = new Menu(guiClazz,id);
+		menus.add(menu);
+		ConfigMenu.saveMenuToConfig(index, id);
 		return menu;
 	}
 	

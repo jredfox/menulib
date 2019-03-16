@@ -8,74 +8,60 @@ import org.ralleytn.simple.json.JSONObject;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.menulib.ConfigMenu;
+import com.evilnotch.menulib.compat.event.CMMAutoJSONRegistry;
+import com.evilnotch.menulib.compat.eventhandler.CMMAutoJSONHandler;
 import com.evilnotch.menulib.compat.menu.MenuCMM;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 
 public class ProxyMod {
 	
 	public static boolean cmm;
-	public static boolean thebetweenlands;
-	
-	//cmm
 	public static boolean flagCMMJson;
 	public static File cmmJson = null;
 	
-	//thebetweenlands
+	public static boolean thebetweenlands;
 	public static Class tbl_musicHandler = null;
 	public static Object tbl_instance = null;
 	
 	public static void preInit() 
 	{
 		ProxyMod.isModsLoaded();
+		if(!ProxyMod.cmm || ConfigMenu.cmmAndVanilla)
+		{
+			MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		}
 		ProxyMod.register();
+		cacheData();
+	}
+	
+	public static void init()
+	{
+		if(cmm && flagCMMJson)
+		{
+			JSONObject json = JavaUtil.getJson(cmmJson);
+	    	CMMAutoJSONRegistry.fireCMMAutoJSON(json);
+			JavaUtil.saveJSON(json, cmmJson, false);
+			refreshCMM();
+			System.out.println("Done Hooking CMM Auto JSON Support for first time use");
+		}
 	}
 	
 	public static void isModsLoaded()
 	{
 		cmm = Loader.isModLoaded("custommainmenu");
 		thebetweenlands = Loader.isModLoaded("thebetweenlands");
-		cacheData();
 	}
 
 	public static void register()
 	{	
 		if(cmm)
 		{
-			MenuRegistry.registerIMenu(new MenuCMM());
-			
-			if(flagCMMJson)
-			{
-				JSONObject json = JavaUtil.getJson(cmmJson);
-				JSONObject buttonElements = json.getJSONObject("buttons");
-				JSONObject left = new JSONObject();
-		    	
-				left.put("text", ConfigMenu.fancyPage ? "previous" : "<");
-		    	left.put("posX", 5);
-		    	left.put("posY", 5);
-		    	left.put("width", 20);
-		    	left.put("height", 20);
-		    	left.put("alignment", "top_left");
-		    	left.put("wrappedButton", ConfigMenu.leftButtonId);
-		    	buttonElements.put("menulibLeft", left);
-		    	
-		    	JSONObject right = new JSONObject();
-		    	right.put("text", ConfigMenu.fancyPage ? "next" : ">");
-		    	right.put("posX", 30);
-		    	right.put("posY", 5);
-		    	right.put("width", 20);
-		    	right.put("height", 20);
-		    	right.put("alignment", "top_left");
-		    	right.put("wrappedButton", ConfigMenu.rightButtonId);
-		    	buttonElements.put("menulibRight", right);
-		    	
-				JavaUtil.saveJSON(json, cmmJson, false);
-				refreshCMM();
-				
-				System.out.println("Done Hooking CMM Auto JSON Support for first time use");
-			}
+			MenuRegistry.registerIMenu(ConfigMenu.cmmAndVanilla ? 1 : 0, new MenuCMM());//make sure it's the first index initially or 2d if both main menus are running
+			CMMAutoJSONRegistry.registry.add(new CMMAutoJSONHandler());
 		}
 		
 		if(thebetweenlands)
