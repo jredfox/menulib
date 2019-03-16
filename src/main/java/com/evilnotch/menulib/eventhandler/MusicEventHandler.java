@@ -13,14 +13,6 @@ public class MusicEventHandler {
 	@SubscribeEvent
 	public void canPlayMusic(MenuMusicEvent e)
 	{
-		if(!(e.gui instanceof GuiMainMenu) && !(e.gui instanceof GuiMainMenu))
-		{
-			return;
-		}
-		if(e.gui instanceof GuiMainMenuBase)
-		{
-			e.canPlay = ((GuiMainMenuBase)e.gui).allowMusic;
-		}
 		for(Class c : ConfigMenu.musicDeny)
 		{
 			if(JavaUtil.isClassExtending(c, e.gui.getClass()))
@@ -36,6 +28,11 @@ public class MusicEventHandler {
 				e.canPlay = true;
 				break;
 			}
+		}
+		
+		if(e.gui instanceof GuiMainMenuBase)
+		{
+			e.canPlay = ((GuiMainMenuBase)e.gui).allowMusic;
 		}
 	}
 
