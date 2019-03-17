@@ -7,9 +7,18 @@ import com.evilnotch.menulib.ConfigMenu;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 public class Menu implements IMenu {
+	
+	static
+	{
+		if(!ConfigMenu.isLoaded)
+		{
+			throw new RuntimeException("ConfigMenu Must be Loaded Beofre Instantiating this class so button vars can be configurable");
+		}
+	}
 	
 	public ResourceLocation id = null;
 	public Constructor ctr = null;
@@ -18,14 +27,13 @@ public class Menu implements IMenu {
 	
 	public ResourceLocation bTexture = new ResourceLocation("textures/gui/widgets.png");
 	
-	public static final GuiBasicButton lbutton = new GuiBasicButton(ConfigMenu.leftButtonId,5,5,20,20,"<");
-	public static final GuiBasicButton rbutton = new GuiBasicButton(ConfigMenu.rightButtonId,30,5,20,20,">");
+	public static final GuiBasicButton lbutton = new GuiBasicButton(ConfigMenu.leftButtonId, ConfigMenu.leftButtonPosX, ConfigMenu.leftButtonPosY, ConfigMenu.leftButtonWidth, ConfigMenu.leftButtonHeight, "menulib.lbutton.name");
+	public static final GuiBasicButton rbutton = new GuiBasicButton(ConfigMenu.rightButtonId, ConfigMenu.rightButtonPosX, ConfigMenu.rightButtonPosY, ConfigMenu.rightButtonWidth, ConfigMenu.rightButtonHeight, "menulib.rbutton.name");
 	
-	public static final GuiBasicButton fancyLButton = new GuiBasicButton(ConfigMenu.leftButtonId,5,5,64,20,"previous");
-	public static final GuiBasicButton fancyRButton = new GuiBasicButton(ConfigMenu.rightButtonId,74,5,64,20,"next");
-	
+	public static final GuiBasicButton fancyLButton = new GuiBasicButton(ConfigMenu.leftButtonId, ConfigMenu.lFButtonPosX, ConfigMenu.lFButtonPosY, ConfigMenu.lFButtonWidth, ConfigMenu.lFButtonHeight, "menulib.lbuttonfancy.name");
+	public static final GuiBasicButton fancyRButton = new GuiBasicButton(ConfigMenu.rightButtonId, ConfigMenu.rFButtonPosX, ConfigMenu.rFButtonPosY, ConfigMenu.rFButtonWidth, ConfigMenu.rFButtonHeight, "menulib.rbuttonfancy.name");
 
-	public Menu(Class<? extends GuiScreen> clazz,ResourceLocation id)
+	public Menu(Class<? extends GuiScreen> clazz, ResourceLocation id)
 	{
 		this.clazz = clazz;
 		try 
@@ -110,6 +118,18 @@ public class Menu implements IMenu {
 	public GuiScreen getGui() 
 	{
 		return this.gui;
+	}
+
+	/**
+	 * called so the unlocalized names are now updated on the display names
+	 */
+	public static void refreshButtonNames() 
+	{
+		lbutton.displayString = I18n.format(lbutton.unlocalizedName);
+		fancyLButton.displayString = I18n.format(fancyLButton.unlocalizedName);
+		
+		rbutton.displayString = I18n.format(rbutton.unlocalizedName);
+		fancyRButton.displayString = I18n.format(fancyRButton.unlocalizedName);
 	}
 	
 }

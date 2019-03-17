@@ -7,6 +7,7 @@ import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.event.MenuMusicEvent;
 import com.evilnotch.menulib.menu.IMenu;
+import com.evilnotch.menulib.menu.Menu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
 import net.minecraft.client.Minecraft;
@@ -52,6 +53,7 @@ public class GuiEventHandler {
 		{
 			return;
 		}
+		Menu.refreshButtonNames();
 		e.setGui(MenuRegistry.createCurrentGui());
 		IMenu menu = MenuRegistry.getCurrentMenu();
 		menu.onOpen();

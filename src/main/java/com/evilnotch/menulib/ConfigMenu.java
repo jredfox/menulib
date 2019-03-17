@@ -20,6 +20,8 @@ import net.minecraftforge.common.config.Property;
 
 public class ConfigMenu {
 	
+	public static boolean isLoaded = false;
+	
 	public static List<LineArray> mainMenus = new ArrayList();
 	public static List<Class> musicAllow = new ArrayList();
 	public static List<Class> musicDeny = new ArrayList();
@@ -31,7 +33,24 @@ public class ConfigMenu {
 	public static File cfgmenu = null;
 	
 	public static int leftButtonId = 498;
+	public static int leftButtonPosX = 5;
+	public static int leftButtonPosY = 5;
+	public static int leftButtonWidth = 20;
+	public static int leftButtonHeight = 20;
+	public static int lFButtonPosX = 5;
+	public static int lFButtonPosY = 5;
+	public static int lFButtonWidth = 64;
+	public static int lFButtonHeight = 20;
+	
 	public static int rightButtonId = 499;
+	public static int rightButtonPosX = 30;
+	public static int rightButtonPosY = 5;
+	public static int rightButtonWidth = 20;
+	public static int rightButtonHeight = 20;
+	public static int rFButtonPosX = 74;
+	public static int rFButtonPosY = 5;
+	public static int rFButtonWidth = 64;
+	public static int rFButtonHeight = 20;
 	
 	private static final String menu_comment = "format of menus is \"modid:mainmenu <class> = true/false\" changeing the menu order will change it in game";
 	
@@ -45,13 +64,33 @@ public class ConfigMenu {
 		Configuration config = new Configuration(cfgmenu);
 		
 		config.load();
-		fancyPage = config.get("menulib","fancyMenuPage",false).getBoolean();
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
 		cmmAndVanilla = config.get("menulib", "cmmAndVanilla", cmmAndVanilla).getBoolean();
-		debugFrameRate = config.get("debug","debugFrameRate", debugFrameRate).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
-		leftButtonId = config.get("menulib","buttonLeftId", leftButtonId).getInt();
-		rightButtonId = config.get("menulib","buttonRightId", rightButtonId).getInt();
+		
+		debugFrameRate = config.get("debug","debugFrameRate", debugFrameRate).getBoolean();
+		
+		fancyPage = config.get("buttons","fancyButtons",false).getBoolean();
+		
+		leftButtonId = config.get("buttons","leftId", leftButtonId).getInt();
+		leftButtonPosX = config.get("buttons", "leftPosX", leftButtonPosX).getInt();
+		leftButtonPosY = config.get("buttons", "leftPosY", leftButtonPosY).getInt();
+		leftButtonWidth = config.get("buttons", "leftWidth", leftButtonWidth).getInt();
+		leftButtonHeight = config.get("buttons", "leftHeight", leftButtonHeight).getInt();
+		lFButtonPosX = config.get("buttons", "leftFancyPosX", lFButtonPosX).getInt();
+		lFButtonPosY = config.get("buttons", "leftFancyPosY", lFButtonPosY).getInt();
+		lFButtonWidth = config.get("buttons", "leftFancyWidth", lFButtonWidth).getInt();
+		lFButtonHeight = config.get("buttons", "leftFancyHeight", lFButtonHeight).getInt();
+		
+		rightButtonId = config.get("buttons","rightId", rightButtonId).getInt();
+		rightButtonPosX = config.get("buttons", "rightPosX", rightButtonPosX).getInt();
+		rightButtonPosY = config.get("buttons", "rightPosY", rightButtonPosY).getInt();
+		rightButtonWidth = config.get("buttons", "rightWidth", rightButtonWidth).getInt();
+		rightButtonHeight = config.get("buttons", "rightHeight", rightButtonHeight).getInt();
+		rFButtonPosX = config.get("buttons", "rightFancyPosX", rFButtonPosX).getInt();
+		rFButtonPosY = config.get("buttons", "rightFancyPosY", rFButtonPosY).getInt();
+		rFButtonWidth = config.get("buttons", "rightfancyWidth", rFButtonWidth).getInt();
+		rFButtonHeight = config.get("buttons", "rightFancyHeight", rFButtonHeight).getInt();
 
 		String[] order = config.get("menulib", "menus", new String[]{""},menu_comment).getStringList();
 		resetMenus(order);
@@ -77,6 +116,7 @@ public class ConfigMenu {
 		}
 		
 		config.save();
+		isLoaded = true;
 	}
 	
 	private static void resetMenus(String[] order) 
