@@ -53,6 +53,8 @@ public class ConfigMenu {
 	public static int rFButtonHeight = 20;
 	
 	private static final String menu_comment = "format of menus is \"modid:mainmenu <class> = true/false\" changeing the menu order will change it in game";
+	private static final String musicDeny_comment = "this is a blacklist of menus that extend GuiMainMenu but, have their own music";
+	private static final String musicAllow_comment = "this is a whitelist of menus not extending GuiMainMenu that require vanilla music";
 	
 	/**
 	 * load all configurations for menu lib
@@ -95,7 +97,7 @@ public class ConfigMenu {
 		String[] order = config.get("menulib", "menus", new String[]{""},menu_comment).getStringList();
 		resetMenus(order);
 		
-		String[] clList = config.getStringList("classes_allowed", "music", new String[]{"lumien.custommainmenu.gui.GuiCustom"}, "this is a whitelist of menus not extending GuiMainMenu that require vanilla music");
+		String[] clList = config.getStringList("classes_allowed", "music", new String[]{"lumien.custommainmenu.gui.GuiCustom"}, musicAllow_comment);
 		for(String s : clList)
 		{
 			if(JavaUtil.toWhiteSpaced(s).isEmpty())
@@ -105,7 +107,7 @@ public class ConfigMenu {
 				musicAllow.add(c);
 		}
 		
-		String[] clDenyList = config.getStringList("classes_deny", "music", new String[]{""}, "this is a blacklist of menus that extend GuiMainMenu but, have their own music");
+		String[] clDenyList = config.getStringList("classes_deny", "music", new String[]{""}, musicDeny_comment);
 		for(String s : clDenyList)
 		{
 			if(JavaUtil.toWhiteSpaced(s).isEmpty())
@@ -140,6 +142,7 @@ public class ConfigMenu {
 	 * does the config have a new menu
 	 */
 	public static boolean addedMenus = false;
+
 	public static void saveMenusAndIndex() 
 	{
 		Configuration config = new Configuration(cfgmenu);
@@ -166,8 +169,10 @@ public class ConfigMenu {
 		
 		//fix comment dissapearing
 		String[] strlist = JavaUtil.toStaticStringArray(list);
-		Property prop = config.get("menulib", "menus", strlist,menu_comment);
+		Property prop = config.get("menulib", "menus", strlist,"");
 		prop.set(strlist);
+		
+		syncComments(config);
 		
 		config.save();
 		isDirty = false;
@@ -191,7 +196,7 @@ public class ConfigMenu {
 		config.load();
 		setConfigIndex(config,loc);
 		currentMenuIndex = loc;
-		config.get("menulib", "menus", new String[]{""},menu_comment);
+		syncComments(config);
 		config.save();
 		if(Config.debug)
 		{
@@ -199,6 +204,13 @@ public class ConfigMenu {
 		}
 	}
 	
+	private static void syncComments(Configuration config) 
+	{
+		config.get("menulib", "menus", new String[]{""}, menu_comment);
+		config.get("music", "classes_deny", new String[]{""}, musicDeny_comment);
+		config.get("music", "classes_allowed", new String[]{""}, musicAllow_comment);
+	}
+
 	/**
 	 * don't call this till after the config has loaded
 	 */
