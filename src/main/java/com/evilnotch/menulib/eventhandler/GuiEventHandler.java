@@ -27,11 +27,12 @@ public class GuiEventHandler {
 		
 		//check if the IMenu Is open and switiching to a sub menu
 		GuiScreen current = MenuRegistry.getCurrentGui();
-		if(current == Minecraft.getMinecraft().currentScreen && current != null && gui != current)
+		if(lastMenuGui == current && lastMenuGui != null && lastMenuGui != gui)
 		{
-			MenuRegistry.getCurrentMenu().onCloseFromSub();
+			MenuRegistry.getCurrentMenu().onCloseFromSub();	
 		}
-		lastMenuGui = gui;
+		
+		lastMenuGui = gui;//set the last menu equal to the current menu
 		
 		//return from method if gui is null
 		if(gui == null || !MenuRegistry.isReplaceable(gui))
@@ -55,6 +56,7 @@ public class GuiEventHandler {
 		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
 		GuiScreen replaced = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();
 		e.setGui(replaced);
+		lastMenuGui = replaced;
 		IMenu menu = MenuRegistry.getCurrentMenu();
 		if(!sub)
 		{

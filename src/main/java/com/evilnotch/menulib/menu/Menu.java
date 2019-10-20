@@ -48,20 +48,16 @@ public class Menu implements IMenu {
 	}
 
 	/**
-	 * for clearing open gl special effects on close for stubborn guis
+	 * called when menu switches
 	 */
 	@Override
-	public void onClose() {
-		System.out.println("close");
-	}
+	public void onClose() {}
 	
 	/**
 	 * called when the menu closes and goes into a sub menu
 	 */
 	@Override
-	public void onCloseFromSub(){
-		System.out.println("sub close");
-	}
+	public void onCloseFromSub(){}
 
 	/**
 	 * do special and or rnd effects to your gui and open gl via open
