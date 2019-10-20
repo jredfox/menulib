@@ -51,26 +51,26 @@ public class Menu implements IMenu {
 	 * for clearing open gl special effects on close for stubborn guis
 	 */
 	@Override
-	public void onClose() {}
+	public void onClose() {
+		System.out.println("close");
+	}
 	
 	/**
 	 * called when the menu closes and goes into a sub menu
 	 */
 	@Override
-	public void onCloseFromSub(){}
+	public void onCloseFromSub(){
+		System.out.println("sub close");
+	}
 
 	/**
 	 * do special and or rnd effects to your gui and open gl via open
 	 */
 	@Override
-	public void onOpen() {
-		System.out.println("open");
-	}
+	public void onOpen() {}
 	
 	@Override
-	public void onOpenFromSub() {
-		System.out.println("sub open");
-	}
+	public void onOpenFromSub() {}
 
 	@Override
 	public ResourceLocation getId() 

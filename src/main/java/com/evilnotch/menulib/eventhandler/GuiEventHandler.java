@@ -7,6 +7,7 @@ import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.menu.IMenu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -23,6 +24,13 @@ public class GuiEventHandler {
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
 		GuiScreen gui = e.getGui();
+		
+		//check if the IMenu Is open and switiching to a sub menu
+		GuiScreen current = MenuRegistry.getCurrentGui();
+		if(current == Minecraft.getMinecraft().currentScreen && current != null && gui != current)
+		{
+			MenuRegistry.getCurrentMenu().onCloseFromSub();
+		}
 		lastMenuGui = gui;
 		
 		//return from method if gui is null
