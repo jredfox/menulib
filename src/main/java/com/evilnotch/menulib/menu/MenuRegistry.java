@@ -265,4 +265,12 @@ public class MenuRegistry {
 		}
 		return -1;
 	}
+	
+	/**
+	 * should buttons be added to IMenus
+	 */
+	public static boolean hasButtons()
+	{
+		return MenuRegistry.getMenuSize() > 1;
+	}
 }

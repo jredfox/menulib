@@ -19,60 +19,50 @@ import net.minecraftforge.fml.common.Loader;
 
 public class ProxyMod {
 	
-	public static boolean cmm;
-	public static boolean flagCMMJson;
-	public static File cmmJson = null;
-	
-	public static boolean thebetweenlands;
-	public static Class tbl_musicHandler = null;
-	public static Object tbl_instance = null;
-	
-	public static boolean fossil;
-	
 	public static void preInit() 
 	{
-		ProxyMod.isModsLoaded();
-		if(!ProxyMod.cmm || ConfigMenu.cmmAndVanilla)
-		{
-			MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
-		}
-		ProxyMod.register();
+		isModsLoaded();
+		register();
 		cacheData();
-	}
-	
-	public static void init()
-	{
-		if(cmm && flagCMMJson)
-		{
-			JSONObject json = JavaUtil.getJson(cmmJson);
-	    	CMMAutoJSONRegistry.fireCMMAutoJSON(json);
-			JavaUtil.saveJSON(json, cmmJson, false);
-			refreshCMM();
-			System.out.println("Done Hooking CMM Auto JSON Support for first time use");
-		}
 	}
 	
 	public static void isModsLoaded()
 	{
-		cmm = Loader.isModLoaded("custommainmenu");
-		thebetweenlands = Loader.isModLoaded("thebetweenlands");
-		fossil = Loader.isModLoaded("fossil");
+		ProxyCMM.isLoaded = Loader.isModLoaded("custommainmenu");
+		ProxyTBL.isLoaded = Loader.isModLoaded("thebetweenlands");
+		ProxyFossil.isLoaded = Loader.isModLoaded("fossil");
+	}
+	
+	public static void init()
+	{
+		if(ProxyCMM.isLoaded && ProxyCMM.flagCMMJson)
+		{
+			JSONObject json = JavaUtil.getJson(ProxyCMM.cmmJson);
+	    	CMMAutoJSONRegistry.fireCMMAutoJSON(json);
+			JavaUtil.saveJSON(json, ProxyCMM.cmmJson, false);
+			refreshCMM();
+			System.out.println("Done Hooking CMM Auto JSON Support for first time use");
+		}
 	}
 
 	public static void register()
 	{	
-		if(cmm)
+		if(!ProxyCMM.isLoaded || ConfigMenu.cmmAndVanilla)
+		{
+			MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		}
+		if(ProxyCMM.isLoaded)
 		{
 			MenuRegistry.registerIMenu(ConfigMenu.cmmAndVanilla ? 1 : 0, new MenuCMM());//make sure it's the first index initially or 2d if both main menus are running
 			CMMAutoJSONRegistry.registry.add(new CMMAutoJSONHandler());
 		}
 		
-		if(thebetweenlands)
+		if(ProxyTBL.isLoaded)
 		{
 			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"), new ResourceLocation("thebetweenlands:mainmenu"));
 		}
 		
-		if(fossil)
+		if(ProxyFossil.isLoaded)
 		{
 			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI"), new ResourceLocation("fossil:mainmenu"));
 		}
@@ -83,7 +73,7 @@ public class ProxyMod {
 	 */
 	public static void menuChange()
 	{
-		if(thebetweenlands)
+		if(ProxyTBL.isLoaded)
 		{
 			ReflectionUtil.setObject(tbl_instance, false, tbl_musicHandler, "hasBlMainMenu");//sets it to false to garentee it will not play till the next cik
 		}
@@ -91,7 +81,7 @@ public class ProxyMod {
 	
 	private static void cacheData() 
 	{
-		if(thebetweenlands)
+		if(ProxyTBL.isLoaded)
 		{
 			tbl_musicHandler =  ReflectionUtil.classForName("thebetweenlands.client.handler.MusicHandler");
 			tbl_instance = ReflectionUtil.getObject(null, tbl_musicHandler, "INSTANCE");

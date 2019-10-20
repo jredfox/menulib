@@ -20,22 +20,24 @@ public class GuiEventHandler {
 	/**
 	 * set the gui to something mods are never going to be looking at
 	 */
-	public static GuiScreen cachedGui = null;
+	public static GuiScreen lastMenuGui = null;
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
 		GuiScreen gui = e.getGui();
+		//return from method if gui is null
 		if(gui == null)
 		{
 			return;
 		}
+		//is this gui that just got opened replaceable?
 		if(!(gui instanceof GuiMainMenu) && !MenuRegistry.containsMenu(gui.getClass() ))
 		{
 			return;
 		}
-		cachedGui = gui;
+		lastMenuGui = gui;
 		e.setGui(fake_menu);
 	}
 	
@@ -46,16 +48,12 @@ public class GuiEventHandler {
 	public void onGuiOpen(GuiOpenEvent e)
 	{
 		GuiScreen gui = e.getGui();
-		if(gui == null)
-		{
-			return;
-		}
 		if(!(gui instanceof GuiFakeMenu))
 		{
 			return;
 		}
-		boolean flag = MenuRegistry.getCurrentGui() == cachedGui && cachedGui != null;
-		GuiScreen replacedGui = flag ? cachedGui : MenuRegistry.createCurrentGui();
+		boolean flag = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
+		GuiScreen replacedGui = flag ? lastMenuGui : MenuRegistry.createCurrentGui();
 		e.setGui(replacedGui);
 		IMenu menu = MenuRegistry.getCurrentMenu();
 		if(!flag)
@@ -68,21 +66,19 @@ public class GuiEventHandler {
 		}
 	}
 	
+	/**
+	 * add left and right button to this gui if it's not already added
+	 */
 	@SubscribeEvent
 	public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post e)
 	{
 		GuiScreen gui = e.getGui();
-		if(gui == null)
+		if(gui == null || !MenuRegistry.containsMenu(gui.getClass() ))
 		{
 			return;
 		}
-		if(MenuRegistry.getMenuSize() > 1)
+		if(MenuRegistry.hasButtons())
 		{
-			Class clazz = gui.getClass();
-			if(!MenuRegistry.containsMenu(clazz))
-			{
-				return;
-			}
 			IMenu menu = MenuRegistry.getCurrentMenu();
 			List<GuiButton> li = e.getButtonList();
 			GuiButton lbutton = menu.getLeftButton();
@@ -107,12 +103,14 @@ public class GuiEventHandler {
 			return;
 		}
 		
-		if(e.getButton().id == ConfigMenu.leftButtonId)
+		//advance previous or next menu based upon the button
+		int buttonId = e.getButton().id;
+		if(buttonId == ConfigMenu.leftButtonId)
 		{
 			MenuRegistry.advancePreviousMenu();
 			ConfigMenu.saveMenuIndex();//keep the save index separately for more options on modders
 		}
-		else if(e.getButton().id == ConfigMenu.rightButtonId)
+		else if(buttonId == ConfigMenu.rightButtonId)
 		{
 			MenuRegistry.advanceNextMenu();
 			ConfigMenu.saveMenuIndex();
