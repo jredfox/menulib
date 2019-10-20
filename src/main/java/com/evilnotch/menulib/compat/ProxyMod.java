@@ -27,6 +27,8 @@ public class ProxyMod {
 	public static Class tbl_musicHandler = null;
 	public static Object tbl_instance = null;
 	
+	public static boolean fossil;
+	
 	public static void preInit() 
 	{
 		ProxyMod.isModsLoaded();
@@ -54,6 +56,7 @@ public class ProxyMod {
 	{
 		cmm = Loader.isModLoaded("custommainmenu");
 		thebetweenlands = Loader.isModLoaded("thebetweenlands");
+		fossil = Loader.isModLoaded("fossil");
 	}
 
 	public static void register()
@@ -67,6 +70,11 @@ public class ProxyMod {
 		if(thebetweenlands)
 		{
 			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"), new ResourceLocation("thebetweenlands:mainmenu"));
+		}
+		
+		if(fossil)
+		{
+			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI"), new ResourceLocation("fossil:mainmenu"));
 		}
 	}
 	

@@ -58,6 +58,9 @@ public class Menu implements IMenu {
 	 */
 	@Override
 	public void onOpen() {}
+	
+	@Override
+	public void onOpenFromSub() {}
 
 	@Override
 	public ResourceLocation getId() 
@@ -119,17 +122,13 @@ public class Menu implements IMenu {
 	{
 		return this.gui;
 	}
-
-	/**
-	 * called so the unlocalized names are now updated on the display names
-	 */
-	public static void refreshButtonNames() 
+	
+	@Override
+	public boolean equals(Object obj)
 	{
-		lbutton.displayString = I18n.format(lbutton.unlocalizedName);
-		fancyLButton.displayString = I18n.format(fancyLButton.unlocalizedName);
-		
-		rbutton.displayString = I18n.format(rbutton.unlocalizedName);
-		fancyRButton.displayString = I18n.format(fancyRButton.unlocalizedName);
+		if(!(obj instanceof IMenu))
+			return false;
+		return this.getId().equals(((IMenu)obj).getId());
 	}
 	
 }

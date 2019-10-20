@@ -51,7 +51,7 @@ public class MenuCMM implements IMenu{
 	{
 		try 
 		{
-			loadSplashTexts.invoke(MenuRegistry.getCurrentGui());
+			loadSplashTexts.invoke(this.getGui());
 		} 
 		catch (Throwable t) 
 		{
@@ -63,6 +63,12 @@ public class MenuCMM implements IMenu{
 	public void onOpen() 
 	{
 		
+	}
+
+	@Override
+	public void onOpenFromSub()
+	{
+	
 	}
 
 	@Override
@@ -122,6 +128,14 @@ public class MenuCMM implements IMenu{
 	public GuiButton getRightButton() 
 	{
 		return Menu.rbutton;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(!(obj instanceof IMenu))
+			return false;
+		return this.getId().equals(((IMenu)obj).getId());
 	}
 
 }

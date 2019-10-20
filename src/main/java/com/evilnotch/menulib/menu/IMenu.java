@@ -13,6 +13,12 @@ public interface IMenu {
 	 * called right after gui is set to main menu
 	 */
 	public void onOpen();
+	
+	/**
+	 * fires when your gui opens up from a sub menu without re-creating the whole gui
+	 */
+	public void onOpenFromSub();
+	
 	/**
 	 * this creates a new gui called when a new main menu gets created(opened)
 	 */

@@ -8,6 +8,7 @@ import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.compat.ProxyMod;
+import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 
 import net.minecraft.client.Minecraft;
@@ -22,12 +23,16 @@ public class MenuRegistry {
 	
 	public static void registerIMenu(IMenu menu)
 	{
+		if(menus.contains(menu))
+			menus.remove(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(menu.getId());
 	}
 	
 	public static void registerIMenu(int index, IMenu menu)
 	{
+		if(menus.contains(menu))
+			menus.remove(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(index, menu.getId());
 	}
@@ -39,7 +44,9 @@ public class MenuRegistry {
 	 */
 	public static IMenu registerGuiMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
-		IMenu menu = new Menu(guiClazz,id);
+		IMenu menu = new Menu(guiClazz, id);
+		if(menus.contains(menu))
+			menus.remove(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(id);
 		return menu;
@@ -48,23 +55,11 @@ public class MenuRegistry {
 	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz,id);
+		if(menus.contains(menu))
+			menus.remove(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(index, id);
 		return menu;
-	}
-	
-	public static void deleteGui(ResourceLocation loc)
-	{
-		Iterator<IMenu> it = menus.iterator();
-		while(it.hasNext())
-		{
-			IMenu menu = it.next();
-			if(menu.getId().equals(loc))
-			{
-				it.remove();
-				break;
-			}
-		}
 	}
 	
 	/**
@@ -77,9 +72,9 @@ public class MenuRegistry {
 		currentMenu = menus.get(indexMenu);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		currentMenu.onOpen();
-		Minecraft.getMinecraft().displayGuiScreen(MenuRegistry.createCurrentGui());
+		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
 	}
+	
 	/**
 	 * used by button guis to advanced current gui to the next gui
 	 */
@@ -90,8 +85,7 @@ public class MenuRegistry {
 		currentMenu = menus.get(indexMenu);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		currentMenu.onOpen();
-		Minecraft.getMinecraft().displayGuiScreen(MenuRegistry.createCurrentGui());
+		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
 	}
 	
 	protected static int getNext(int index) 
@@ -222,7 +216,8 @@ public class MenuRegistry {
 					continue;
 				}
 				IMenu menu = new Menu(c,loc);
-				list.add(menu);
+				if(!list.contains(menu))
+					list.add(menu);
 			}
 			else
 			{
@@ -234,7 +229,8 @@ public class MenuRegistry {
 					ConfigMenu.isDirty = true;
 					continue;
 				}
-				list.add(menu);
+				if(!list.contains(menu))
+					list.add(menu);
 			}
 		}
 		menus = list;
