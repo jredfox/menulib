@@ -28,12 +28,7 @@ public class GuiEventHandler {
 	{
 		GuiScreen gui = e.getGui();
 		//return from method if gui is null
-		if(gui == null)
-		{
-			return;
-		}
-		//is this gui that just got opened replaceable?
-		if(!(gui instanceof GuiMainMenu) && !MenuRegistry.containsMenu(gui.getClass() ))
+		if(gui == null || !MenuRegistry.isReplaceable(gui))
 		{
 			return;
 		}

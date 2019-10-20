@@ -32,6 +32,7 @@ public class ConfigMenuCore {
 		}
 		cfg.save();
 		
+		//flag cmm here and now since they do their file in pre-init
 		ProxyCMM.flagCMMJson(dir);
 	}
 

@@ -12,6 +12,7 @@ import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
@@ -272,5 +273,13 @@ public class MenuRegistry {
 	public static boolean hasButtons()
 	{
 		return MenuRegistry.getMenuSize() > 1;
+	}
+	
+	/**
+	 * is this gui replaceable for IMenus
+	 */
+	public static boolean isReplaceable(GuiScreen gui)
+	{
+		return gui instanceof GuiMainMenu || containsMenu(gui.getClass() );
 	}
 }

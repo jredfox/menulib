@@ -21,9 +21,10 @@ public class MenuCMM implements IMenu{
 	public static Method getGui;
 	public static Object modInstance;
 	
-	public GuiScreen gui;
-	
 	public static final ResourceLocation bTexture = new ResourceLocation("minecraft:textures/gui/widgets.png");
+	public static final ResourceLocation id = new ResourceLocation("custommainmenu:mainmenu");
+	
+	public GuiScreen gui;
 	
 	static
 	{
@@ -103,7 +104,7 @@ public class MenuCMM implements IMenu{
 	@Override
 	public ResourceLocation getId() 
 	{
-		return new ResourceLocation("custommainmenu:mainmenu");
+		return id;
 	}
 
 	@Override
