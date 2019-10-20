@@ -26,23 +26,16 @@ public class ProxyMod {
 		cacheData();
 	}
 	
+	public static void init()
+	{
+		ProxyCMM.init();
+	}
+	
 	public static void isModsLoaded()
 	{
 		ProxyCMM.isLoaded = Loader.isModLoaded("custommainmenu");
 		ProxyTBL.isLoaded = Loader.isModLoaded("thebetweenlands");
 		ProxyFossil.isLoaded = Loader.isModLoaded("fossil");
-	}
-	
-	public static void init()
-	{
-		if(ProxyCMM.isLoaded && ProxyCMM.flagCMMJson)
-		{
-			JSONObject json = JavaUtil.getJson(ProxyCMM.cmmJson);
-	    	CMMAutoJSONRegistry.fireCMMAutoJSON(json);
-			JavaUtil.saveJSON(json, ProxyCMM.cmmJson, false);
-			refreshCMM();
-			System.out.println("Done Hooking CMM Auto JSON Support for first time use");
-		}
 	}
 
 	public static void register()
@@ -73,39 +66,13 @@ public class ProxyMod {
 	 */
 	public static void menuChange()
 	{
-		if(ProxyTBL.isLoaded)
-		{
-			ReflectionUtil.setObject(tbl_instance, false, tbl_musicHandler, "hasBlMainMenu");//sets it to false to garentee it will not play till the next cik
-		}
+		ProxyTBL.menuChange();
 	}
 	
-	private static void cacheData() 
+	public static void cacheData() 
 	{
-		if(ProxyTBL.isLoaded)
-		{
-			tbl_musicHandler =  ReflectionUtil.classForName("thebetweenlands.client.handler.MusicHandler");
-			tbl_instance = ReflectionUtil.getObject(null, tbl_musicHandler, "INSTANCE");
-		}
+		ProxyTBL.cacheData();
 	}
 
-	public static void flagCMMJson(File rootdir) 
-	{
-		cmmJson = new File(rootdir, "config/CustomMainMenu/mainmenu.json");
-		flagCMMJson = !cmmJson.exists();
-	}
-	
-	public static void refreshCMM()
-	{
-		try 
-		{
-			Method refresh = MenuCMM.cmm.getDeclaredMethod("reload");
-			refresh.setAccessible(true);
-			refresh.invoke(MenuCMM.modInstance);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-	}
 
 }
