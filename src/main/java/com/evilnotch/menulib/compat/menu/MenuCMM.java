@@ -48,30 +48,26 @@ public class MenuCMM implements IMenu{
 	}
 
 	@Override
-	public void onClose() 
+	public void onClose() {}
+	
+	@Override
+	public void onCloseFromSub(){}
+
+	@Override
+	public void onOpen() 
 	{
-		System.out.println("fire!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		try 
 		{
 			loadSplashTexts.invoke(this.getGui());
 		} 
-		catch (Throwable t) 
+		catch (Throwable t)
 		{
 			t.printStackTrace();
 		}
 	}
 
 	@Override
-	public void onOpen() 
-	{
-		System.out.println("open");
-	}
-
-	@Override
-	public void onOpenFromSub()
-	{
-		System.out.println("sub open");
-	}
+	public void onOpenFromSub(){}
 
 	@Override
 	public GuiScreen getGui() 

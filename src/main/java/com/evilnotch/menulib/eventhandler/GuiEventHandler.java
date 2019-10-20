@@ -24,6 +24,7 @@ public class GuiEventHandler {
 	{
 		GuiScreen gui = e.getGui();
 		lastMenuGui = gui;
+		
 		//return from method if gui is null
 		if(gui == null || !MenuRegistry.isReplaceable(gui))
 		{
@@ -44,16 +45,16 @@ public class GuiEventHandler {
 			return;
 		}
 		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
-		GuiScreen replacedGui = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();  
-		e.setGui(replacedGui);
+		GuiScreen replaced = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();
+		e.setGui(replaced);
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		if(sub)
+		if(!sub)
 		{
-			menu.onOpenFromSub();
+			menu.onOpen();
 		}
 		else
 		{
-			menu.onOpen();
+			menu.onOpenFromSub();
 		}
 	}
 	

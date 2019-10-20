@@ -52,6 +52,12 @@ public class Menu implements IMenu {
 	 */
 	@Override
 	public void onClose() {}
+	
+	/**
+	 * called when the menu closes and goes into a sub menu
+	 */
+	@Override
+	public void onCloseFromSub(){}
 
 	/**
 	 * do special and or rnd effects to your gui and open gl via open

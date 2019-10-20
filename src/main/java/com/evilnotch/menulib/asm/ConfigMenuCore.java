@@ -9,7 +9,7 @@ import net.minecraftforge.common.config.Configuration;
 public class ConfigMenuCore {
 	
 	/**
-	 * do not change this value making it final screws up compilers as this will change depdening upon mc version
+	 * do not change this value making it final screws up compilers as this will change depending upon mc version
 	 */
 	public static int vanillaMainMenuLock = 30;
 	
