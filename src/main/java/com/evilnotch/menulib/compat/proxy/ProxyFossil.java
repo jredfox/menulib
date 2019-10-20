@@ -1,4 +1,4 @@
-package com.evilnotch.menulib.compat;
+package com.evilnotch.menulib.compat.proxy;
 
 public class ProxyFossil {
 	

@@ -2,7 +2,7 @@ package com.evilnotch.menulib.asm;
 
 import java.io.File;
 
-import com.evilnotch.menulib.compat.ProxyCMM;
+import com.evilnotch.menulib.compat.proxy.ProxyCMM;
 
 import net.minecraftforge.common.config.Configuration;
 

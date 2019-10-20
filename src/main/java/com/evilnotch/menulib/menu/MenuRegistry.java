@@ -7,7 +7,7 @@ import java.util.List;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.evilnotch.menulib.ConfigMenu;
-import com.evilnotch.menulib.compat.ProxyMod;
+import com.evilnotch.menulib.compat.proxy.ProxyMod;
 import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 

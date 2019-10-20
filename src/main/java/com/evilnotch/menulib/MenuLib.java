@@ -1,7 +1,7 @@
 package com.evilnotch.menulib;
 
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
-import com.evilnotch.menulib.compat.ProxyMod;
+import com.evilnotch.menulib.compat.proxy.ProxyMod;
 import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 import com.evilnotch.menulib.menu.MenuRegistry;

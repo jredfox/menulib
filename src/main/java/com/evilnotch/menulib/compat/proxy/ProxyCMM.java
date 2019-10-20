@@ -1,4 +1,4 @@
-package com.evilnotch.menulib.compat;
+package com.evilnotch.menulib.compat.proxy;
 
 import java.io.File;
 import java.lang.reflect.Method;
