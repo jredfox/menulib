@@ -8,7 +8,6 @@ import com.evilnotch.menulib.menu.IMenu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -17,22 +16,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiEventHandler {
 	
-	/**
-	 * set the gui to something mods are never going to be looking at
-	 */
-	public static GuiScreen lastMenuGui = null;
+	public static GuiScreen lastMenuGui;
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
 		GuiScreen gui = e.getGui();
+		lastMenuGui = gui;
 		//return from method if gui is null
 		if(gui == null || !MenuRegistry.isReplaceable(gui))
 		{
 			return;
 		}
-		lastMenuGui = gui;
 		e.setGui(fake_menu);
 	}
 	
@@ -47,17 +43,17 @@ public class GuiEventHandler {
 		{
 			return;
 		}
-		boolean flag = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
-		GuiScreen replacedGui = flag ? lastMenuGui : MenuRegistry.createCurrentGui();
+		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
+		GuiScreen replacedGui = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();  
 		e.setGui(replacedGui);
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		if(!flag)
+		if(sub)
 		{
-			menu.onOpen();
+			menu.onOpenFromSub();
 		}
 		else
 		{
-			menu.onOpenFromSub();
+			menu.onOpen();
 		}
 	}
 	

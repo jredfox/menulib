@@ -50,6 +50,7 @@ public class MenuCMM implements IMenu{
 	@Override
 	public void onClose() 
 	{
+		System.out.println("fire!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		try 
 		{
 			loadSplashTexts.invoke(this.getGui());
@@ -63,13 +64,13 @@ public class MenuCMM implements IMenu{
 	@Override
 	public void onOpen() 
 	{
-		
+		System.out.println("open");
 	}
 
 	@Override
 	public void onOpenFromSub()
 	{
-	
+		System.out.println("sub open");
 	}
 
 	@Override

@@ -57,10 +57,14 @@ public class Menu implements IMenu {
 	 * do special and or rnd effects to your gui and open gl via open
 	 */
 	@Override
-	public void onOpen() {}
+	public void onOpen() {
+		System.out.println("open");
+	}
 	
 	@Override
-	public void onOpenFromSub() {}
+	public void onOpenFromSub() {
+		System.out.println("sub open");
+	}
 
 	@Override
 	public ResourceLocation getId() 
