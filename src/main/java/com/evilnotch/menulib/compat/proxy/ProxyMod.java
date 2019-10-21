@@ -40,25 +40,9 @@ public class ProxyMod {
 
 	public static void register()
 	{	
-		if(!ProxyCMM.isLoaded || ConfigMenu.cmmAndVanilla)
-		{
-			MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
-		}
-		if(ProxyCMM.isLoaded)
-		{
-			MenuRegistry.registerIMenu(ConfigMenu.cmmAndVanilla ? 1 : 0, new MenuCMM());//make sure it's the first index initially or 2d if both main menus are running
-			CMMAutoJSONRegistry.registry.add(new CMMAutoJSONHandler());
-		}
-		
-		if(ProxyTBL.isLoaded)
-		{
-			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"), new ResourceLocation("thebetweenlands:mainmenu"));
-		}
-		
-		if(ProxyFossil.isLoaded)
-		{
-			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI"), new ResourceLocation("fossil:mainmenu"));
-		}
+		ProxyCMM.register();
+		ProxyTBL.register();
+		ProxyFossil.register();
 	}
 	
 	/**

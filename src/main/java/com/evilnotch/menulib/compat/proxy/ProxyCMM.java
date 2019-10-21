@@ -6,8 +6,14 @@ import java.lang.reflect.Method;
 import org.ralleytn.simple.json.JSONObject;
 
 import com.evilnotch.lib.util.JavaUtil;
+import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.compat.event.CMMAutoJSONRegistry;
+import com.evilnotch.menulib.compat.eventhandler.CMMAutoJSONHandler;
 import com.evilnotch.menulib.compat.menu.MenuCMM;
+import com.evilnotch.menulib.menu.MenuRegistry;
+
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.util.ResourceLocation;
 
 public class ProxyCMM {
 
@@ -46,5 +52,24 @@ public class ProxyCMM {
 	{
 		cmmJson = new File(rootdir, "config/CustomMainMenu/mainmenu.json");
 		flagCMMJson = !cmmJson.exists();
+	}
+
+	public static void register()
+	{
+		if(ProxyCMM.isLoaded)
+		{
+			if(!ConfigMenu.cmmAndVanilla)
+			{
+				MenuRegistry.removeMenu(new ResourceLocation("mainmenu"));
+				MenuRegistry.registerIMenu(0, new MenuCMM());
+			}
+			else
+			{
+				MenuRegistry.registerIMenu(1, new MenuCMM());
+			}
+			
+			//register the handler for CMM json support
+			CMMAutoJSONRegistry.registry.add(new CMMAutoJSONHandler());
+		}
 	}
 }

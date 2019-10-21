@@ -27,6 +27,7 @@ public class MenuLib {
 	public void preinit(FMLPreInitializationEvent event)
 	{	
 		ConfigMenu.loadMenuLib(event.getModConfigurationDirectory());
+		MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
 		ProxyMod.preInit();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());

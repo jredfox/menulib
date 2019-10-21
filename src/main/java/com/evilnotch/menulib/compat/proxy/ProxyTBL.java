@@ -1,6 +1,9 @@
 package com.evilnotch.menulib.compat.proxy;
 
 import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.menulib.menu.MenuRegistry;
+
+import net.minecraft.util.ResourceLocation;
 
 public class ProxyTBL {
 	
@@ -23,6 +26,14 @@ public class ProxyTBL {
 		{
 			tbl_musicHandler =  ReflectionUtil.classForName("thebetweenlands.client.handler.MusicHandler");
 			tbl_instance = ReflectionUtil.getObject(null, tbl_musicHandler, "INSTANCE");
+		}
+	}
+
+	public static void register() 
+	{
+		if(ProxyTBL.isLoaded)
+		{
+			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"), new ResourceLocation("thebetweenlands:mainmenu"));
 		}
 	}
 

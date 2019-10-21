@@ -148,6 +148,17 @@ public class MenuRegistry {
 		return false;
 	}
 	
+	public static void removeMenu(ResourceLocation loc)
+	{
+		Iterator<IMenu> it = menus.iterator();
+		while(it.hasNext())
+		{
+			IMenu m = it.next();
+			if(m.getId().equals(loc))
+				it.remove();
+		}
+	}
+	
 	/**
 	 * re-order the menus list also skip any menus that are disabled
 	 */
