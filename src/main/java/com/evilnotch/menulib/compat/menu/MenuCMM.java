@@ -135,5 +135,11 @@ public class MenuCMM implements IMenu{
 			return false;
 		return this.getId().equals(((IMenu)obj).getId());
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getId().toString();
+	}
 
 }

@@ -202,7 +202,7 @@ public class MenuRegistry {
 		{
 			if(ConfigMenu.displayNewMenu && ConfigMenu.addedMenus)
 			{
-				ResourceLocation loc = ConfigMenu.mainMenus.get(ConfigMenu.mainMenus.size()-1).getResourceLocation();//when adding a new menu display it
+				ResourceLocation loc = menus.get(menus.size()-1).getId();//when adding a new menu display it
 				ConfigMenu.currentMenuIndex = loc;
 			}
 			ConfigMenu.saveMenusAndIndex();
@@ -252,13 +252,18 @@ public class MenuRegistry {
 		menus = list;
 		
 		//more optimized then setting then saving the config twice
-		if(!ConfigMenu.hasMenu(ConfigMenu.currentMenuIndex))
+		if(!hasMenu(ConfigMenu.currentMenuIndex))
 		{
-			ResourceLocation loc = ConfigMenu.mainMenus.get(0).getResourceLocation();
+			ResourceLocation loc = menus.get(0).getId();
 			System.out.println("null currentIndex found:" + ConfigMenu.currentMenuIndex + " setting currentIndex to 0:" + loc);
 			ConfigMenu.currentMenuIndex = loc;
 			ConfigMenu.isDirty = true;
 		}
+	}
+	
+	public static boolean hasMenu(ResourceLocation loc)
+	{
+		return getMenu(loc) != null;
 	}
 
 	public static IMenu getMenu(ResourceLocation loc) 
