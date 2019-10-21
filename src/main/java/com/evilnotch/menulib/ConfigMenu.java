@@ -272,13 +272,8 @@ public class ConfigMenu {
 	public static boolean hasMenu(ResourceLocation loc) 
 	{
 		for(LineArray line : ConfigMenu.mainMenus)
-		{
-			System.out.println(line.getResourceLocation() + "," + loc + "," + line.getResourceLocation().equals(loc));
 			if(line.getResourceLocation().equals(loc))
-			{
 				return true;
-			}
-		}
 		return false;
 	}
 
