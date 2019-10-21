@@ -24,16 +24,14 @@ public class MenuRegistry {
 	
 	public static void registerIMenu(IMenu menu)
 	{
-		if(menus.contains(menu))
-			menus.remove(menu);
+		removeMenu(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(menu.getId());
 	}
 	
 	public static void registerIMenu(int index, IMenu menu)
 	{
-		if(menus.contains(menu))
-			menus.remove(menu);
+		removeMenu(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(index, menu.getId());
 	}
@@ -46,8 +44,7 @@ public class MenuRegistry {
 	public static IMenu registerGuiMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz, id);
-		if(menus.contains(menu))
-			menus.remove(menu);
+		removeMenu(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(id);
 		return menu;
@@ -56,8 +53,7 @@ public class MenuRegistry {
 	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz,id);
-		if(menus.contains(menu))
-			menus.remove(menu);
+		removeMenu(menu);
 		menus.add(menu);
 		ConfigMenu.saveMenuToConfig(index, id);
 		return menu;
@@ -148,6 +144,11 @@ public class MenuRegistry {
 		return false;
 	}
 	
+	public static void removeMenu(IMenu menu)
+	{
+		menus.remove(menu);
+	}
+	
 	public static void removeMenu(ResourceLocation loc)
 	{
 		Iterator<IMenu> it = menus.iterator();
@@ -155,7 +156,10 @@ public class MenuRegistry {
 		{
 			IMenu m = it.next();
 			if(m.getId().equals(loc))
+			{
 				it.remove();
+				break;
+			}
 		}
 	}
 	
