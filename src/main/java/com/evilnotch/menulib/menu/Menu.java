@@ -53,7 +53,7 @@ public class Menu implements IMenu {
 	 */
 	@Override
 	public void onClose() {
-		this.gui = null;
+//		this.gui = null;
 	}
 	
 	/**

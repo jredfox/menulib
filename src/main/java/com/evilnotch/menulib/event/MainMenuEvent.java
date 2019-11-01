@@ -25,9 +25,11 @@ public class MainMenuEvent extends Event{
 	@Cancelable
 	public static class Open extends MainMenuEvent
 	{
+		public GuiScreen gui;
 		public Open(IMenu menu)
 		{
 			super(menu);
+			this.gui = menu.createGui();
 		}
 	}
 	
@@ -37,9 +39,11 @@ public class MainMenuEvent extends Event{
 	@Cancelable
 	public static class OnOpenFromSub extends MainMenuEvent
 	{
+		public GuiScreen gui;
 		public OnOpenFromSub(IMenu menu) 
 		{
 			super(menu);
+			this.gui = menu.getGui();
 		}
 	}
 	

@@ -37,13 +37,24 @@ public class GuiEventHandler {
 		boolean isReplaceable = MenuRegistry.isReplaceable(gui);
 		GuiScreen compare = isReplaceable ? MenuRegistry.getCurrentGui() : gui;
 		GuiScreen lastGui = MenuRegistry.getGui(lastMenu);
+		
+		//if a new MainMenu shows up and The last MainMenu isn't null close it
 		if(isReplaceable && lastGui != compare && lastGui != null)
 		{
-			lastMenu.onClose();
+			Event event = new MainMenuEvent.Close(lastMenu);
+			if(!MinecraftForge.EVENT_BUS.post(event))
+			{
+				lastMenu.onClose();
+			}
 		}
+		//if your going into a SubMenu from the MainMenu close it from sub
 		else if(lastGui == Minecraft.getMinecraft().currentScreen && lastGui != null)
 		{
-			lastMenu.onCloseFromSub();
+			Event event = new MainMenuEvent.OnCloseFromSub(lastMenu);
+			if(!MinecraftForge.EVENT_BUS.post(event))
+			{
+				lastMenu.onCloseFromSub();
+			}
 		}
 		
 		//return from method if gui is null or not a main menu
@@ -70,21 +81,22 @@ public class GuiEventHandler {
 		if(!sub)
 		{
 			MainMenuEvent.Open open = new MainMenuEvent.Open(menu);
-			menu = open.menu;//in case it gets replaced
-			gui = menu.createGui();
-			if(!MinecraftForge.EVENT_BUS.post(open))
+			boolean canOpen = !MinecraftForge.EVENT_BUS.post(open);
+			gui = open.gui;//allow the IMenu gui to be replaceable without creating a whole new IMenu
+			if(canOpen)
 			{
 				menu.onOpen();
 			}
 		}
 		else
 		{
-			MainMenuEvent.OnOpenFromSub onOpenFromSub = new MainMenuEvent.OnOpenFromSub(menu);
-			if(!MinecraftForge.EVENT_BUS.post(onOpenFromSub))
+			MainMenuEvent.OnOpenFromSub open = new MainMenuEvent.OnOpenFromSub(menu);
+			boolean canOpen = !MinecraftForge.EVENT_BUS.post(open);
+			gui = open.gui;
+			if(canOpen)
 			{
 				menu.onOpenFromSub();
 			}
-			gui = menu.getGui();
 		}
 		lastMenu = menu;
 		e.setGui(gui);
