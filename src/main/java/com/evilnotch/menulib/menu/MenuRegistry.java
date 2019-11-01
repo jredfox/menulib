@@ -9,6 +9,7 @@ import java.util.Map;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.main.Config;
 import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.evilnotch.lib.util.line.LineArray;
 import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.compat.proxy.ProxyMod;
@@ -72,7 +73,6 @@ public class MenuRegistry {
 	 */
 	public static void advanceNextMenu()
 	{
-		getCurrentMenu().onClose();	
 		MainMenuEvent.AdvancedNext event = new MainMenuEvent.AdvancedNext();
 		if(MinecraftForge.EVENT_BUS.post(event))
 			return;
@@ -88,7 +88,6 @@ public class MenuRegistry {
 	 */
 	public static void advancePreviousMenu()
 	{
-		getCurrentMenu().onClose();	
 		MainMenuEvent.AdvancedPrevious event = new MainMenuEvent.AdvancedPrevious();
 		if(MinecraftForge.EVENT_BUS.post(event))
 			return;
@@ -334,7 +333,9 @@ public class MenuRegistry {
 	 */
 	public static boolean isReplaceable(GuiScreen gui)
 	{
-		return gui instanceof GuiMainMenu || containsMenu(gui.getClass() );
+		if(gui == null)
+			return false;
+		return gui instanceof GuiMainMenu || gui instanceof GuiFakeMenu || containsMenu(gui.getClass() );
 	}
 	
 	public static boolean hasInit()
@@ -356,5 +357,13 @@ public class MenuRegistry {
 		MusicEvent e = new MusicEvent(screen, instance);
 		MinecraftForge.EVENT_BUS.post(e);
 		return e.canPlay;
+	}
+
+	/**
+	 * Get the gui from the IMenu with null handeling
+	 */
+	public static GuiScreen getGui(IMenu menu) 
+	{
+		return menu != null ? menu.getGui() : null;
 	}
 }

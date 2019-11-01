@@ -19,8 +19,10 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiEventHandler {
-	
-	public static GuiScreen currentGui;
+	/**
+	 * the last IMenu opened
+	 */
+	public static IMenu lastMenu;
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -32,10 +34,20 @@ public class GuiEventHandler {
 			return;
 		}
 		GuiScreen gui = e.getGui();
-		currentGui = gui;
+		boolean isReplaceable = MenuRegistry.isReplaceable(gui);
+		GuiScreen compare = isReplaceable ? MenuRegistry.getCurrentGui() : gui;
+		GuiScreen lastGui = MenuRegistry.getGui(lastMenu);
+		if(isReplaceable && lastGui != compare && lastGui != null)
+		{
+			lastMenu.onClose();
+		}
+		else if(lastGui == Minecraft.getMinecraft().currentScreen && lastGui != null)
+		{
+			lastMenu.onCloseFromSub();
+		}
 		
 		//return from method if gui is null or not a main menu
-		if(gui == null || !MenuRegistry.isReplaceable(gui))
+		if(gui == null || !isReplaceable)
 		{
 			return;
 		}
@@ -54,14 +66,12 @@ public class GuiEventHandler {
 			return;
 		}
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		boolean sub = currentGui == MenuRegistry.getCurrentGui() && currentGui != null;
-		gui = sub ? menu.getGui() : menu.createGui();
-		currentGui = gui;
-		e.setGui(gui);
-		
+		boolean sub = MenuRegistry.getGui(lastMenu) == menu.getGui() && lastMenu != null;
 		if(!sub)
 		{
 			MainMenuEvent.Open open = new MainMenuEvent.Open(menu);
+			menu = open.menu;//in case it gets replaced
+			gui = menu.createGui();
 			if(!MinecraftForge.EVENT_BUS.post(open))
 			{
 				menu.onOpen();
@@ -74,7 +84,10 @@ public class GuiEventHandler {
 			{
 				menu.onOpenFromSub();
 			}
+			gui = menu.getGui();
 		}
+		lastMenu = menu;
+		e.setGui(gui);
 	}
 	
 	/**
