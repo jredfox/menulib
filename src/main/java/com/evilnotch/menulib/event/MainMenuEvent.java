@@ -102,14 +102,6 @@ public class MainMenuEvent extends Event{
 		}
 	}
 	
-	public static class ChooseMenu extends MainMenuEvent
-	{
-		public ChooseMenu(IMenu menu)
-		{
-			super(menu);	
-		}
-	}
-	
 	/**
 	 * used to determine if music can play. Currently only supports vanilla however modders can fire this for their main menu music
 	 * @author jredfox

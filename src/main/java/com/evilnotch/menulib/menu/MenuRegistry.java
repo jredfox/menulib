@@ -76,11 +76,11 @@ public class MenuRegistry {
 		MainMenuEvent.AdvancedNext event = new MainMenuEvent.AdvancedNext();
 		if(MinecraftForge.EVENT_BUS.post(event))
 			return;
-		indexMenu = event.nextIndex;
-		currentMenu = menus.get(indexMenu);
+		setMenu(event.nextIndex);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
+		ConfigMenu.saveMenuIndex();
 	}
 	
 	/**
@@ -92,11 +92,11 @@ public class MenuRegistry {
 		MainMenuEvent.AdvancedPrevious event = new MainMenuEvent.AdvancedPrevious();
 		if(MinecraftForge.EVENT_BUS.post(event))
 			return;
-		indexMenu = event.nextIndex;
-		currentMenu = menus.get(indexMenu);
+		setMenu(event.nextIndex);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
+		ConfigMenu.saveMenuIndex();
 	}
 	
 	public static int getNext(int index) 
@@ -337,7 +337,7 @@ public class MenuRegistry {
 		return gui instanceof GuiMainMenu || containsMenu(gui.getClass() );
 	}
 	
-	public static boolean hasBeenInit()
+	public static boolean hasInit()
 	{
 		return isInit;
 	}

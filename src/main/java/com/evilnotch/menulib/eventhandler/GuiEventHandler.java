@@ -8,6 +8,7 @@ import com.evilnotch.menulib.event.MainMenuEvent;
 import com.evilnotch.menulib.menu.IMenu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -19,29 +20,19 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiEventHandler {
 	
-	public static GuiScreen lastMenuGui;
+	public static GuiScreen currentGui;
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
-		if(!MenuRegistry.hasBeenInit())
+		if(!MenuRegistry.hasInit())
 		{
 			System.out.println("GuiOpenEvent firing before MenuRegistry has been initialized returning!");
 			return;
 		}
 		GuiScreen gui = e.getGui();
-		
-		//check if the IMenu Is open and switching to a sub menu
-		if(lastMenuGui == MenuRegistry.getCurrentGui() && lastMenuGui != null && lastMenuGui != gui)
-		{
-			IMenu menu = MenuRegistry.getCurrentMenu();
-			Event event = new MainMenuEvent.OnCloseFromSub(menu);
-			if(!MinecraftForge.EVENT_BUS.post(event))
-				menu.onCloseFromSub();	
-		}
-		
-		lastMenuGui = gui;//set the last menu equal to the current menu
+		currentGui = gui;
 		
 		//return from method if gui is null or not a main menu
 		if(gui == null || !MenuRegistry.isReplaceable(gui))
@@ -62,32 +53,25 @@ public class GuiEventHandler {
 		{
 			return;
 		}
-		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
+		IMenu menu = MenuRegistry.getCurrentMenu();
+		boolean sub = currentGui == MenuRegistry.getCurrentGui() && currentGui != null;
+		gui = sub ? menu.getGui() : menu.createGui();
+		currentGui = gui;
+		e.setGui(gui);
 		
 		if(!sub)
 		{
-			IMenu menu = MenuRegistry.getCurrentMenu();
-			gui = menu.createGui();
-			e.setGui(gui);
-			lastMenuGui = gui;
-			
-			Event open = new MainMenuEvent.Open(menu);
+			MainMenuEvent.Open open = new MainMenuEvent.Open(menu);
 			if(!MinecraftForge.EVENT_BUS.post(open))
 			{
-				System.out.println("Open");
 				menu.onOpen();
 			}
 		}
 		else
 		{
-			IMenu menu = MenuRegistry.getCurrentMenu();
-			gui = menu.getGui();
-			e.setGui(gui);
-			
-			Event openFromSub = new MainMenuEvent.OnOpenFromSub(menu);
-			if(!MinecraftForge.EVENT_BUS.post(openFromSub))
+			MainMenuEvent.OnOpenFromSub onOpenFromSub = new MainMenuEvent.OnOpenFromSub(menu);
+			if(!MinecraftForge.EVENT_BUS.post(onOpenFromSub))
 			{
-				System.out.println("OpenFromSub");
 				menu.onOpenFromSub();
 			}
 		}
@@ -134,12 +118,10 @@ public class GuiEventHandler {
 		if(bId == menu.getLeftButton().id)
 		{
 			MenuRegistry.advancePreviousMenu();
-			ConfigMenu.saveMenuIndex();
 		}
 		else if(bId == menu.getRightButton().id)
 		{
 			MenuRegistry.advanceNextMenu();
-			ConfigMenu.saveMenuIndex();
 		}
 	}
 
