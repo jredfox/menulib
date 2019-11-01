@@ -21,11 +21,11 @@ public class MenuLib {
 	
 	public static final String MODID = "menulib";
 	public static final String NAME = "Menu Lib";
-	public static final String VERSION = "1.2.5";
+	public static final String VERSION = "1.2.5.1";
 	
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
-	{	
+	{
 		ConfigMenu.loadMenuLib(event.getModConfigurationDirectory());
 		MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
 		ProxyMod.preInit();

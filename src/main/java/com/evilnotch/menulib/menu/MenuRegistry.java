@@ -1,39 +1,46 @@
 package com.evilnotch.menulib.menu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.main.Config;
+import com.evilnotch.lib.main.loader.LoaderMain;
 import com.evilnotch.lib.util.line.LineArray;
 import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.compat.proxy.ProxyMod;
+import com.evilnotch.menulib.event.MainMenuEvent;
 import com.evilnotch.menulib.eventhandler.GuiEventHandler;
-import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 public class MenuRegistry {
 	
 	protected static List<IMenu> menus = new ArrayList();
+	protected static boolean isInit;
+	protected static Map<ResourceLocation,Integer> tempMenus = new HashMap();
 	public static int indexMenu = 0;
 	protected static IMenu currentMenu = null;
 	
 	public static void registerIMenu(IMenu menu)
 	{
-		removeMenu(menu);
+		menus.remove(menu);
 		menus.add(menu);
-		ConfigMenu.saveMenuToConfig(menu.getId());
+		tempMenus.put(menu.getId(), -1);
 	}
 	
 	public static void registerIMenu(int index, IMenu menu)
 	{
-		removeMenu(menu);
+		menus.remove(menu);
 		menus.add(menu);
-		ConfigMenu.saveMenuToConfig(index, menu.getId());
+		tempMenus.put(menu.getId(), index);
 	}
 	
 	/**
@@ -44,18 +51,18 @@ public class MenuRegistry {
 	public static IMenu registerGuiMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz, id);
-		removeMenu(menu);
+		menus.remove(menu);
 		menus.add(menu);
-		ConfigMenu.saveMenuToConfig(id);
+		tempMenus.put(id, -1);
 		return menu;
 	}
 	
 	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz,id);
-		removeMenu(menu);
+		menus.remove(menu);
 		menus.add(menu);
-		ConfigMenu.saveMenuToConfig(index, id);
+		tempMenus.put(id, index);
 		return menu;
 	}
 	
@@ -65,7 +72,10 @@ public class MenuRegistry {
 	public static void advanceNextMenu()
 	{
 		getCurrentMenu().onClose();	
-		indexMenu = getNext(indexMenu);
+		MainMenuEvent.AdvancedNext event = new MainMenuEvent.AdvancedNext();
+		if(MinecraftForge.EVENT_BUS.post(event))
+			return;
+		indexMenu = event.nextIndex;
 		currentMenu = menus.get(indexMenu);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
@@ -77,15 +87,18 @@ public class MenuRegistry {
 	 */
 	public static void advancePreviousMenu()
 	{
-		getCurrentMenu().onClose();
-		indexMenu = getPrevious(indexMenu);
+		getCurrentMenu().onClose();	
+		MainMenuEvent.AdvancedPrevious event = new MainMenuEvent.AdvancedPrevious();
+		if(MinecraftForge.EVENT_BUS.post(event))
+			return;
+		indexMenu = event.nextIndex;
 		currentMenu = menus.get(indexMenu);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
 	}
 	
-	protected static int getNext(int index) 
+	public static int getNext(int index) 
 	{
 		if(index + 1 == MenuRegistry.getMenus().size() )
 			return 0;
@@ -93,7 +106,7 @@ public class MenuRegistry {
 		return index;
 	}
 	
-	protected static int getPrevious(int index) 
+	public static int getPrevious(int index) 
 	{
 		if( (index -1) == -1)
 			return menus.size()-1;
@@ -144,11 +157,6 @@ public class MenuRegistry {
 		return false;
 	}
 	
-	public static void removeMenu(IMenu menu)
-	{
-		menus.remove(menu);
-	}
-	
 	public static void removeMenu(ResourceLocation loc)
 	{
 		Iterator<IMenu> it = menus.iterator();
@@ -161,6 +169,7 @@ public class MenuRegistry {
 				break;
 			}
 		}
+		tempMenus.remove(loc);
 	}
 	
 	/**
@@ -168,9 +177,26 @@ public class MenuRegistry {
 	 */
 	public static void init() 
 	{
+		if(isInit)
+			return;
+		mergeTemp();
 		reorderLists();
 		checkConfig();
 		setConfigIndex();
+		isInit = true;
+	}
+
+	public static void mergeTemp() 
+	{
+		for(Map.Entry<ResourceLocation, Integer> map : tempMenus.entrySet())
+		{
+			int index = map.getValue();
+			if(index == -1)
+				ConfigMenu.saveMenuToConfig(map.getKey());
+			else
+				ConfigMenu.saveMenuToConfig(index, map.getKey());
+		}
+		tempMenus.clear();
 	}
 
 	public static void setConfigIndex() 
@@ -195,6 +221,11 @@ public class MenuRegistry {
 		setMenu(index);
 		return true;
 	}
+	
+	public static boolean setMenu(IMenu menu)
+	{
+		return setMenu(menu.getId());
+	}
 
 	public static void checkConfig() 
 	{
@@ -202,8 +233,7 @@ public class MenuRegistry {
 		{
 			if(ConfigMenu.displayNewMenu && ConfigMenu.addedMenus)
 			{
-				ResourceLocation loc = menus.get(menus.size()-1).getId();//when adding a new menu display it
-				ConfigMenu.currentMenuIndex = loc;
+				ConfigMenu.currentMenuIndex = menus.get(menus.size()-1).getId();//when adding a new menu display it
 			}
 			ConfigMenu.saveMenusAndIndex();
 		}
@@ -250,6 +280,9 @@ public class MenuRegistry {
 			}
 		}
 		menus = list;
+		
+		if(Config.debug)
+			System.out.println("ConfigMenu.isDirty:" + ConfigMenu.isDirty);
 		
 		//more optimized then setting then saving the config twice
 		if(!hasMenu(ConfigMenu.currentMenuIndex))
@@ -301,5 +334,16 @@ public class MenuRegistry {
 	public static boolean isReplaceable(GuiScreen gui)
 	{
 		return gui instanceof GuiMainMenu || containsMenu(gui.getClass() );
+	}
+	
+	public static boolean hasBeenInit()
+	{
+		return isInit;
+	}
+	
+	public static void refresh()
+	{
+		isInit = false;
+		init();
 	}
 }

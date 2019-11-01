@@ -28,12 +28,12 @@ public class ProxyCMM {
 			JSONObject json = JavaUtil.getJson(ProxyCMM.cmmJson);
 			CMMAutoJSONRegistry.fireCMMAutoJSON(json);
 			JavaUtil.saveJSON(json, ProxyCMM.cmmJson, false);
-			refreshMenus();
+			refreshCMM();
 			System.out.println("Done Hooking CMM Auto JSON Support. To Regenerate support delete the CMM JSON File!");
 		}
 	}
 	
-	public static void refreshMenus()
+	public static void refreshCMM()
 	{
 		try 
 		{

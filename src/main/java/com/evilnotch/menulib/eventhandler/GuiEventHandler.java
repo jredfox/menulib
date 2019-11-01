@@ -4,14 +4,16 @@ import java.util.List;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.evilnotch.menulib.ConfigMenu;
+import com.evilnotch.menulib.event.MainMenuEvent;
 import com.evilnotch.menulib.menu.IMenu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -23,18 +25,25 @@ public class GuiEventHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
+		if(!MenuRegistry.hasBeenInit())
+		{
+			System.out.println("GuiOpenEvent firing before MenuRegistry has been initialized returning!");
+			return;
+		}
 		GuiScreen gui = e.getGui();
 		
-		//check if the IMenu Is open and switiching to a sub menu
-		GuiScreen current = MenuRegistry.getCurrentGui();
-		if(lastMenuGui == current && lastMenuGui != null && lastMenuGui != gui)
+		//check if the IMenu Is open and switching to a sub menu
+		if(lastMenuGui == MenuRegistry.getCurrentGui() && lastMenuGui != null && lastMenuGui != gui)
 		{
-			MenuRegistry.getCurrentMenu().onCloseFromSub();	
+			IMenu menu = MenuRegistry.getCurrentMenu();
+			Event event = new MainMenuEvent.OnCloseFromSub(menu);
+			if(!MinecraftForge.EVENT_BUS.post(event))
+				menu.onCloseFromSub();	
 		}
 		
 		lastMenuGui = gui;//set the last menu equal to the current menu
 		
-		//return from method if gui is null
+		//return from method if gui is null or not a main menu
 		if(gui == null || !MenuRegistry.isReplaceable(gui))
 		{
 			return;
@@ -54,17 +63,25 @@ public class GuiEventHandler {
 			return;
 		}
 		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
-		GuiScreen replaced = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();
-		e.setGui(replaced);
-		lastMenuGui = replaced;
-		IMenu menu = MenuRegistry.getCurrentMenu();
+		
 		if(!sub)
 		{
-			menu.onOpen();
+			IMenu menu = MenuRegistry.getCurrentMenu();
+			e.setGui(menu.createGui());
+			lastMenuGui = gui;
+			
+			Event open = new MainMenuEvent.Open(menu);
+			if(!MinecraftForge.EVENT_BUS.post(open))
+				menu.onOpen();
 		}
 		else
 		{
-			menu.onOpenFromSub();
+			IMenu menu = MenuRegistry.getCurrentMenu();
+			e.setGui(menu.getGui());
+			
+			Event openFromSub = new MainMenuEvent.OnOpenFromSub(menu);
+			if(!MinecraftForge.EVENT_BUS.post(openFromSub))
+				menu.onOpenFromSub();
 		}
 	}
 	
@@ -104,15 +121,14 @@ public class GuiEventHandler {
 		{
 			return;
 		}
-		
-		//advance previous or next menu based upon the button
-		int buttonId = e.getButton().id;
-		if(buttonId == ConfigMenu.leftButtonId)
+		IMenu menu = MenuRegistry.getCurrentMenu();
+		int bId = e.getButton().id;
+		if(bId == menu.getLeftButton().id)
 		{
 			MenuRegistry.advancePreviousMenu();
-			ConfigMenu.saveMenuIndex();//keep the save index separately for more options on modders
+			ConfigMenu.saveMenuIndex();
 		}
-		else if(buttonId == ConfigMenu.rightButtonId)
+		else if(bId == menu.getRightButton().id)
 		{
 			MenuRegistry.advanceNextMenu();
 			ConfigMenu.saveMenuIndex();
