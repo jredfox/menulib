@@ -67,21 +67,29 @@ public class GuiEventHandler {
 		if(!sub)
 		{
 			IMenu menu = MenuRegistry.getCurrentMenu();
-			e.setGui(menu.createGui());
+			gui = menu.createGui();
+			e.setGui(gui);
 			lastMenuGui = gui;
 			
 			Event open = new MainMenuEvent.Open(menu);
 			if(!MinecraftForge.EVENT_BUS.post(open))
+			{
+				System.out.println("Open");
 				menu.onOpen();
+			}
 		}
 		else
 		{
 			IMenu menu = MenuRegistry.getCurrentMenu();
-			e.setGui(menu.getGui());
+			gui = menu.getGui();
+			e.setGui(gui);
 			
 			Event openFromSub = new MainMenuEvent.OnOpenFromSub(menu);
 			if(!MinecraftForge.EVENT_BUS.post(openFromSub))
+			{
+				System.out.println("OpenFromSub");
 				menu.onOpenFromSub();
+			}
 		}
 	}
 	

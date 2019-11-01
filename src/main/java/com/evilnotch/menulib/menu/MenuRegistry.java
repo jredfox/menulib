@@ -13,6 +13,7 @@ import com.evilnotch.lib.util.line.LineArray;
 import com.evilnotch.menulib.ConfigMenu;
 import com.evilnotch.menulib.compat.proxy.ProxyMod;
 import com.evilnotch.menulib.event.MainMenuEvent;
+import com.evilnotch.menulib.event.MainMenuEvent.MusicEvent;
 import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 
 import net.minecraft.client.Minecraft;
@@ -215,7 +216,7 @@ public class MenuRegistry {
 		int index = getIndex(loc);
 		if(index == -1)
 		{
-			System.out.println("null menu when trying to set index:" + ConfigMenu.currentMenuIndex);
+			System.out.println("null menu when trying to set index:" + loc);
 			return false;
 		}
 		setMenu(index);
@@ -345,5 +346,15 @@ public class MenuRegistry {
 	{
 		isInit = false;
 		init();
+	}
+	
+	/**
+	 * use this to fire the event
+	 */
+	public static boolean canPlayMusic(GuiScreen screen, Class instance)
+	{
+		MusicEvent e = new MusicEvent(screen, instance);
+		MinecraftForge.EVENT_BUS.post(e);
+		return e.canPlay;
 	}
 }

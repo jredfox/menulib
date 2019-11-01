@@ -3,6 +3,10 @@ package com.evilnotch.menulib.event;
 import com.evilnotch.menulib.menu.IMenu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
+import net.minecraft.client.audio.MusicTicker;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -104,6 +108,27 @@ public class MainMenuEvent extends Event{
 		{
 			super(menu);	
 		}
+	}
+	
+	/**
+	 * used to determine if music can play. Currently only supports vanilla however modders can fire this for their main menu music
+	 * @author jredfox
+	 */
+	public static class MusicEvent extends Event {
+		
+		public GuiScreen gui;
+		public boolean canPlay;
+		public Class instanceClass;
+		public boolean isVanillaTicker;
+		
+		public MusicEvent(GuiScreen screen, Class instance)
+		{
+			this.gui = screen;
+			this.canPlay = this.gui instanceof GuiMainMenu;
+			this.instanceClass = instance;
+			this.isVanillaTicker = this.instanceClass.equals(MusicTicker.class);
+		}
+
 	}
 
 }
