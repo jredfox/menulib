@@ -19,7 +19,7 @@ public class ConfigMenuCore {
 	public static void loadConfig()
 	{
 		File dir = new File(System.getProperty("user.dir"));
-		File filecfg = new File(dir, "config/menulib/menulibcore.cfg");
+		File filecfg = new File(dir, "config/menulib/asm.cfg");
 		Configuration cfg = new Configuration(filecfg);
 		
 		cfg.load();

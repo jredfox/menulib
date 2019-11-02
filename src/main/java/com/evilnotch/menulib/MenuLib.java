@@ -31,10 +31,6 @@ public class MenuLib {
 		ProxyMod.preInit();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
-		if(ConfigMenu.debugFrameRate)
-		{
-			TickRegistry.register(new TickTest(), Side.CLIENT);
-		}
 	}
 	
 	@EventHandler
