@@ -21,7 +21,6 @@ public class ConfigMenuCore {
 		File dir = new File(System.getProperty("user.dir"));
 		File filecfg = new File(dir, "config/menulib/asm.cfg");
 		Configuration cfg = new Configuration(filecfg);
-		
 		cfg.load();
 		lockMenuFrameRate = cfg.get("general", "lockMenuFrameRate", lockMenuFrameRate).getBoolean();
 		lockedMenuFrameRate = cfg.get("general", "lockedMenuFrameRate", lockedMenuFrameRate).getInt();

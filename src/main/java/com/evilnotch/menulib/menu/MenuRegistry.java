@@ -209,7 +209,7 @@ public class MenuRegistry {
 		mergeTemp();
 		reorderLists();
 		checkConfig();
-		setConfigIndex();
+		setMenuFromConfig();
 		isInit = true;
 	}
 
@@ -290,7 +290,7 @@ public class MenuRegistry {
 		}
 	}
 	
-	public static void setConfigIndex() 
+	public static void setMenuFromConfig() 
 	{
 		setMenu(ConfigMenu.currentMenuIndex);
 	}
