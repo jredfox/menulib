@@ -50,7 +50,7 @@ public class MenuRegistry {
 	 * to make an IMenu method use register IMenu
 	 * or simply make a new Menu instance(Menu implements IMenu) and override what you need 
 	 */
-	public static IMenu registerGuiMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
+	public static IMenu registerGuiMenu(Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz, id);
 		menus.remove(menu);
@@ -59,13 +59,23 @@ public class MenuRegistry {
 		return menu;
 	}
 	
-	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz,ResourceLocation id)
+	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz,id);
 		menus.remove(menu);
 		menus.add(menu);
 		tempMenus.put(id, index);
 		return menu;
+	}
+	//TODO:
+	public static void removeIMenu(ResourceLocation id, boolean removeUser)
+	{
+		menus.remove(getMenu(id));
+		tempMenus.remove(id);
+		if(removeUser)
+		{
+			
+		}
 	}
 	
 	/**

@@ -143,45 +143,36 @@ public class ConfigMenu {
 	 */
 	public static boolean addedMenus = false;
 
+	/**
+	 * saves the generated menus to the config with keeping configurations from the user data
+	 */
 	public static void saveMenusAndIndex() 
 	{
 		Configuration config = new Configuration(cfgmenu);
 		config.load();
-		
 		List<String> list = new ArrayList();
 		for(LineArray line : mainMenus)
 		{
-			if(!list.contains(line.getResourceLocation().toString()))
+			ResourceLocation id = line.getResourceLocation();
+			if(!list.contains(id))
 			{
 				if(!line.getBoolean())
+				{
 					list.add(line.toString());
+				}
 				else
 				{
-					String s = line.getMetaString();
-					if(!s.isEmpty())
-						s = " <" + s + ">";
-					list.add(line.getResourceLocation() + s);
+					list.add(id + (line.hasStringMeta() ? " <" + line.getMetaString() + ">" : "") );
 				}
 			}
 		}
-		
 		setConfigIndex(config, currentMenuIndex);
-		
-		//fix comment dissapearing
 		String[] strlist = JavaUtil.toStaticStringArray(list);
-		Property prop = config.get("menulib", "menus", strlist,"");
+		Property prop = config.get("menulib", "menus", strlist, "");
 		prop.set(strlist);
-		
 		syncComments(config);
-		
 		config.save();
 		isDirty = false;
-	}
-
-	private static void setConfigIndex(Configuration config,ResourceLocation loc) 
-	{
-		Property prop_index = config.get("menulib", "currentMenuIndex", "");
-		prop_index.set(loc.toString());
 	}
 
 	public static void saveMenuIndex()
@@ -194,7 +185,7 @@ public class ConfigMenu {
 		long stamp = System.currentTimeMillis();
 		Configuration config = new Configuration(cfgmenu);
 		config.load();
-		setConfigIndex(config,loc);
+		setConfigIndex(config, loc);
 		currentMenuIndex = loc;
 		syncComments(config);
 		config.save();
@@ -202,6 +193,12 @@ public class ConfigMenu {
 		{
 			JavaUtil.printTime(stamp, "Saved Current Menu:");
 		}
+	}
+	
+	private static void setConfigIndex(Configuration config, ResourceLocation loc) 
+	{
+		Property prop_index = config.get("menulib", "currentMenuIndex", "");
+		prop_index.set(loc.toString());
 	}
 
 	/**
@@ -224,11 +221,10 @@ public class ConfigMenu {
 	{
 		if(!hasMenu(loc))
 		{
+			mainMenus.add(index, new LineArray(loc.toString() + " = " + true));
+			isDirty = true;
 			if(!addedMenus)
 				addedMenus = index == mainMenus.size();
-			isDirty = true;
-			
-			mainMenus.add(index, new LineArray(loc.toString() + " = " + true));
 		}
 	}
 	
@@ -254,11 +250,10 @@ public class ConfigMenu {
 	{
 		if(!hasMenu(loc))
 		{
+			mainMenus.add(index, new LineArray(loc + " <" + clazz + ">" + " = " + enabled));
+			isDirty = true;
 			if(!addedMenus)
 				addedMenus = index == mainMenus.size();
-			isDirty = true;
-			
-			mainMenus.add(index, new LineArray(loc + " <" + clazz + ">" + " = " + enabled));
 		}
 	}
 	
