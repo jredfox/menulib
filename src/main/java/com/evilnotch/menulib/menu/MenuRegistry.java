@@ -25,10 +25,10 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class MenuRegistry {
 	
-	protected static List<IMenu> menus = new ArrayList();
 	protected static boolean isInit;
+	protected static List<IMenu> menus = new ArrayList();
 	protected static Map<ResourceLocation,Integer> tempMenus = new HashMap();
-	public static int indexMenu = 0;
+	protected static int indexMenu = 0;
 	protected static IMenu currentMenu = null;
 	
 	public static void registerIMenu(IMenu menu)
@@ -67,15 +67,25 @@ public class MenuRegistry {
 		tempMenus.put(id, index);
 		return menu;
 	}
-	//TODO:
+	
 	public static void removeIMenu(ResourceLocation id, boolean removeUser)
 	{
 		menus.remove(getMenu(id));
 		tempMenus.remove(id);
 		if(removeUser)
 		{
-			
+			ConfigMenu.mainMenus.remove(new LineArray(id.toString() ));
 		}
+	}
+	
+	public static int getCurrentIndex()
+	{
+		return indexMenu;
+	}
+	
+	public static void setCurrentIndex(int index)
+	{
+		indexMenu = index;
 	}
 	
 	/**

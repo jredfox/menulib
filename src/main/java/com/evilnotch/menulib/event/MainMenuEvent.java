@@ -6,7 +6,6 @@ import com.evilnotch.menulib.menu.MenuRegistry;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -84,7 +83,7 @@ public class MainMenuEvent extends Event{
 		public AdvancedNext()
 		{
 			super(MenuRegistry.getCurrentMenu());
-			this.currentIndex = MenuRegistry.indexMenu;
+			this.currentIndex = MenuRegistry.getCurrentIndex();
 			this.nextIndex = MenuRegistry.getNext(this.currentIndex);
 		}
 	}
@@ -101,7 +100,7 @@ public class MainMenuEvent extends Event{
 		public AdvancedPrevious()
 		{
 			super(MenuRegistry.getCurrentMenu());
-			this.currentIndex = MenuRegistry.indexMenu;
+			this.currentIndex = MenuRegistry.getCurrentIndex();
 			this.nextIndex = MenuRegistry.getPrevious(this.currentIndex);
 		}
 	}
