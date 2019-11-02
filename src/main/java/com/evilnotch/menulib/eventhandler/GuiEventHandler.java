@@ -77,7 +77,8 @@ public class GuiEventHandler {
 			return;
 		}
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		boolean sub = MenuRegistry.getGui(lastMenu) == menu.getGui() && lastMenu != null;
+		GuiScreen compare = MenuRegistry.getGui(lastMenu);
+		boolean sub = compare == menu.getGui() && compare != null;
 		if(!sub)
 		{
 			MainMenuEvent.Open open = new MainMenuEvent.Open(menu);
