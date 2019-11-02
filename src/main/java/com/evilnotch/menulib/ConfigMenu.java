@@ -100,6 +100,20 @@ public class ConfigMenu {
 		isLoaded = true;
 	}
 	
+	private static void setMenus(String[] order) 
+	{
+		mainMenus.clear();
+		for(String s : order)
+		{
+			if(s == null || JavaUtil.toWhiteSpaced(s).isEmpty())
+				continue;
+			LineArray line = new LineArray(s);
+			if(!line.hasHead())
+				line.setHead(true);
+			mainMenus.add(line);
+		}
+	}
+	
 	private static void setClasses(List<Class> cache, String[] strList) 
 	{
 		cache.clear();
@@ -112,26 +126,18 @@ public class ConfigMenu {
 				cache.add(c);
 		}
 	}
-
-	private static void setMenus(String[] order) 
-	{
-		mainMenus.clear();
-		for(String s : order)
-		{
-			if(s == null || JavaUtil.toWhiteSpaced(s).equals(""))
-				continue;
-			LineArray line = new LineArray(s);
-			if(!line.hasHead())
-				line.setHead(true);
-			mainMenus.add(line);
-		}
-	}
 	
 	private static void syncComments(Configuration config) 
 	{
 		config.get("menulib", "menus", new String[]{""}, menu_comment);
 		config.get("music", "classes_deny", new String[]{""}, musicDeny_comment);
 		config.get("music", "classes_allowed", new String[]{""}, musicAllow_comment);
+	}
+	
+	private static void setConfigIndex(Configuration config, ResourceLocation loc) 
+	{
+		Property prop_index = config.get("menulib", "currentMenuIndex", "");
+		prop_index.set(loc.toString());
 	}
 	
 	/**
@@ -195,10 +201,12 @@ public class ConfigMenu {
 		}
 	}
 	
-	private static void setConfigIndex(Configuration config, ResourceLocation loc) 
+	public static boolean hasMenu(ResourceLocation loc) 
 	{
-		Property prop_index = config.get("menulib", "currentMenuIndex", "");
-		prop_index.set(loc.toString());
+		for(LineArray line : ConfigMenu.mainMenus)
+			if(line.getResourceLocation().equals(loc))
+				return true;
+		return false;
 	}
 
 	/**
@@ -257,13 +265,4 @@ public class ConfigMenu {
 		}
 	}
 	
-	public static boolean hasMenu(ResourceLocation loc) 
-	{
-		for(LineArray line : ConfigMenu.mainMenus)
-			if(line.getResourceLocation().equals(loc))
-				return true;
-		return false;
-	}
-
-
 }

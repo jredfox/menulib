@@ -60,12 +60,12 @@ public class ProxyCMM {
 		{
 			if(!ConfigMenu.cmmAndVanilla)
 			{
-				MenuRegistry.removeMenu(new ResourceLocation("mainmenu"));
-				MenuRegistry.registerIMenu(0, new MenuCMM());
+				MenuRegistry.removeMenu(new ResourceLocation("mainmenu"), false);
+				MenuRegistry.registerMenu(0, new MenuCMM());
 			}
 			else
 			{
-				MenuRegistry.registerIMenu(1, new MenuCMM());
+				MenuRegistry.registerMenu(1, new MenuCMM());
 			}
 			
 			//register the handler for CMM json support

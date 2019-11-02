@@ -13,7 +13,7 @@ public class ProxyFossil {
 	{
 		if(ProxyFossil.isLoaded)
 		{
-			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI"), new ResourceLocation("fossil:mainmenu"));
+			MenuRegistry.registerMenu(ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI"), new ResourceLocation("fossil:mainmenu"));
 		}
 	}
 
