@@ -6,6 +6,7 @@ import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

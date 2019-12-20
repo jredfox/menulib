@@ -70,11 +70,12 @@ public class MenuLibTransformer implements IClassTransformer{
 			break;
 			
 			case 1:
+//				patchMusicTicker(classNode);
 				ASMHelper.replaceMethod(classNode, inputBase + "MusicTicker", "update", "()V", "func_73660_a");
 			break;
 			
 			case 2:
-				return ASMHelper.replaceClass(inputBase + "CMMEventHandler");//99% re-coded edited or removed as his ideas where wrong
+				return ASMHelper.replaceClass(inputBase + "CMMEventHandler");
 			
 			case 3:
 				MethodNode node = ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom", "initGui", "()V", "func_73866_w_");
@@ -93,6 +94,11 @@ public class MenuLibTransformer implements IClassTransformer{
         	ASMHelper.dumpFile(name, bytes);
         }
 		return bytes;
+	}
+	
+	private static void patchMusicTicker(ClassNode classNode)
+	{
+		
 	}
 	
 	/**
