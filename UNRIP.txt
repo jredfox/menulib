@@ -1,0 +1,34 @@
+Menu Lib:
+ASM shouldn't replace the music ticker method
+Add a refresh button to re-instantiate the mod
+CMM Main Menu bugs:
+button click twice(click and hold mouse button as you click the button)
+refresh doesn't work(IMenu open and close doesn't fire properly keeps getting mixed up from the sup menus)
+
+Menu Lib 1.3:
+fixed incompatability with vanilla fix crash menu gui
+fixed custom LR button ids wouldn't change the menu
+added MainMenuEvent.* forge events so people can override me and other people using this library
+fixed IMenu#onClose logic
+fixed IMenu#onCloseFromSub logic
+fixed IMenu#onOpen logic
+fixed IMenu#onOpenFromSub logic
+fixed ram leak where all main menus guis where loaded when browsed once
+added a method to refresh MenuRegistry for the config
+transfered button config settings to their own file for organizational purposes
+changed config menulibcore.cfg > asm.cfg
+cleaned up ConfigMenu.class
+cleaned up ConfigRegistry.class
+fixed some minor bugs during code cleanup
+removed cmm from mod depedancy path
+
+SilkSpawners:
+fix 404 TE not found
+
+IItemRenderer:
+make sure camera transforms are proper even when you render another IBakedModel inside of an IBakedModel
+check mipmapping
+check open gl resets
+
+Evil notch Lib:
+instead of blocking the whole Entity#setPositionAndUpdate() if it's not spawned into the world call Entity#setPosition()
