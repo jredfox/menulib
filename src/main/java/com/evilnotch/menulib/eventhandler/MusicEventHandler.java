@@ -3,14 +3,16 @@ package com.evilnotch.menulib.eventhandler;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiMainMenuBase;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.menulib.ConfigMenu;
-import com.evilnotch.menulib.event.MainMenuEvent.MusicEvent;
+import com.evilnotch.menulib.event.MenuMusicEvent;
 
+import net.minecraft.client.audio.MusicTicker;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MusicEventHandler {
 	
 	@SubscribeEvent
-	public void canPlayMusic(MusicEvent e)
+	public void canPlayMusic(MenuMusicEvent e)
 	{
 		//only touch vanilla music here
 		if(!e.isVanillaTicker)

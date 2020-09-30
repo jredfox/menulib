@@ -21,10 +21,9 @@ public class MenuCMM implements IMenu{
 	public static Method getGui;
 	public static Object modInstance;
 	
-	public static final ResourceLocation bTexture = new ResourceLocation("minecraft:textures/gui/widgets.png");
-	public static final ResourceLocation id = new ResourceLocation("custommainmenu:mainmenu");
-	
 	public GuiScreen gui;
+	
+	public static final ResourceLocation bTexture = new ResourceLocation("minecraft:textures/gui/widgets.png");
 	
 	static
 	{
@@ -48,28 +47,28 @@ public class MenuCMM implements IMenu{
 	}
 
 	@Override
-	public void onClose() {
-//		this.gui = null;
-	}
-	
-	@Override
-	public void onCloseFromSub(){}
-
-	@Override
-	public void onOpen() 
+	public void onClose() 
 	{
 		try 
 		{
 			loadSplashTexts.invoke(this.getGui());
 		} 
-		catch (Throwable t)
+		catch (Throwable t) 
 		{
 			t.printStackTrace();
 		}
 	}
 
 	@Override
-	public void onOpenFromSub(){
+	public void onOpen() 
+	{
+		
+	}
+
+	@Override
+	public void onOpenFromSub()
+	{
+	
 	}
 
 	@Override
@@ -104,7 +103,7 @@ public class MenuCMM implements IMenu{
 	@Override
 	public ResourceLocation getId() 
 	{
-		return id;
+		return new ResourceLocation("custommainmenu:mainmenu");
 	}
 
 	@Override
@@ -137,12 +136,6 @@ public class MenuCMM implements IMenu{
 		if(!(obj instanceof IMenu))
 			return false;
 		return this.getId().equals(((IMenu)obj).getId());
-	}
-	
-	@Override
-	public String toString()
-	{
-		return this.getId().toString();
 	}
 
 }
