@@ -33,7 +33,7 @@ public class ProxyTBL {
 	{
 		if(ProxyTBL.isLoaded)
 		{
-			MenuRegistry.registerMenu(ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"), new ResourceLocation("thebetweenlands:mainmenu"));
+			MenuRegistry.registerGuiMenu(ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"), new ResourceLocation("thebetweenlands:mainmenu"));
 		}
 	}
 

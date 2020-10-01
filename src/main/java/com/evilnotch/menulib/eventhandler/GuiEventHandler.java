@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.evilnotch.menulib.ConfigMenu;
-import com.evilnotch.menulib.event.MainMenuEvent;
 import com.evilnotch.menulib.menu.IMenu;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
@@ -13,52 +12,30 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiEventHandler {
-	/**
-	 * the last IMenu opened
-	 */
-	public static IMenu lastMenu;
+	
+	public static GuiScreen lastMenuGui;
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
-		if(!MenuRegistry.hasInit())
-		{
-			System.out.println("GuiOpenEvent firing before MenuRegistry has been initialized returning!");
-			return;
-		}
 		GuiScreen gui = e.getGui();
-		boolean isReplaceable = MenuRegistry.isReplaceable(gui);
-		GuiScreen compare = isReplaceable ? MenuRegistry.getCurrentGui() : gui;
-		GuiScreen lastGui = MenuRegistry.getGui(lastMenu);
 		
-		//if a new MainMenu shows up and The last MainMenu isn't null close it
-		if(isReplaceable && lastGui != compare && lastGui != null)
+		//check if the IMenu Is open and switiching to a sub menu
+		GuiScreen current = MenuRegistry.getCurrentGui();
+		if(lastMenuGui == current && lastMenuGui != null && lastMenuGui != gui)
 		{
-			Event event = new MainMenuEvent.Close(lastMenu);
-			if(!MinecraftForge.EVENT_BUS.post(event))
-			{
-				lastMenu.onClose();
-			}
-		}
-		//if your going into a SubMenu from the MainMenu close it from sub
-		else if(lastGui == Minecraft.getMinecraft().currentScreen && lastGui != null)
-		{
-			Event event = new MainMenuEvent.OnCloseFromSub(lastMenu);
-			if(!MinecraftForge.EVENT_BUS.post(event))
-			{
-				lastMenu.onCloseFromSub();
-			}
+			MenuRegistry.getCurrentMenu().onCloseFromSub();	
 		}
 		
-		//return from method if gui is null or not a main menu
-		if(gui == null || !isReplaceable)
+		lastMenuGui = gui;//set the last menu equal to the current menu
+		
+		//return from method if gui is null
+		if(gui == null || !MenuRegistry.isReplaceable(gui))
 		{
 			return;
 		}
@@ -76,31 +53,19 @@ public class GuiEventHandler {
 		{
 			return;
 		}
+		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
+		GuiScreen replaced = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();
+		e.setGui(replaced);
+		lastMenuGui = replaced;
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		GuiScreen compare = MenuRegistry.getGui(lastMenu);
-		boolean sub = compare == menu.getGui() && compare != null;
 		if(!sub)
 		{
-			MainMenuEvent.Open open = new MainMenuEvent.Open(menu);
-			boolean canOpen = !MinecraftForge.EVENT_BUS.post(open);
-			gui = open.gui;//allow the IMenu gui to be replaceable without creating a whole new IMenu
-			if(canOpen)
-			{
-				menu.onOpen();
-			}
+			menu.onOpen();
 		}
 		else
 		{
-			MainMenuEvent.OnOpenFromSub open = new MainMenuEvent.OnOpenFromSub(menu);
-			boolean canOpen = !MinecraftForge.EVENT_BUS.post(open);
-			gui = open.gui;
-			if(canOpen)
-			{
-				menu.onOpenFromSub();
-			}
+			menu.onOpenFromSub();
 		}
-		lastMenu = menu;
-		e.setGui(gui);
 	}
 	
 	/**
@@ -139,15 +104,18 @@ public class GuiEventHandler {
 		{
 			return;
 		}
-		IMenu menu = MenuRegistry.getCurrentMenu();
-		int bId = e.getButton().id;
-		if(bId == menu.getLeftButton().id)
+		
+		//advance previous or next menu based upon the button
+		int buttonId = e.getButton().id;
+		if(buttonId == ConfigMenu.leftButtonId)
 		{
 			MenuRegistry.advancePreviousMenu();
+			ConfigMenu.saveMenuIndex();//keep the save index separately for more options on modders
 		}
-		else if(bId == menu.getRightButton().id)
+		else if(buttonId == ConfigMenu.rightButtonId)
 		{
 			MenuRegistry.advanceNextMenu();
+			ConfigMenu.saveMenuIndex();
 		}
 	}
 

@@ -6,7 +6,6 @@ import com.evilnotch.menulib.eventhandler.GuiEventHandler;
 import com.evilnotch.menulib.eventhandler.MusicEventHandler;
 import com.evilnotch.menulib.menu.MenuRegistry;
 
-import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,21 +16,25 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = MenuLib.MODID, name = MenuLib.NAME, version = MenuLib.VERSION, clientSideOnly = true, dependencies = "required-after:evilnotchlib")
+@Mod(modid = MenuLib.MODID,name = MenuLib.NAME, version = MenuLib.VERSION, clientSideOnly = true, dependencies = "required-after:evilnotchlib;after:custommainmenu")
 public class MenuLib {
 	
 	public static final String MODID = "menulib";
 	public static final String NAME = "Menu Lib";
-	public static final String VERSION = "1.3";
+	public static final String VERSION = "1.2.5";
 	
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
-	{
+	{	
 		ConfigMenu.loadMenuLib(event.getModConfigurationDirectory());
-		MenuRegistry.registerMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
 		ProxyMod.preInit();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
+		if(ConfigMenu.debugFrameRate)
+		{
+			TickRegistry.register(new TickTest(), Side.CLIENT);
+		}
 	}
 	
 	@EventHandler

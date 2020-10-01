@@ -24,7 +24,6 @@ public class Menu implements IMenu {
 	public Constructor ctr = null;
 	public Class clazz = null;
 	public GuiScreen gui;
-	public boolean isOpen;
 	
 	public ResourceLocation bTexture = new ResourceLocation("textures/gui/widgets.png");
 	
@@ -52,9 +51,7 @@ public class Menu implements IMenu {
 	 * called when menu switches
 	 */
 	@Override
-	public void onClose() {
-		this.gui = null;//prevent ram leaks when this menu isn't open there is no need for a gui
-	}
+	public void onClose() {}
 	
 	/**
 	 * called when the menu closes and goes into a sub menu
@@ -66,9 +63,7 @@ public class Menu implements IMenu {
 	 * do special and or rnd effects to your gui and open gl via open
 	 */
 	@Override
-	public void onOpen() {
-		
-	}
+	public void onOpen() {}
 	
 	@Override
 	public void onOpenFromSub() {}

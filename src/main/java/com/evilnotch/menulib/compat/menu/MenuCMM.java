@@ -48,9 +48,7 @@ public class MenuCMM implements IMenu{
 	}
 
 	@Override
-	public void onClose() {
-//		this.gui = null;
-	}
+	public void onClose() {}
 	
 	@Override
 	public void onCloseFromSub(){}
@@ -69,8 +67,7 @@ public class MenuCMM implements IMenu{
 	}
 
 	@Override
-	public void onOpenFromSub(){
-	}
+	public void onOpenFromSub(){}
 
 	@Override
 	public GuiScreen getGui() 

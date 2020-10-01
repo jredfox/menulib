@@ -19,8 +19,9 @@ public class ConfigMenuCore {
 	public static void loadConfig()
 	{
 		File dir = new File(System.getProperty("user.dir"));
-		File filecfg = new File(dir, "config/menulib/asm.cfg");
+		File filecfg = new File(dir, "config/menulib/menulibcore.cfg");
 		Configuration cfg = new Configuration(filecfg);
+		
 		cfg.load();
 		lockMenuFrameRate = cfg.get("general", "lockMenuFrameRate", lockMenuFrameRate).getBoolean();
 		lockedMenuFrameRate = cfg.get("general", "lockedMenuFrameRate", lockedMenuFrameRate).getInt();

@@ -2,13 +2,22 @@ package net.minecraft.client.audio;
 
 import java.util.Random;
 
-import com.evilnotch.menulib.menu.MenuRegistry;
+import com.evilnotch.menulib.event.MenuMusicEvent;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.GuiOptions;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiScreenRealmsProxy;
+import net.minecraft.client.gui.GuiWorldSelection;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.GuiModList;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,7 +40,7 @@ public class MusicTicker implements ITickable
     public void update()
     {
         MusicTicker.MusicType type = this.mc.getAmbientMusicType();
-        if(type == MusicType.MENU && !MenuRegistry.canPlayMusic(this.mc.currentScreen, MusicTicker.class))
+        if(type == MusicType.MENU && !isMenu(this.mc.currentScreen))
         {
         	return;
         }
@@ -58,6 +67,15 @@ public class MusicTicker implements ITickable
             this.playMusic(type);
         }
     }
+    
+    /**
+     * is the gui a vanilla menu or not
+     */
+    public boolean isMenu(GuiScreen gui) 
+    {
+    	MenuMusicEvent e = MenuMusicEvent.fireMusicEvent(gui, MusicTicker.class);
+		return e.canPlay;
+	}
 
 	/**
      * Plays a music track for the maximum allowable period of time

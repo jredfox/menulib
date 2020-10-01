@@ -70,16 +70,16 @@ public class MenuLibTransformer implements IClassTransformer{
 			break;
 			
 			case 1:
-//				patchMusicTicker(classNode);
 				ASMHelper.replaceMethod(classNode, inputBase + "MusicTicker", "update", "()V", "func_73660_a");
+				ASMHelper.addMethod(classNode, inputBase + "MusicTicker", "isMenu", "(Lnet/minecraft/client/gui/GuiScreen;)Z");
 			break;
 			
 			case 2:
-				return ASMHelper.replaceClass(inputBase + "CMMEventHandler");
+				return ASMHelper.replaceClass(inputBase + "CMMEventHandler");//99% re-coded edited or removed as his ideas where wrong
 			
 			case 3:
 				MethodNode node = ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom", "initGui", "()V", "func_73866_w_");
-				ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom", "actionPerformed", "(Lnet/minecraft/client/gui/GuiButton;)V", "func_146284_a");
+				ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom","actionPerformed", "(Lnet/minecraft/client/gui/GuiButton;)V", "func_146284_a");
 			break;
 		}
 		
@@ -94,11 +94,6 @@ public class MenuLibTransformer implements IClassTransformer{
         	ASMHelper.dumpFile(name, bytes);
         }
 		return bytes;
-	}
-	
-	private static void patchMusicTicker(ClassNode classNode)
-	{
-		
 	}
 	
 	/**

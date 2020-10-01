@@ -28,12 +28,12 @@ public class ProxyCMM {
 			JSONObject json = JavaUtil.getJson(ProxyCMM.cmmJson);
 			CMMAutoJSONRegistry.fireCMMAutoJSON(json);
 			JavaUtil.saveJSON(json, ProxyCMM.cmmJson, false);
-			refreshCMM();
+			refreshMenus();
 			System.out.println("Done Hooking CMM Auto JSON Support. To Regenerate support delete the CMM JSON File!");
 		}
 	}
 	
-	public static void refreshCMM()
+	public static void refreshMenus()
 	{
 		try 
 		{
@@ -60,12 +60,12 @@ public class ProxyCMM {
 		{
 			if(!ConfigMenu.cmmAndVanilla)
 			{
-				MenuRegistry.removeMenu(new ResourceLocation("mainmenu"), false);
-				MenuRegistry.registerMenu(0, new MenuCMM());
+				MenuRegistry.removeMenu(new ResourceLocation("mainmenu"));
+				MenuRegistry.registerIMenu(0, new MenuCMM());
 			}
 			else
 			{
-				MenuRegistry.registerMenu(1, new MenuCMM());
+				MenuRegistry.registerIMenu(1, new MenuCMM());
 			}
 			
 			//register the handler for CMM json support
