@@ -24,8 +24,6 @@ public class MLMod {
 	public void preinit(FMLPreInitializationEvent event)
 	{	
 		MLConfig.loadMenuLib(event.getModConfigurationDirectory());
-		MenuRegistry.registerMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
-		ProxyMod.preInit();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
 		if(MLConfig.debugFrameRate)

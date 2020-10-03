@@ -8,27 +8,27 @@ public interface IMenu {
 	/**
 	 * called right after menu closes
 	 */
-	public void onClose();
+	public void close();
 	/**
 	 * called when the menu closes and goes into a sub menu
 	 */
-	public void onCloseFromSub();
+	public void closeToSub();
 	/**
-	 * called right after gui is set to main menu
+	 * called when the menu opens
 	 */
-	public void onOpen();
+	public void open();
 	/**
-	 * fires when your gui opens up from a sub menu without re-creating the whole gui
+	 * called when the menu opens from a sub menu
 	 */
-	public void onOpenFromSub();
+	public void openFromSub();
 	/**
 	 * this creates a new gui called when a new main menu gets created(opened)
 	 */
-	public GuiScreen createGui();
+	public GuiScreen create();
 	/**
 	 * grabs current gui generated from createGui()
 	 */
-	public GuiScreen getGui();
+	public GuiScreen get();
 	/**
 	 * get the gui class
 	 */
@@ -40,18 +40,18 @@ public interface IMenu {
 	/**
 	 * if this is null it won't be displayed
 	 */
-	public GuiButton getLeftButton();
+	public GuiButton getLeft();
 	/**
 	 * if this is null it won't be displayed
 	 */
-	public GuiButton getRightButton();
+	public GuiButton getRight();
 	/**
 	 * this allows for custom button textures
 	 */
-	public ResourceLocation getButtonTexture();
+	public ResourceLocation getTexture();
 	/**
 	 * this for Menu(IMenu implementation) sets the button texture field but, for other objects might not do anything
 	 */
-	public void setButtonTexture(ResourceLocation loc);
+	public void setTexture(ResourceLocation loc);
 
 }
