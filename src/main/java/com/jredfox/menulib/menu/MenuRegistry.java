@@ -9,7 +9,7 @@ import java.util.Map;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.compat.proxy.ProxyMod;
-import com.jredfox.menulib.eventhandler.GuiEventHandler;
+import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.Minecraft;
@@ -66,12 +66,12 @@ public class MenuRegistry {
 	 */
 	public static void advanceNextMenu()
 	{
-		getCurrentMenu().onClose();	
+		getCurrentMenu().close();	
 		indexMenu = getNext(indexMenu);
 		currentMenu = menus.get(indexMenu);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
+		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 	
 	/**
@@ -79,12 +79,12 @@ public class MenuRegistry {
 	 */
 	public static void advancePreviousMenu()
 	{
-		getCurrentMenu().onClose();
+		getCurrentMenu().close();
 		indexMenu = getPrevious(indexMenu);
 		currentMenu = menus.get(indexMenu);
 		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		Minecraft.getMinecraft().displayGuiScreen(GuiEventHandler.fake_menu);
+		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 	
 	protected static int getNext(int index) 
@@ -108,7 +108,7 @@ public class MenuRegistry {
 	public static GuiScreen createCurrentGui()
 	{
 		IMenu menu = getCurrentMenu();
-		GuiScreen screen = menu.createGui();
+		GuiScreen screen = menu.create();
 		return screen;
 	}
 	/**
@@ -117,7 +117,7 @@ public class MenuRegistry {
 	public static GuiScreen getCurrentGui()
 	{
 		IMenu menu = getCurrentMenu();
-		GuiScreen screen = menu.getGui();
+		GuiScreen screen = menu.get();
 		return screen;
 	}
 	

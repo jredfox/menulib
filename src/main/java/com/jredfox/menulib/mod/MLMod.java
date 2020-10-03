@@ -2,9 +2,9 @@ package com.jredfox.menulib.mod;
 
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.compat.proxy.ProxyMod;
-import com.jredfox.menulib.eventhandler.GuiEventHandler;
-import com.jredfox.menulib.eventhandler.MusicEventHandler;
-import com.jredfox.menulib.eventhandler.Tick;
+import com.jredfox.menulib.eventhandler.GuiHandler;
+import com.jredfox.menulib.eventhandler.MusicHandler;
+import com.jredfox.menulib.eventhandler.TickHandler;
 import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraft.client.gui.GuiMainMenu;
@@ -23,13 +23,9 @@ public class MLMod {
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
 	{	
-		MLConfig.loadMenuLib(event.getModConfigurationDirectory());
-		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
-		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
-		if(MLConfig.debugFrameRate)
-		{
-			TickRegistry.register(new Tick(), Side.CLIENT);
-		}
+		MLConfig.loadConfig(event.getModConfigurationDirectory());
+		MLRegistry.register();
+		MLRegistry.registerEvents();
 	}
 	
 	@EventHandler

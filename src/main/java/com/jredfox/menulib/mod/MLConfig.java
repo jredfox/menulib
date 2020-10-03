@@ -36,6 +36,7 @@ public class MLConfig {
 	public static int leftButtonPosY = 5;
 	public static int leftButtonWidth = 20;
 	public static int leftButtonHeight = 20;
+	
 	public static int lFButtonPosX = 5;
 	public static int lFButtonPosY = 5;
 	public static int lFButtonWidth = 64;
@@ -46,6 +47,7 @@ public class MLConfig {
 	public static int rightButtonPosY = 5;
 	public static int rightButtonWidth = 20;
 	public static int rightButtonHeight = 20;
+	
 	public static int rFButtonPosX = 74;
 	public static int rFButtonPosY = 5;
 	public static int rFButtonWidth = 64;
@@ -58,7 +60,7 @@ public class MLConfig {
 	/**
 	 * load all configurations for menu lib
 	 */
-	public static void loadMenuLib(File d) 
+	public static void loadConfig(File d) 
 	{
 		cfgmenu = new File(d, "menulib/menulib.cfg");
 		
@@ -78,6 +80,7 @@ public class MLConfig {
 		leftButtonPosY = config.get("buttons", "leftPosY", leftButtonPosY).getInt();
 		leftButtonWidth = config.get("buttons", "leftWidth", leftButtonWidth).getInt();
 		leftButtonHeight = config.get("buttons", "leftHeight", leftButtonHeight).getInt();
+		
 		lFButtonPosX = config.get("buttons", "leftFancyPosX", lFButtonPosX).getInt();
 		lFButtonPosY = config.get("buttons", "leftFancyPosY", lFButtonPosY).getInt();
 		lFButtonWidth = config.get("buttons", "leftFancyWidth", lFButtonWidth).getInt();
@@ -88,6 +91,7 @@ public class MLConfig {
 		rightButtonPosY = config.get("buttons", "rightPosY", rightButtonPosY).getInt();
 		rightButtonWidth = config.get("buttons", "rightWidth", rightButtonWidth).getInt();
 		rightButtonHeight = config.get("buttons", "rightHeight", rightButtonHeight).getInt();
+		
 		rFButtonPosX = config.get("buttons", "rightFancyPosX", rFButtonPosX).getInt();
 		rFButtonPosY = config.get("buttons", "rightFancyPosY", rFButtonPosY).getInt();
 		rFButtonWidth = config.get("buttons", "rightfancyWidth", rFButtonWidth).getInt();

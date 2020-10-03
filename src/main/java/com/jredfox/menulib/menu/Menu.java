@@ -51,22 +51,22 @@ public class Menu implements IMenu {
 	 * called when menu switches
 	 */
 	@Override
-	public void onClose() {}
+	public void close() {}
 	
 	/**
 	 * called when the menu closes and goes into a sub menu
 	 */
 	@Override
-	public void onCloseFromSub(){}
+	public void closeToSub(){}
 
 	/**
 	 * do special and or rnd effects to your gui and open gl via open
 	 */
 	@Override
-	public void onOpen() {}
+	public void open() {}
 	
 	@Override
-	public void onOpenFromSub() {}
+	public void openFromSub() {}
 
 	@Override
 	public ResourceLocation getId() 
@@ -79,42 +79,28 @@ public class Menu implements IMenu {
 	{
 		return this.clazz;
 	}
-
-	@Override
-	public ResourceLocation getButtonTexture() 
-	{
-		return this.bTexture;
-	}
 	
 	@Override
-	public void setButtonTexture(ResourceLocation loc)
-	{
-		this.bTexture = loc;
-	}
-	
-	@Override
-	public GuiButton getLeftButton() 
+	public GuiButton getLeft() 
 	{
 		GuiBasicButton button = MLConfig.fancyPage ? fancyLButton : lbutton;
-		button.setButtonTexture(this.getButtonTexture());
 		return button;
 	}
 	
 	@Override
-	public GuiButton getRightButton()
+	public GuiButton getRight()
 	{
 		GuiBasicButton button = MLConfig.fancyPage ? fancyRButton : rbutton;
-		button.setButtonTexture(this.getButtonTexture());
 		return button;
 	}
 
 	@Override
-	public GuiScreen createGui() 
+	public GuiScreen create() 
 	{
 		try
 		{
 			this.gui = (GuiScreen) ctr.newInstance();
-			return this.getGui();
+			return this.get();
 		}
 		catch(Exception e)
 		{
@@ -124,7 +110,7 @@ public class Menu implements IMenu {
 	}
 	
 	@Override
-	public GuiScreen getGui() 
+	public GuiScreen get() 
 	{
 		return this.gui;
 	}

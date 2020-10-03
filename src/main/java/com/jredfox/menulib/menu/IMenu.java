@@ -45,13 +45,5 @@ public interface IMenu {
 	 * if this is null it won't be displayed
 	 */
 	public GuiButton getRight();
-	/**
-	 * this allows for custom button textures
-	 */
-	public ResourceLocation getTexture();
-	/**
-	 * this for Menu(IMenu implementation) sets the button texture field but, for other objects might not do anything
-	 */
-	public void setTexture(ResourceLocation loc);
 
 }
