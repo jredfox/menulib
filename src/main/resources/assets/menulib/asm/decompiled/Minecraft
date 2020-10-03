@@ -1,19 +1,40 @@
 package net.minecraft.client;
 
-import com.evilnotch.menulib.asm.ConfigMenuCore;
+import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
+import com.jredfox.menulib.coremod.MLCoreConfig;
 
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.settings.GameSettings;
 
-public class Minecraft {
-	private GameSettings gameSettings;
+public class Minecraft{
 	
+	public GameSettings gameSettings;
+
 	/**
-	 * this get's injected into the Minecraft.class
+	 * if locked will be what the user configures else will be capped at 30 or higher depending on the game settings
 	 */
-	public int getMainMenuFrameRate() 
-	{
-		if(ConfigMenuCore.lockMenuFrameRate)
-			return ConfigMenuCore.lockedMenuFrameRate;
-		return this.gameSettings.limitFramerate < ConfigMenuCore.vanillaMainMenuLock ? ConfigMenuCore.vanillaMainMenuLock : this.gameSettings.limitFramerate;
+	public int getMenuFrames() 
+    {
+    	int limit = this.gameSettings.limitFramerate;
+		return MLCoreConfig.lockFrames ? MLCoreConfig.frames : (limit > MLCoreConfig.vFrames ? limit : MLCoreConfig.vFrames);
+	}
+
+	public static Minecraft getMinecraft() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void displayGuiScreen(GuiFakeMenu fakeMenu) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public SoundHandler getSoundHandler() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getLimitFramerate() {
+		return 0;
 	}
 }

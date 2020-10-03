@@ -1,6 +1,7 @@
 package com.jredfox.menulib.mod;
 
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
+import com.jredfox.menulib.coremod.MLCoreConfig;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.TickHandler;
@@ -27,7 +28,7 @@ public class MLRegistry {
 		MinecraftForge.EVENT_BUS.register(new GuiHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicHandler());
 		
-		if(MLConfig.debugFrameRate)
+		if(MLCoreConfig.debugFrames)
 		{
 			TickRegistry.register(new TickHandler(), Side.CLIENT);
 		}

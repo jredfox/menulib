@@ -9,9 +9,9 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @IFMLLoadingPlugin.Name("menulib-transformer_fixes")
-@IFMLLoadingPlugin.SortingIndex(1002)
+@IFMLLoadingPlugin.SortingIndex(1003)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@TransformerExclusions("com.evilnotch.menulib.asm.")
+@TransformerExclusions("com.jredfox.menulib.asm.")
 public class MLPlugin implements IFMLLoadingPlugin
 {
 	static

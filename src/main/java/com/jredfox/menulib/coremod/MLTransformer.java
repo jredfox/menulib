@@ -11,6 +11,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -34,79 +35,62 @@ public class MLTransformer implements IClassTransformer{
     	"lumien.custommainmenu.gui.GuiCustom",
     });
     
+    //since I don't have my asm system I use a slightly better version for forge's switch case is gross but, it's better then if else
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) 
 	{
 		if(bytes == null)
-		{
 			return null;
-		}
-		
-		int index = clazzes.indexOf(transformedName);
-		
-        try 
-        {
-			return index != -1 ? transform(index, bytes, FMLCorePlugin.isObf) : bytes;
-		} 
-        catch (Throwable e) 
-        {
-			e.printStackTrace();
-		}
-        return bytes;
-	}
-
-	public byte[] transform(int index, byte[] clazz, boolean isObf) throws IOException 
-	{
-		String name =  clazzes.get(index);
-		ClassNode classNode = ASMHelper.getClassNode(clazz);
-		String inputBase = "assets/menulib/asm/" + (isObf ? "srg/" : "deob/");
-		
-		System.out.println("MenuLib Transforming:" + name);
-		
-		switch (index)
+		try
 		{
-			case 0:
-				patchFrameRate(classNode, inputBase, name);
-			break;
-			
-			case 1:
-				ASMHelper.replaceMethod(classNode, inputBase + "MusicTicker", "update", "()V", "func_73660_a");
-				ASMHelper.addMethod(classNode, inputBase + "MusicTicker", "isMenu", "(Lnet/minecraft/client/gui/GuiScreen;)Z");
-			break;
-			
-			case 2:
-				return ASMHelper.replaceClass(inputBase + "CMMEventHandler");//99% re-coded edited or removed as his ideas where wrong
-			
-			case 3:
-				MethodNode node = ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom", "initGui", "()V", "func_73866_w_");
-				ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom","actionPerformed", "(Lnet/minecraft/client/gui/GuiButton;)V", "func_146284_a");
-			break;
+			int index = clazzes.indexOf(name);
+			if(index != -1)
+			{
+				ClassNode node = ASMHelper.getClassNode(bytes);
+				String base = "assets/menulib/asm/" + (FMLCorePlugin.isObf ? "srg/" : "deob/");
+				switch (index)
+				{
+					case 0:
+						transformFramerate(node, base);
+					break;
+					
+					case 1:
+						transformMusic(node);
+					break;
+				}
+				
+				//legacy mess I have to manually clear the cache of classnodes, manually do classwriter sh*t then return and or dump the file
+				ASMHelper.clearCacheNodes();
+				MCWriter classWriter = new MCWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+		        node.accept(classWriter);
+		        byte[] transformed = classWriter.toByteArray();
+		        if(ConfigCore.dumpASM)
+		        {
+		        	ASMHelper.dumpFile(name + "-test", transformed);
+		        }
+		        return transformed;
+			}
 		}
-		
-		ASMHelper.clearCacheNodes();
-        
-		ClassWriter classWriter = new MCWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-        classNode.accept(classWriter);
-        
-        byte[] bytes = classWriter.toByteArray();
-        if(ConfigCore.dumpASM)
-        {
-        	ASMHelper.dumpFile(name, bytes);
-        }
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+		}
 		return bytes;
 	}
-	
+
 	/**
-	 * patch the framerate of main menus to allow for higher fps then 30 for advanced main menus and simply looks
+	 * patches the framerate to be equal to the game instead of locking it at 30 always
+	 * @throws IOException 
 	 */
-	private static void patchFrameRate(ClassNode classNode, String inputBase, String name) throws IOException 
+	public void transformFramerate(ClassNode classNode, String input) throws IOException 
 	{
-		//add the method before changing the methods exicution
-		MethodNode mainmenu = ASMHelper.addMethod(classNode, inputBase + "Minecraft", "getMainMenuFrameRate", "()I");
+		//add getMenuFrames so minecraft can use them later
+		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
 		
+		//start finding the injection point to change the 30 return value to a method call "getMenuFrames"
+		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");
 		AbstractInsnNode spot = null;
 		FieldInsnNode tocheck = new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/Minecraft", new MCPSidedString("currentScreen","field_71462_r").toString(), "Lnet/minecraft/client/gui/GuiScreen;");
-		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");
 		for(AbstractInsnNode ab : node.instructions.toArray())
 		{
 			if(ab.getOpcode() == Opcodes.GETFIELD)
@@ -120,12 +104,17 @@ public class MLTransformer implements IClassTransformer{
 			}
 		}
 		
-		//remove the intial 30 and replace it with a method call
+		//remove the initial 30 and replace it with a method call
 		InsnList toInsert = new InsnList();
         toInsert.add(new VarInsnNode(ALOAD, 0));
-        toInsert.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/Minecraft", "getMainMenuFrameRate", "()I", false));
+        toInsert.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/Minecraft", "getMenuFrames", "()I", false));
         node.instructions.insertBefore(spot, toInsert);
         node.instructions.remove(spot);
+	}
+	
+	public void transformMusic(ClassNode node)
+	{
+		
 	}
 
 }

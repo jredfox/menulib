@@ -27,7 +27,6 @@ public class MLConfig {
 	public static boolean fancyPage = false;
 	public static boolean displayNewMenu = true;
 	public static boolean cmmAndVanilla = false;	
-	public static boolean debugFrameRate = false;
 	public static ResourceLocation currentMenuIndex = null;
 	public static File cfgmenu = null;
 	
@@ -70,8 +69,6 @@ public class MLConfig {
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
 		cmmAndVanilla = config.get("menulib", "cmmAndVanilla", cmmAndVanilla).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
-		
-		debugFrameRate = config.get("debug","debugFrameRate", debugFrameRate).getBoolean();
 		
 		fancyPage = config.get("buttons","fancyButtons",false).getBoolean();
 		
