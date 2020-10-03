@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
 @IFMLLoadingPlugin.Name("menulib-transformer_fixes")
 @IFMLLoadingPlugin.SortingIndex(1003)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@TransformerExclusions("com.jredfox.menulib.asm.")
+@TransformerExclusions("com.jredfox.menulib.coremod.")
 public class MLPlugin implements IFMLLoadingPlugin
 {
 	static
