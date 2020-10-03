@@ -13,6 +13,15 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class MLRegistry {
 	
+	public static void run()
+	{
+		register();
+		registerEvents();
+	}
+	
+	/**
+	 * register forge and non forge events here
+	 */
 	public static void registerEvents()
 	{
 		MinecraftForge.EVENT_BUS.register(new GuiHandler());
@@ -24,9 +33,14 @@ public class MLRegistry {
 		}
 	}
 	
+	/**
+	 * generic registry
+	 */
 	public static void register()
 	{
-		MenuRegistry.registerMenu(GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
+//		MenuRegistry.register("thebetweenlands.client.gui.menu.GuiBLMainMenu", new ResourceLocation("thebetweenlands:mainmenu"));
 	}
 
 }

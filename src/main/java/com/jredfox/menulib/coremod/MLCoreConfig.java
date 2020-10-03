@@ -2,18 +2,12 @@ package com.jredfox.menulib.coremod;
 
 import java.io.File;
 
-import com.jredfox.menulib.compat.proxy.ProxyCMM;
-
 import net.minecraftforge.common.config.Configuration;
 
 public class MLCoreConfig {
 	
-	/**
-	 * do not change this value making it final screws up compilers as this will change depending upon mc version
-	 */
-	public static int vanillaMainMenuLock = 30;
-	public static boolean lockMenuFrameRate = false;
-	public static int lockedMenuFrameRate = vanillaMainMenuLock;
+	public static int vMenuFrames = 30;//vanilla menu framerate
+	public static boolean lockFrames = false;
 	
 	public static void loadConfig()
 	{
@@ -22,17 +16,10 @@ public class MLCoreConfig {
 		Configuration cfg = new Configuration(filecfg);
 		
 		cfg.load();
-		lockMenuFrameRate = cfg.get("general", "lockMenuFrameRate", lockMenuFrameRate).getBoolean();
-		lockedMenuFrameRate = cfg.get("general", "lockedMenuFrameRate", lockedMenuFrameRate).getInt();
-		if(lockedMenuFrameRate < vanillaMainMenuLock)
-		{
-			lockedMenuFrameRate = vanillaMainMenuLock;
-			System.out.println("Main Menu Framerate Limit cannot be below " + vanillaMainMenuLock + "!");
-		}
+		lockFrames = cfg.get("general", "lockMenuFrameRate", lockFrames).getBoolean();
 		cfg.save();
 		
-		//flag cmm here and now since they do their file in pre-init
-		ProxyCMM.flagCMMJson(dir);
+//		ProxyCMM.flagCMMJson(dir);
 	}
 
 }

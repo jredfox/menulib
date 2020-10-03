@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.line.LineArray;
-import com.jredfox.menulib.compat.proxy.ProxyMod;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.mod.MLConfig;
 
@@ -24,14 +23,14 @@ public class MenuRegistry {
 	public static int indexMenu = 0;
 	protected static IMenu currentMenu = null;
 	
-	public static void registerIMenu(IMenu menu)
+	public static void register(IMenu menu)
 	{
 		menus.remove(menu);
 		menus.add(menu);
 		tempMenus.put(menu.getId(), -1);
 	}
 	
-	public static void registerMenu(int index, IMenu menu)
+	public static void register(int index, IMenu menu)
 	{
 		menus.remove(menu);
 		menus.add(menu);
@@ -39,11 +38,20 @@ public class MenuRegistry {
 	}
 	
 	/**
+	 * proxy friendly
+	 */
+	public static IMenu register(String clazz, ResourceLocation id)
+	{
+		Class<? extends GuiScreen> guiClazz = ReflectionUtil.classForName(clazz);
+		return guiClazz == null ? null : register(guiClazz, id);
+	}
+	
+	/**
 	 * Returns menu so you can manipulate data after adding one
 	 * to make an IMenu method use register IMenu
 	 * or simply make a new Menu instance(Menu implements IMenu) and override what you need 
 	 */
-	public static IMenu registerMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
+	public static IMenu register(Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz, id);
 		menus.remove(menu);
@@ -52,7 +60,7 @@ public class MenuRegistry {
 		return menu;
 	}
 	
-	public static IMenu registerMenu(int index, Class<? extends GuiScreen> guiClazz, ResourceLocation id)
+	public static IMenu register(int index, Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz,id);
 		menus.remove(menu);
@@ -69,7 +77,6 @@ public class MenuRegistry {
 		getCurrentMenu().close();	
 		indexMenu = getNext(indexMenu);
 		currentMenu = menus.get(indexMenu);
-		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
@@ -82,7 +89,6 @@ public class MenuRegistry {
 		getCurrentMenu().close();
 		indexMenu = getPrevious(indexMenu);
 		currentMenu = menus.get(indexMenu);
-		ProxyMod.menuChange();
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}

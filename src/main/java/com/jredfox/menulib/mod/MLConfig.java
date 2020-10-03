@@ -60,7 +60,7 @@ public class MLConfig {
 	/**
 	 * load all configurations for menu lib
 	 */
-	public static void loadConfig(File d) 
+	public static void parse(File d) 
 	{
 		cfgmenu = new File(d, "menulib/menulib.cfg");
 		
