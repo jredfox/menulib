@@ -41,7 +41,7 @@ public class MLRegistry {
 	{
 		MenuRegistry.register(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
 //		MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
-//		MenuRegistry.register("thebetweenlands.client.gui.menu.GuiBLMainMenu", new ResourceLocation("thebetweenlands:mainmenu"));
+		MenuRegistry.register("thebetweenlands.client.gui.menu.GuiBLMainMenu", new ResourceLocation("thebetweenlands:mainmenu"));
 	}
 
 }

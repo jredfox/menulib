@@ -71,24 +71,20 @@ public class MLConfig {
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
 		
 		fancyPage = config.get("buttons","fancyButtons",false).getBoolean();
-		
 		leftButtonId = config.get("buttons","leftId", leftButtonId).getInt();
 		leftButtonPosX = config.get("buttons", "leftPosX", leftButtonPosX).getInt();
 		leftButtonPosY = config.get("buttons", "leftPosY", leftButtonPosY).getInt();
 		leftButtonWidth = config.get("buttons", "leftWidth", leftButtonWidth).getInt();
 		leftButtonHeight = config.get("buttons", "leftHeight", leftButtonHeight).getInt();
-		
 		lFButtonPosX = config.get("buttons", "leftFancyPosX", lFButtonPosX).getInt();
 		lFButtonPosY = config.get("buttons", "leftFancyPosY", lFButtonPosY).getInt();
 		lFButtonWidth = config.get("buttons", "leftFancyWidth", lFButtonWidth).getInt();
 		lFButtonHeight = config.get("buttons", "leftFancyHeight", lFButtonHeight).getInt();
-		
 		rightButtonId = config.get("buttons","rightId", rightButtonId).getInt();
 		rightButtonPosX = config.get("buttons", "rightPosX", rightButtonPosX).getInt();
 		rightButtonPosY = config.get("buttons", "rightPosY", rightButtonPosY).getInt();
 		rightButtonWidth = config.get("buttons", "rightWidth", rightButtonWidth).getInt();
 		rightButtonHeight = config.get("buttons", "rightHeight", rightButtonHeight).getInt();
-		
 		rFButtonPosX = config.get("buttons", "rightFancyPosX", rFButtonPosX).getInt();
 		rFButtonPosY = config.get("buttons", "rightFancyPosY", rFButtonPosY).getInt();
 		rFButtonWidth = config.get("buttons", "rightfancyWidth", rFButtonWidth).getInt();
@@ -97,7 +93,7 @@ public class MLConfig {
 		String[] order = config.get("menulib", "menus", new String[]{""},menu_comment).getStringList();
 		resetMenus(order);
 		
-		String[] clList = config.getStringList("classes_allowed", "music", new String[]{"lumien.custommainmenu.gui.GuiCustom"}, musicAllow_comment);
+		String[] clList = config.getStringList("classes_allowed", "music", new String[]{""}, musicAllow_comment);
 		for(String s : clList)
 		{
 			if(JavaUtil.toWhiteSpaced(s).isEmpty())
