@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.main.Config;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.compat.proxy.ProxyMod;
 import com.jredfox.menulib.eventhandler.GuiEventHandler;
-import com.jredfox.menulib.main.ConfigMenu;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -32,7 +31,7 @@ public class MenuRegistry {
 		tempMenus.put(menu.getId(), -1);
 	}
 	
-	public static void registerIMenu(int index, IMenu menu)
+	public static void registerMenu(int index, IMenu menu)
 	{
 		menus.remove(menu);
 		menus.add(menu);
@@ -44,7 +43,7 @@ public class MenuRegistry {
 	 * to make an IMenu method use register IMenu
 	 * or simply make a new Menu instance(Menu implements IMenu) and override what you need 
 	 */
-	public static IMenu registerGuiMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
+	public static IMenu registerMenu(Class<? extends GuiScreen> guiClazz,ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz, id);
 		menus.remove(menu);
@@ -53,7 +52,7 @@ public class MenuRegistry {
 		return menu;
 	}
 	
-	public static IMenu registerGuiMenu(int index, Class<? extends GuiScreen> guiClazz,ResourceLocation id)
+	public static IMenu registerMenu(int index, Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
 		IMenu menu = new Menu(guiClazz,id);
 		menus.remove(menu);
@@ -179,16 +178,16 @@ public class MenuRegistry {
 		{
 			int index = map.getValue();
 			if(index == -1)
-				ConfigMenu.saveMenuToConfig(map.getKey());
+				MLConfig.saveMenuToConfig(map.getKey());
 			else
-				ConfigMenu.saveMenuToConfig(index, map.getKey());
+				MLConfig.saveMenuToConfig(index, map.getKey());
 		}
 		tempMenus.clear();
 	}
 
 	public static void setConfigIndex() 
 	{
-		setMenu(ConfigMenu.currentMenuIndex);
+		setMenu(MLConfig.currentMenuIndex);
 	}
 
 	public static void setMenu(int i) 
@@ -202,7 +201,7 @@ public class MenuRegistry {
 		int index = getIndex(loc);
 		if(index == -1)
 		{
-			System.out.println("null menu when trying to set index:" + ConfigMenu.currentMenuIndex);
+			System.out.println("null menu when trying to set index:" + MLConfig.currentMenuIndex);
 			return false;
 		}
 		setMenu(index);
@@ -211,20 +210,20 @@ public class MenuRegistry {
 
 	public static void checkConfig() 
 	{
-		if(ConfigMenu.isDirty)
+		if(MLConfig.isDirty)
 		{
-			if(ConfigMenu.displayNewMenu && ConfigMenu.addedMenus)
+			if(MLConfig.displayNewMenu && MLConfig.addedMenus)
 			{
-				ConfigMenu.currentMenuIndex = menus.get(menus.size()-1).getId();//when adding a new menu display it
+				MLConfig.currentMenuIndex = menus.get(menus.size()-1).getId();//when adding a new menu display it
 			}
-			ConfigMenu.saveMenusAndIndex();
+			MLConfig.saveMenusAndIndex();
 		}
 	}
 
 	public static void reorderLists() 
 	{
 		List<IMenu> list = new ArrayList<IMenu>();
-		Iterator<LineArray> it = ConfigMenu.mainMenus.iterator();
+		Iterator<LineArray> it = MLConfig.mainMenus.iterator();
 		while(it.hasNext())
 		{
 			LineArray line = it.next();
@@ -240,7 +239,7 @@ public class MenuRegistry {
 				{
 					System.out.println("null class when parsing menu for:" + line.getMetaString());
 					it.remove();
-					ConfigMenu.isDirty = true;
+					MLConfig.isDirty = true;
 					continue;
 				}
 				IMenu menu = new Menu(c,loc);
@@ -254,7 +253,7 @@ public class MenuRegistry {
 				{
 					System.out.println("null menu when parsing found for:" + loc);
 					it.remove();
-					ConfigMenu.isDirty = true;
+					MLConfig.isDirty = true;
 					continue;
 				}
 				if(!list.contains(menu))
@@ -263,16 +262,16 @@ public class MenuRegistry {
 		}
 		menus = list;
 		
-		if(Config.debug)
-			System.out.println("ConfigMenu.isDirty:" + ConfigMenu.isDirty);
+		if(com.evilnotch.lib.main.Config.debug)
+			System.out.println("ConfigMenu.isDirty:" + MLConfig.isDirty);
 		
 		//more optimized then setting then saving the config twice
-		if(!hasMenu(ConfigMenu.currentMenuIndex))
+		if(!hasMenu(MLConfig.currentMenuIndex))
 		{
 			ResourceLocation loc = menus.get(0).getId();
-			System.out.println("null currentIndex found:" + ConfigMenu.currentMenuIndex + " setting currentIndex to 0:" + loc);
-			ConfigMenu.currentMenuIndex = loc;
-			ConfigMenu.isDirty = true;
+			System.out.println("null currentIndex found:" + MLConfig.currentMenuIndex + " setting currentIndex to 0:" + loc);
+			MLConfig.currentMenuIndex = loc;
+			MLConfig.isDirty = true;
 		}
 	}
 	

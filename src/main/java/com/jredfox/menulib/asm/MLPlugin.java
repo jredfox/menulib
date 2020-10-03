@@ -12,11 +12,11 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions
 @IFMLLoadingPlugin.SortingIndex(1002)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @TransformerExclusions("com.evilnotch.menulib.asm.")
-public class MenuLibPlugin implements IFMLLoadingPlugin
+public class MLPlugin implements IFMLLoadingPlugin
 {
 	static
 	{
-		ConfigMenuCore.loadConfig();
+		MLCoreConfig.loadConfig();
 	}
 	
 	@Override

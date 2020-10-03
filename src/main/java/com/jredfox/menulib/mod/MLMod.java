@@ -1,4 +1,4 @@
-package com.jredfox.menulib.main;
+package com.jredfox.menulib.mod;
 
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.compat.proxy.ProxyMod;
@@ -17,18 +17,18 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = Reference.modid,name = Reference.name, version = Reference.version, clientSideOnly = true, dependencies = "required-after:evilnotchlib;after:custommainmenu")
-public class MenuLib {
+@Mod(modid = MLReference.id, name = MLReference.name, version = MLReference.version, clientSideOnly = true, dependencies = "required-after:evilnotchlib;after:custommainmenu")
+public class MLMod {
 	
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
 	{	
-		ConfigMenu.loadMenuLib(event.getModConfigurationDirectory());
-		MenuRegistry.registerGuiMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		MLConfig.loadMenuLib(event.getModConfigurationDirectory());
+		MenuRegistry.registerMenu(0, GuiMainMenu.class, new ResourceLocation("mainmenu"));
 		ProxyMod.preInit();
 		MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicEventHandler());
-		if(ConfigMenu.debugFrameRate)
+		if(MLConfig.debugFrameRate)
 		{
 			TickRegistry.register(new Tick(), Side.CLIENT);
 		}

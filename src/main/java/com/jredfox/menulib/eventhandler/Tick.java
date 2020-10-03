@@ -11,7 +11,7 @@ public class Tick implements ITick{
 	@Override
 	public void tick() 
 	{
-		if(TickRegistry.isRightTickClient(20))
+		if(TickRegistry.isRightTickClient(20 * 5))
 		{
 			System.out.println("Client FrameRate:" + Minecraft.getMinecraft().getLimitFramerate());
 		}

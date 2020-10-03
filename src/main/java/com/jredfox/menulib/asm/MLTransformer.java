@@ -24,7 +24,7 @@ import com.evilnotch.lib.util.JavaUtil;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
-public class MenuLibTransformer implements IClassTransformer{
+public class MLTransformer implements IClassTransformer{
 	
     public static final List<String> clazzes = (List<String>)JavaUtil.<String>asArray(new Object[]
     {

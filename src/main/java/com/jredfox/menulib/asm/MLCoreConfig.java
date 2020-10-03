@@ -6,13 +6,12 @@ import com.jredfox.menulib.compat.proxy.ProxyCMM;
 
 import net.minecraftforge.common.config.Configuration;
 
-public class ConfigMenuCore {
+public class MLCoreConfig {
 	
 	/**
 	 * do not change this value making it final screws up compilers as this will change depending upon mc version
 	 */
 	public static int vanillaMainMenuLock = 30;
-	
 	public static boolean lockMenuFrameRate = false;
 	public static int lockedMenuFrameRate = vanillaMainMenuLock;
 	

@@ -3,9 +3,9 @@ package com.jredfox.menulib.eventhandler;
 import java.util.List;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
-import com.jredfox.menulib.main.ConfigMenu;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -107,15 +107,15 @@ public class GuiEventHandler {
 		
 		//advance previous or next menu based upon the button
 		int buttonId = e.getButton().id;
-		if(buttonId == ConfigMenu.leftButtonId)
+		if(buttonId == MLConfig.leftButtonId)
 		{
 			MenuRegistry.advancePreviousMenu();
-			ConfigMenu.saveMenuIndex();//keep the save index separately for more options on modders
+			MLConfig.saveMenuIndex();//keep the save index separately for more options on modders
 		}
-		else if(buttonId == ConfigMenu.rightButtonId)
+		else if(buttonId == MLConfig.rightButtonId)
 		{
 			MenuRegistry.advanceNextMenu();
-			ConfigMenu.saveMenuIndex();
+			MLConfig.saveMenuIndex();
 		}
 	}
 

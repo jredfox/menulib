@@ -1,11 +1,10 @@
-package com.jredfox.menulib.main;
+package com.jredfox.menulib.mod;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.main.Config;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.ILine;
 import com.evilnotch.lib.util.line.LineArray;
@@ -18,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
-public class ConfigMenu {
+public class MLConfig {
 	
 	public static boolean isLoaded = false;
 	
@@ -198,7 +197,7 @@ public class ConfigMenu {
 		currentMenuIndex = loc;
 		syncComments(config);
 		config.save();
-		if(Config.debug)
+		if(com.evilnotch.lib.main.Config.debug)
 		{
 			JavaUtil.printTime(stamp, "Saved Current Menu:");
 		}
@@ -271,7 +270,7 @@ public class ConfigMenu {
 	
 	public static boolean hasMenu(ResourceLocation loc) 
 	{
-		for(LineArray line : ConfigMenu.mainMenus)
+		for(LineArray line : MLConfig.mainMenus)
 			if(line.getResourceLocation().equals(loc))
 				return true;
 		return false;

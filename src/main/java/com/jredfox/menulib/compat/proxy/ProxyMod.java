@@ -7,11 +7,11 @@ import org.ralleytn.simple.json.JSONObject;
 
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.JavaUtil;
-import com.jredfox.menulib.compat.event.CMMAutoJSONRegistry;
-import com.jredfox.menulib.compat.eventhandler.CMMAutoJSONHandler;
+import com.jredfox.menulib.compat.event.CMMReg;
+import com.jredfox.menulib.compat.eventhandler.MLCompat;
 import com.jredfox.menulib.compat.menu.MenuCMM;
-import com.jredfox.menulib.main.ConfigMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;

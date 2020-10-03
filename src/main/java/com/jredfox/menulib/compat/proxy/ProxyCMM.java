@@ -6,11 +6,11 @@ import java.lang.reflect.Method;
 import org.ralleytn.simple.json.JSONObject;
 
 import com.evilnotch.lib.util.JavaUtil;
-import com.jredfox.menulib.compat.event.CMMAutoJSONRegistry;
-import com.jredfox.menulib.compat.eventhandler.CMMAutoJSONHandler;
+import com.jredfox.menulib.compat.event.CMMReg;
+import com.jredfox.menulib.compat.eventhandler.MLCompat;
 import com.jredfox.menulib.compat.menu.MenuCMM;
-import com.jredfox.menulib.main.ConfigMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +26,7 @@ public class ProxyCMM {
 		if(ProxyCMM.isLoaded && ProxyCMM.flagCMMJson)
 		{
 			JSONObject json = JavaUtil.getJson(ProxyCMM.cmmJson);
-			CMMAutoJSONRegistry.fireCMMAutoJSON(json);
+			CMMReg.fire(json);
 			JavaUtil.saveJSON(json, ProxyCMM.cmmJson, false);
 			refreshMenus();
 			System.out.println("Done Hooking CMM Auto JSON Support. To Regenerate support delete the CMM JSON File!");
@@ -58,18 +58,18 @@ public class ProxyCMM {
 	{
 		if(ProxyCMM.isLoaded)
 		{
-			if(!ConfigMenu.cmmAndVanilla)
+			if(!MLConfig.cmmAndVanilla)
 			{
 				MenuRegistry.removeMenu(new ResourceLocation("mainmenu"));
-				MenuRegistry.registerIMenu(0, new MenuCMM());
+				MenuRegistry.registerMenu(0, new MenuCMM());
 			}
 			else
 			{
-				MenuRegistry.registerIMenu(1, new MenuCMM());
+				MenuRegistry.registerMenu(1, new MenuCMM());
 			}
 			
 			//register the handler for CMM json support
-			CMMAutoJSONRegistry.registry.add(new CMMAutoJSONHandler());
+			CMMReg.registry.add(new MLCompat());
 		}
 	}
 }

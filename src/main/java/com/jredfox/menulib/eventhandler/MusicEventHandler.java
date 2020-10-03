@@ -3,7 +3,7 @@ package com.jredfox.menulib.eventhandler;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiMainMenuBase;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.event.MenuMusicEvent;
-import com.jredfox.menulib.main.ConfigMenu;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -20,7 +20,7 @@ public class MusicEventHandler {
 			return;
 		}
 		
-		for(Class c : ConfigMenu.musicDeny)
+		for(Class c : MLConfig.musicDeny)
 		{
 			if(JavaUtil.isClassExtending(c, e.gui.getClass()))
 			{
@@ -28,7 +28,7 @@ public class MusicEventHandler {
 				return;
 			}
 		}
-		for(Class c : ConfigMenu.musicAllow)
+		for(Class c : MLConfig.musicAllow)
 		{
 			if(JavaUtil.isClassExtending(c, e.gui.getClass()))
 			{

@@ -3,7 +3,7 @@ package com.jredfox.menulib.menu;
 import java.lang.reflect.Constructor;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
-import com.jredfox.menulib.main.ConfigMenu;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,7 +14,7 @@ public class Menu implements IMenu {
 	
 	static
 	{
-		if(!ConfigMenu.isLoaded)
+		if(!MLConfig.isLoaded)
 		{
 			throw new RuntimeException("ConfigMenu Must be Loaded Beofre Instantiating this class so button vars can be configurable");
 		}
@@ -27,11 +27,11 @@ public class Menu implements IMenu {
 	
 	public ResourceLocation bTexture = new ResourceLocation("textures/gui/widgets.png");
 	
-	public static final GuiBasicButton lbutton = new GuiBasicButton(ConfigMenu.leftButtonId, ConfigMenu.leftButtonPosX, ConfigMenu.leftButtonPosY, ConfigMenu.leftButtonWidth, ConfigMenu.leftButtonHeight, "menulib.lbutton.name");
-	public static final GuiBasicButton rbutton = new GuiBasicButton(ConfigMenu.rightButtonId, ConfigMenu.rightButtonPosX, ConfigMenu.rightButtonPosY, ConfigMenu.rightButtonWidth, ConfigMenu.rightButtonHeight, "menulib.rbutton.name");
+	public static final GuiBasicButton lbutton = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.leftButtonPosX, MLConfig.leftButtonPosY, MLConfig.leftButtonWidth, MLConfig.leftButtonHeight, "menulib.lbutton.name");
+	public static final GuiBasicButton rbutton = new GuiBasicButton(MLConfig.rightButtonId, MLConfig.rightButtonPosX, MLConfig.rightButtonPosY, MLConfig.rightButtonWidth, MLConfig.rightButtonHeight, "menulib.rbutton.name");
 	
-	public static final GuiBasicButton fancyLButton = new GuiBasicButton(ConfigMenu.leftButtonId, ConfigMenu.lFButtonPosX, ConfigMenu.lFButtonPosY, ConfigMenu.lFButtonWidth, ConfigMenu.lFButtonHeight, "menulib.lbuttonfancy.name");
-	public static final GuiBasicButton fancyRButton = new GuiBasicButton(ConfigMenu.rightButtonId, ConfigMenu.rFButtonPosX, ConfigMenu.rFButtonPosY, ConfigMenu.rFButtonWidth, ConfigMenu.rFButtonHeight, "menulib.rbuttonfancy.name");
+	public static final GuiBasicButton fancyLButton = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.lFButtonPosX, MLConfig.lFButtonPosY, MLConfig.lFButtonWidth, MLConfig.lFButtonHeight, "menulib.lbuttonfancy.name");
+	public static final GuiBasicButton fancyRButton = new GuiBasicButton(MLConfig.rightButtonId, MLConfig.rFButtonPosX, MLConfig.rFButtonPosY, MLConfig.rFButtonWidth, MLConfig.rFButtonHeight, "menulib.rbuttonfancy.name");
 
 	public Menu(Class<? extends GuiScreen> clazz, ResourceLocation id)
 	{
@@ -95,7 +95,7 @@ public class Menu implements IMenu {
 	@Override
 	public GuiButton getLeftButton() 
 	{
-		GuiBasicButton button = ConfigMenu.fancyPage ? fancyLButton : lbutton;
+		GuiBasicButton button = MLConfig.fancyPage ? fancyLButton : lbutton;
 		button.setButtonTexture(this.getButtonTexture());
 		return button;
 	}
@@ -103,7 +103,7 @@ public class Menu implements IMenu {
 	@Override
 	public GuiButton getRightButton()
 	{
-		GuiBasicButton button = ConfigMenu.fancyPage ? fancyRButton : rbutton;
+		GuiBasicButton button = MLConfig.fancyPage ? fancyRButton : rbutton;
 		button.setButtonTexture(this.getButtonTexture());
 		return button;
 	}
