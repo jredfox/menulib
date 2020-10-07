@@ -11,7 +11,9 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -114,7 +116,23 @@ public class MLTransformer implements IClassTransformer{
 	
 	public void transformMusic(ClassNode node)
 	{
+		MethodNode play = ASMHelper.getMethodNode(node, new MCPSidedString("playMusic", "func_181558_a").toString(), "(Lnet/minecraft/client/audio/MusicTicker$MusicType;)V");
+		AbstractInsnNode spot = ASMHelper.getFirstInstruction(play, Opcodes.PUTFIELD);
 		
+		//if(!MusicEvent.fire(MusicHandler.musicTicker, this.currentMusic) return
+		InsnList list = new InsnList();
+		list.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/jredfox/menulib/eventhandler/MusicHandler", "musicTicker", "Lnet/minecraft/util/ResourceLocation;"));
+		list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+		list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/audio/MusicTicker", new MCPSidedString("currentMusic", "field_147678_c").toString(), "Lnet/minecraft/client/audio/ISound;"));
+		list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/jredfox/menulib/event/MusicEvent", "fire", "(Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/audio/ISound;)Z", false));
+		LabelNode l2 = new LabelNode();
+		list.add(new JumpInsnNode(Opcodes.IFNE, l2));
+		LabelNode l3 = new LabelNode();
+		list.add(l3);
+		list.add(new InsnNode(Opcodes.RETURN));
+		list.add(l2);
+		
+		play.instructions.insert(spot, list);
 	}
 
 }

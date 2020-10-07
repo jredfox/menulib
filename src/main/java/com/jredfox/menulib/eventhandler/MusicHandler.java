@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MusicHandler {
 	
-	public static final ResourceLocation vanilla = new ResourceLocation("minecraft:music");
+	public static final ResourceLocation musicTicker = new ResourceLocation("minecraft:music");
 	@SubscribeEvent
 	public void canPlayMusic(MusicEvent e)
 	{
-		if(!e.tickId.equals(vanilla) || e.type != e.type.MENU)
+		if(!e.tickId.equals(musicTicker) || e.type != e.type.MENU)
 			return;
 		
 		if(e.gui instanceof GuiMainMenuBase)

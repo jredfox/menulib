@@ -23,12 +23,8 @@ public class GuiHandler {
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
 		GuiScreen gui = e.getGui();
-		
-		//return from method if gui is null
-		if(gui == null || !MenuRegistry.isReplaceable(gui))
-		{
+		if(!MenuRegistry.isReplaceable(gui))
 			return;
-		}
 		e.setGui(fake_menu);
 	}
 	
@@ -40,9 +36,7 @@ public class GuiHandler {
 	{
 		GuiScreen gui = e.getGui();
 		if(!(gui instanceof GuiFakeMenu))
-		{
 			return;
-		}
 		IMenu menu = MenuRegistry.getCurrentMenu();
 		//temporary line of code so it works this is not the proper way to open a menu. if it came from a sub menu it shouldn't create a new one each time
 		e.setGui(menu.create());

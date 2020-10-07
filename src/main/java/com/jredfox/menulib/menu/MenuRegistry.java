@@ -320,6 +320,6 @@ public class MenuRegistry {
 	 */
 	public static boolean isReplaceable(GuiScreen gui)
 	{
-		return gui instanceof GuiMainMenu || containsMenu(gui.getClass() );
+		return gui instanceof GuiMainMenu || gui != null && containsMenu(gui.getClass() );
 	}
 }
