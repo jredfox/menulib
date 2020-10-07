@@ -17,22 +17,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiHandler {
 	
-	public static GuiScreen lastMenuGui;
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
 		GuiScreen gui = e.getGui();
-		
-		//check if the IMenu Is open and switiching to a sub menu
-		GuiScreen current = MenuRegistry.getCurrentGui();
-		if(lastMenuGui == current && lastMenuGui != null && lastMenuGui != gui)
-		{
-			MenuRegistry.getCurrentMenu().closeSub();	
-		}
-		
-		lastMenuGui = gui;//set the last menu equal to the current menu
 		
 		//return from method if gui is null
 		if(gui == null || !MenuRegistry.isReplaceable(gui))
@@ -53,19 +43,10 @@ public class GuiHandler {
 		{
 			return;
 		}
-		boolean sub = MenuRegistry.getCurrentGui() == lastMenuGui && lastMenuGui != null;
-		GuiScreen replaced = sub ? MenuRegistry.getCurrentGui() : MenuRegistry.createCurrentGui();
-		e.setGui(replaced);
-		lastMenuGui = replaced;
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		if(!sub)
-		{
-			menu.open();
-		}
-		else
-		{
-			menu.openSub();
-		}
+		//temporary line of code so it works this is not the proper way to open a menu. if it came from a sub menu it shouldn't create a new one each time
+		e.setGui(menu.create());
+		menu.open();
 	}
 	
 	/**
@@ -74,11 +55,8 @@ public class GuiHandler {
 	@SubscribeEvent
 	public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post e)
 	{
-		GuiScreen gui = e.getGui();
-		if(gui == null || !MenuRegistry.containsMenu(gui.getClass() ))
-		{
+		if(e.getGui() != MenuRegistry.getCurrentGui())
 			return;
-		}
 		if(MenuRegistry.hasButtons())
 		{
 			IMenu menu = MenuRegistry.getCurrentMenu();

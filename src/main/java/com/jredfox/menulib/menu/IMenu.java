@@ -10,17 +10,9 @@ public interface IMenu {
 	 */
 	public void close();
 	/**
-	 * called when the menu closes and goes into a sub menu
-	 */
-	public void closeSub();
-	/**
 	 * called when the menu opens
 	 */
 	public void open();
-	/**
-	 * called when the menu opens from a sub menu
-	 */
-	public void openSub();
 	/**
 	 * this creates a new gui called when a new main menu gets created(opened)
 	 */
