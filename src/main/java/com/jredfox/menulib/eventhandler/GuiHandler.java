@@ -29,7 +29,7 @@ public class GuiHandler {
 		GuiScreen current = MenuRegistry.getCurrentGui();
 		if(lastMenuGui == current && lastMenuGui != null && lastMenuGui != gui)
 		{
-			MenuRegistry.getCurrentMenu().closeToSub();	
+			MenuRegistry.getCurrentMenu().closeSub();	
 		}
 		
 		lastMenuGui = gui;//set the last menu equal to the current menu
@@ -64,7 +64,7 @@ public class GuiHandler {
 		}
 		else
 		{
-			menu.openFromSub();
+			menu.openSub();
 		}
 	}
 	

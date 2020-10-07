@@ -20,30 +20,30 @@ public class MusicEvent extends Event {
 	public ResourceLocation tickId;
 	public boolean canPlay = true;
 	public MusicState type;
-	public GuiScreen gui;
+	public GuiScreen gui;//the gui menu if not null your working with either in game a main menu or anything else
 	public ISound sound;
 
 	public MusicEvent(ResourceLocation tickId, ISound sound)
 	{
-		this.gui = Minecraft.getMinecraft().currentScreen;
-		this.type = getType(this.gui);
-		this.canPlay = this.type == MusicState.MENU ? (MenuRegistry.getCurrentGui() instanceof GuiMainMenu) : true;
+		this.type = this.getType();
+		this.gui = this.type == MusicState.MENU ? MenuRegistry.getCurrentGui() : Minecraft.getMinecraft().currentScreen;
+		this.canPlay = this.type == MusicState.MENU ? (this.gui instanceof GuiMainMenu) : true;
 		this.tickId = tickId;
 		this.sound = sound;
 	}
 	
-	public MusicState getType(GuiScreen gui) 
+	protected MusicState getType() 
 	{
-		return Minecraft.getMinecraft().world == null ? MusicState.MENU : gui != null ? MusicState.GAMEGUI : MusicState.GAME;
+		return Minecraft.getMinecraft().world == null ? MusicState.MENU : Minecraft.getMinecraft().currentScreen != null ? MusicState.GAMEGUI : MusicState.GAME;
 	}
 
 	/**
 	 * fires the MusicEvent
 	 * @return if the music canPlay
 	 */
-	public static boolean fire(ResourceLocation id, ISound sound)
+	public static boolean fire(ResourceLocation tickId, ISound sound)
 	{
-		MusicEvent e = new MusicEvent(id, sound);
+		MusicEvent e = new MusicEvent(tickId, sound);
 		MinecraftForge.EVENT_BUS.post(e);
 		return e.canPlay;
 	}
