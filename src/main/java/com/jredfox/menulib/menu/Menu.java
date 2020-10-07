@@ -57,7 +57,7 @@ public class Menu implements IMenu {
 	 * called when the menu closes and goes into a sub menu
 	 */
 	@Override
-	public void closeToSub(){}
+	public void closeSub(){}
 
 	/**
 	 * do special and or rnd effects to your gui and open gl via open
@@ -66,7 +66,7 @@ public class Menu implements IMenu {
 	public void open() {}
 	
 	@Override
-	public void openFromSub() {}
+	public void openSub() {}
 
 	@Override
 	public ResourceLocation getId() 

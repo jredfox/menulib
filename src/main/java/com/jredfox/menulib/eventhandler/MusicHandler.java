@@ -3,22 +3,24 @@ package com.jredfox.menulib.eventhandler;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiMainMenuBase;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.event.MusicEvent;
-import com.jredfox.menulib.event.MusicMenuEvent;
 import com.jredfox.menulib.mod.MLConfig;
 
-import net.minecraft.client.audio.MusicTicker;
-import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MusicHandler {
 	
+	private static final ResourceLocation vanilla = new ResourceLocation("minecraft:menu");
 	@SubscribeEvent
-	public void canPlayMusic(MusicMenuEvent e)
+	public void canPlayMusic(MusicEvent e)
 	{
-		//only touch vanilla music here
-		if(!e.vanillaTicker)
-		{
+//		System.out.println(e.tickId);
+		if(!e.tickId.equals(vanilla) || e.type != e.type.MENU)
 			return;
+		
+		if(e.gui instanceof GuiMainMenuBase)
+		{
+			e.canPlay = ((GuiMainMenuBase)e.gui).allowMusic;
 		}
 		
 		for(Class c : MLConfig.musicDeny)
@@ -34,15 +36,9 @@ public class MusicHandler {
 			if(JavaUtil.isClassExtending(c, e.gui.getClass()))
 			{
 				e.canPlay = true;
-				break;
+				return;
 			}
 		}
-		
-		if(e.gui instanceof GuiMainMenuBase)
-		{
-			e.canPlay = ((GuiMainMenuBase)e.gui).allowMusic;
-		}
-//		System.out.println("e.canPlay:" + e.canPlay);
 	}
 
 }

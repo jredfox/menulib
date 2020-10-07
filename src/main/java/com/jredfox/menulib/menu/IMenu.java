@@ -12,7 +12,7 @@ public interface IMenu {
 	/**
 	 * called when the menu closes and goes into a sub menu
 	 */
-	public void closeToSub();
+	public void closeSub();
 	/**
 	 * called when the menu opens
 	 */
@@ -20,7 +20,7 @@ public interface IMenu {
 	/**
 	 * called when the menu opens from a sub menu
 	 */
-	public void openFromSub();
+	public void openSub();
 	/**
 	 * this creates a new gui called when a new main menu gets created(opened)
 	 */
