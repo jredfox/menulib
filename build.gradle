@@ -78,7 +78,7 @@ processResources {
 }
 jar {
     manifest {
-        attributes 'FMLCorePlugin': 'com.evilnotch.menulib.asm.MenuLibPlugin',
+        attributes 'FMLCorePlugin': 'com.jredfox.menulib.coremod.MLPlugin',
                    'FMLCorePluginContainsFMLMod': 'false'
     }
 }

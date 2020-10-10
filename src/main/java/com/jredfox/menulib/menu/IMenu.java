@@ -1,13 +1,9 @@
 package com.jredfox.menulib.menu;
 
-import com.jredfox.menulib.coremod.MLCoreConfig;
-import com.jredfox.menulib.misc.NumberUtil;
 import com.jredfox.menulib.sound.IMusicPlayer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 
 public interface IMenu {
@@ -35,7 +31,6 @@ public interface IMenu {
 	 * this is the resource location to identify your main menu
 	 */
 	public ResourceLocation getId();
-	
 	/**
 	 * return null for no music
 	 */
