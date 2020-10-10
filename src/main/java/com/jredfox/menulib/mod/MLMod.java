@@ -2,6 +2,7 @@ package com.jredfox.menulib.mod;
 
 import com.jredfox.menulib.menu.MenuRegistry;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

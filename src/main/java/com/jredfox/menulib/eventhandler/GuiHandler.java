@@ -55,16 +55,12 @@ public class GuiHandler {
 		{
 			IMenu menu = MenuRegistry.getCurrentMenu();
 			List<GuiButton> li = e.getButtonList();
-			GuiButton lbutton = menu.getLeft();
-			GuiButton rbutton = menu.getRight();
-			if(lbutton != null && !li.contains(lbutton))
-			{
-				li.add(lbutton);
-			}
-			if(rbutton != null && !li.contains(rbutton))
-			{
-				li.add(rbutton);
-			}
+			GuiButton prev = menu.getPrevious();
+			GuiButton next = menu.getNext();
+			if(prev != null && !li.contains(prev))
+				li.add(prev);
+			if(next != null && !li.contains(next))
+				li.add(next);
 		}
 	}
 	

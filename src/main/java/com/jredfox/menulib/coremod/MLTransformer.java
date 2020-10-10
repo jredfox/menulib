@@ -57,7 +57,7 @@ public class MLTransformer implements IClassTransformer{
 					break;
 					
 					case 1:
-						transformMusic(node);
+//						transformMusic(node);
 					break;
 				}
 				
@@ -87,7 +87,7 @@ public class MLTransformer implements IClassTransformer{
 	public void transformFramerate(ClassNode classNode, String input) throws IOException 
 	{
 		//add getMenuFrames so minecraft can use them later
-		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
+//		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
 		
 		//start finding the injection point to change the 30 return value to a method call "getMenuFrames"
 		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");

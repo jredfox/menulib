@@ -24,7 +24,6 @@ public class MLConfig {
 	public static List<LineArray> mainMenus = new ArrayList();
 	public static boolean fancyPage = false;
 	public static boolean displayNewMenu = true;
-	public static boolean cmmAndVanilla = false;	
 	public static ResourceLocation currentMenuIndex = null;
 	public static File cfgmenu = null;
 	
@@ -51,8 +50,6 @@ public class MLConfig {
 	public static int rFButtonHeight = 20;
 	
 	private static final String menu_comment = "format of menus is \"modid:mainmenu <class> = true/false\" changeing the menu order will change it in game";
-	private static final String musicDeny_comment = "this is a blacklist of menus that extend GuiMainMenu but, have their own music";
-	private static final String musicAllow_comment = "this is a whitelist of menus not extending GuiMainMenu that require vanilla music";
 	
 	/**
 	 * load all configurations for menu lib
@@ -65,7 +62,6 @@ public class MLConfig {
 		
 		config.load();
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
-		cmmAndVanilla = config.get("menulib", "cmmAndVanilla", cmmAndVanilla).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
 		
 		fancyPage = config.get("buttons","fancyButtons",false).getBoolean();
@@ -180,8 +176,6 @@ public class MLConfig {
 	private static void syncComments(Configuration config) 
 	{
 		config.get("menulib", "menus", new String[]{""}, menu_comment);
-		config.get("music", "classes_deny", new String[]{""}, musicDeny_comment);
-		config.get("music", "classes_allowed", new String[]{""}, musicAllow_comment);
 	}
 
 	/**

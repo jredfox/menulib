@@ -18,7 +18,7 @@ public interface IMenu {
 	 */
 	public void open();
 	/**
-	 * this creates a new gui called when a new main menu gets created(opened)
+	 * this creates a new gui and sets the gui field
 	 */
 	public GuiScreen create();
 	/**

@@ -53,7 +53,8 @@ public class Menu implements IMenu {
 	{
 		try
 		{
-			return (GuiScreen) this.ctr.newInstance();
+			this.gui = (GuiScreen) this.ctr.newInstance();
+			return this.get();
 		}
 		catch(Throwable t)
 		{

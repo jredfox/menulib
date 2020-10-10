@@ -12,16 +12,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MusicHandler {
 	
+	public static final ResourceLocation vanilla = new ResourceLocation("minecraft:menu");
 	@SubscribeEvent
 	public void canPlayMusic(MusicEvent e)
 	{
-//		if(!e.tickId.equals(MusicEvent.musicTicker) || e.state != MusicState.MENU)
-//			return;
+		if(!e.musicId.equals(vanilla) || e.state != MusicState.MENU)
+			return;
 		
-		if(e.gui instanceof GuiMainMenuBase)
-		{
-			e.canPlay = ((GuiMainMenuBase)e.gui).allowMusic;
-		}
+		System.out.println("music firing in the menus....");
 	}
 
 }
