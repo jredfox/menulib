@@ -53,7 +53,7 @@ public class MenuRegistry {
 	 */
 	public static IMenu register(Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
-		IMenu menu = new Menu(guiClazz, id);
+		IMenu menu = new Menu(id, guiClazz);
 		menus.remove(menu);
 		menus.add(menu);
 		tempMenus.put(id, -1);
@@ -62,7 +62,7 @@ public class MenuRegistry {
 	
 	public static IMenu register(int index, Class<? extends GuiScreen> guiClazz, ResourceLocation id)
 	{
-		IMenu menu = new Menu(guiClazz,id);
+		IMenu menu = new Menu(id, guiClazz);
 		menus.remove(menu);
 		menus.add(menu);
 		tempMenus.put(id, index);
@@ -248,7 +248,7 @@ public class MenuRegistry {
 					MLConfig.isDirty = true;
 					continue;
 				}
-				IMenu menu = new Menu(c,loc);
+				IMenu menu = new Menu(loc, c);
 				if(!list.contains(menu))
 					list.add(menu);
 			}

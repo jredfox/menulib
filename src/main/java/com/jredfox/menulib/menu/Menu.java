@@ -2,63 +2,77 @@ package com.jredfox.menulib.menu;
 
 import java.lang.reflect.Constructor;
 
+import org.apache.logging.log4j.core.util.ReflectionUtil;
+
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.jredfox.menulib.mod.MLConfig;
 import com.jredfox.menulib.sound.IMusicPlayer;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 public class Menu implements IMenu {
 	
-	static
-	{
-		if(!MLConfig.isLoaded)
-		{
-			throw new RuntimeException("ConfigMenu Must be Loaded Beofre Instantiating this class so button vars can be configurable");
-		}
-	}
+	public ResourceLocation id;
+	public Class<? extends GuiScreen> guiClass;
+	public IMusicPlayer music;
+	public int frames;
 	
-	public ResourceLocation id = null;
-	public Constructor ctr = null;
-	public Class clazz = null;
+	//objects
 	public GuiScreen gui;
+	public Constructor ctr;//cache the constructor
 	
-	public ResourceLocation bTexture = new ResourceLocation("textures/gui/widgets.png");
-	
-	public static final GuiBasicButton lbutton = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.leftButtonPosX, MLConfig.leftButtonPosY, MLConfig.leftButtonWidth, MLConfig.leftButtonHeight, "menulib.lbutton.name");
-	public static final GuiBasicButton rbutton = new GuiBasicButton(MLConfig.rightButtonId, MLConfig.rightButtonPosX, MLConfig.rightButtonPosY, MLConfig.rightButtonWidth, MLConfig.rightButtonHeight, "menulib.rbutton.name");
-	
-	public static final GuiBasicButton fancyLButton = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.lFButtonPosX, MLConfig.lFButtonPosY, MLConfig.lFButtonWidth, MLConfig.lFButtonHeight, "menulib.lbuttonfancy.name");
-	public static final GuiBasicButton fancyRButton = new GuiBasicButton(MLConfig.rightButtonId, MLConfig.rFButtonPosX, MLConfig.rFButtonPosY, MLConfig.rFButtonWidth, MLConfig.rFButtonHeight, "menulib.rbuttonfancy.name");
-
-	public Menu(Class<? extends GuiScreen> clazz, ResourceLocation id)
+	public Menu(ResourceLocation id, Class<? extends GuiScreen> guiClass)
 	{
-		this.clazz = clazz;
-		try 
-		{
-			this.ctr = clazz.getConstructor();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
+		this(id, guiClass, null);
+	}
+	
+	public Menu(ResourceLocation id, Class<? extends GuiScreen> guiClass, IMusicPlayer music)
+	{
+		this(id, guiClass, music, -1);
+	}
+	
+	public Menu(ResourceLocation id, Class<? extends GuiScreen> guiClass, IMusicPlayer music, int frames)
+	{
 		this.id = id;
+		this.guiClass = guiClass;
+		this.music = music;
+		this.frames = frames;
+		this.ctr = ReflectionUtil.getDefaultConstructor(this.guiClass);
 	}
 
-	/**
-	 * called when menu switches
-	 */
 	@Override
 	public void close() {}
 
-	/**
-	 * do special and or rnd effects to your gui and open gl via open
-	 */
 	@Override
 	public void open() {}
+
+	@Override
+	public GuiScreen create() 
+	{
+		try
+		{
+			return (GuiScreen) this.ctr.newInstance();
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public GuiScreen get() 
+	{
+		return this.gui;
+	}
+
+	@Override
+	public Class<? extends GuiScreen> getGuiClass() 
+	{
+		return this.guiClass;
+	}
 
 	@Override
 	public ResourceLocation getId() 
@@ -67,79 +81,38 @@ public class Menu implements IMenu {
 	}
 
 	@Override
-	public Class<? extends GuiScreen> getGuiClass() 
-	{
-		return this.clazz;
-	}
-	
-	@Override
-	public GuiButton getLeft() 
-	{
-		GuiBasicButton button = MLConfig.fancyPage ? fancyLButton : lbutton;
-		return button;
-	}
-	
-	@Override
-	public GuiButton getRight()
-	{
-		GuiBasicButton button = MLConfig.fancyPage ? fancyRButton : rbutton;
-		return button;
-	}
-
-	@Override
-	public GuiScreen create() 
-	{
-		try
-		{
-			this.gui = (GuiScreen) ctr.newInstance();
-			return this.get();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	@Override
-	public GuiScreen get() 
-	{
-		return this.gui;
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if(!(obj instanceof IMenu))
-			return false;
-		return this.getId().equals(((IMenu)obj).getId());
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return this.getId().hashCode();
-	}
-	
-	@Override
-	public String toString()
-	{
-		return this.getId().toString();
-	}
-
-	@Override
 	public int getFrames() 
 	{
-		return -1;
+		return this.frames;
 	}
 
-	/**
-	 * null as mods will have their own music
-	 */
 	@Override
-	public IMusicPlayer getMusic() 
+	public IMusicPlayer getMusicPlayer() 
 	{
-		return null;
+		return this.music;
 	}
 	
+	public static final GuiBasicButton previous = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.leftButtonPosX, MLConfig.leftButtonPosY, MLConfig.leftButtonWidth, MLConfig.leftButtonHeight, "menulib.previous.name");
+	public static final GuiBasicButton next = new GuiBasicButton(MLConfig.rightButtonId,  MLConfig.rightButtonPosX, MLConfig.rightButtonPosY, MLConfig.rightButtonWidth, MLConfig.rightButtonHeight, "menulib.next.name");
+	public static final GuiBasicButton previousFancy = new GuiBasicButton(MLConfig.leftButtonId,  MLConfig.lFButtonPosX, MLConfig.lFButtonPosY, MLConfig.lFButtonWidth, MLConfig.lFButtonHeight, "menulib.previousFancy.name");
+	public static final GuiBasicButton nextFancy = new GuiBasicButton(MLConfig.rightButtonId, MLConfig.rFButtonPosX, MLConfig.rFButtonPosY, MLConfig.rFButtonWidth, MLConfig.rFButtonHeight, "menulib.nextFancy.name");
+
+	static
+	{
+		if(!MLConfig.isLoaded)
+			throw new RuntimeException("MLConfig cannot be hotloaded!");
+	}
+	
+	@Override
+	public GuiButton getPrevious() 
+	{
+		return !MLConfig.fancyPage ? previous : previousFancy;
+	}
+
+	@Override
+	public GuiButton getNext() 
+	{
+		return !MLConfig.fancyPage ? next : nextFancy;
+	}
+
 }

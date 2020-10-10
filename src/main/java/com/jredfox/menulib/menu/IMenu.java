@@ -33,21 +33,22 @@ public interface IMenu {
 	 * this is the resource location to identify your main menu
 	 */
 	public ResourceLocation getId();
-	/**
-	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
-	 */
-	public int getFrames();
+	
 	/**
 	 * return null for no music
 	 */
 	public IMusicPlayer getMusicPlayer();
 	/**
-	 * if this is null it won't be displayed
+	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
 	 */
-	public GuiButton getLeft();
+	public int getFrames();
 	/**
 	 * if this is null it won't be displayed
 	 */
-	public GuiButton getRight();
+	public GuiButton getPrevious();
+	/**
+	 * if this is null it won't be displayed
+	 */
+	public GuiButton getNext();
 
 }
