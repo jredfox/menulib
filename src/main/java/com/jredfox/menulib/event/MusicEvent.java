@@ -27,7 +27,7 @@ public class MusicEvent extends Event {
 	public ResourceLocation musicId;
 	public boolean canPlay;
 	public MusicState state;
-	public GuiScreen gui;//the gui menu if not null your working with either in game a main menu or anything else
+	public GuiScreen gui;
 	public ISound sound;
 
 	public MusicEvent(IMusicPlayer player, ISound sound)

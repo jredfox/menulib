@@ -40,7 +40,7 @@ public interface IMenu {
 	/**
 	 * return null for no music
 	 */
-	public IMusicPlayer getMusic();
+	public IMusicPlayer getMusicPlayer();
 	/**
 	 * if this is null it won't be displayed
 	 */
