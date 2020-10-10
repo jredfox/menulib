@@ -1,13 +1,20 @@
 package com.jredfox.menulib.event;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.sound.IMusicGui;
+import com.jredfox.menulib.sound.IMusicPlayer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -17,38 +24,33 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  */
 public class MusicEvent extends Event {
 	
-	public ResourceLocation tickId;
-	public boolean canPlay = true;
-	public MusicState type;
+	public ResourceLocation musicId;
+	public boolean canPlay;
+	public MusicState state;
 	public GuiScreen gui;//the gui menu if not null your working with either in game a main menu or anything else
 	public ISound sound;
 
-	public MusicEvent(ResourceLocation tickId, ISound sound)
+	public MusicEvent(IMusicPlayer player, ISound sound)
 	{
-		this.type = this.getType();
-		this.gui = this.type == MusicState.MENU ? MenuRegistry.getCurrentGui() : Minecraft.getMinecraft().currentScreen;
-		this.canPlay = this.type == MusicState.MENU ? (this.gui instanceof GuiMainMenu) : true;
-		this.tickId = tickId;
+		this.musicId = player.getId();
+		this.state = player.getMusicState();
+		this.gui = player instanceof IMusicGui ? ((IMusicGui)player).getGui() : null;
+		this.canPlay = true;
 		this.sound = sound;
-	}
-	
-	protected MusicState getType() 
-	{
-		return Minecraft.getMinecraft().world == null ? MusicState.MENU : Minecraft.getMinecraft().currentScreen != null ? MusicState.GAMEGUI : MusicState.GAME;
 	}
 
 	/**
 	 * fires the MusicEvent
 	 * @return if the music canPlay
 	 */
-	public static boolean fire(ResourceLocation tickId, ISound sound)
+	public static boolean fire(IMusicPlayer player, ISound sound)
 	{
-		MusicEvent e = new MusicEvent(tickId, sound);
+		MusicEvent e = new MusicEvent(player, sound);
 		MinecraftForge.EVENT_BUS.post(e);
 		return e.canPlay;
 	}
 	
-	public enum MusicState
+	public static enum MusicState
 	{
 		GAME(),
 		GAMEGUI(),

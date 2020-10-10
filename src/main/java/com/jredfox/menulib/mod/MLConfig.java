@@ -22,8 +22,6 @@ public class MLConfig {
 	public static boolean isLoaded = false;
 	
 	public static List<LineArray> mainMenus = new ArrayList();
-	public static List<Class> musicAllow = new ArrayList();
-	public static List<Class> musicDeny = new ArrayList();
 	public static boolean fancyPage = false;
 	public static boolean displayNewMenu = true;
 	public static boolean cmmAndVanilla = false;	
@@ -92,27 +90,6 @@ public class MLConfig {
 
 		String[] order = config.get("menulib", "menus", new String[]{""},menu_comment).getStringList();
 		resetMenus(order);
-		
-		String[] clList = config.getStringList("classes_allowed", "music", new String[]{""}, musicAllow_comment);
-		for(String s : clList)
-		{
-			if(JavaUtil.toWhiteSpaced(s).isEmpty())
-				continue;
-			Class c = ReflectionUtil.classForName(s);
-			if(c != null)
-				musicAllow.add(c);
-		}
-		
-		String[] clDenyList = config.getStringList("classes_deny", "music", new String[]{""}, musicDeny_comment);
-		for(String s : clDenyList)
-		{
-			if(JavaUtil.toWhiteSpaced(s).isEmpty())
-				continue;
-			Class c = ReflectionUtil.classForName(s);
-			if(c != null)
-				musicDeny.add(c);
-		}
-		
 		config.save();
 		isLoaded = true;
 	}

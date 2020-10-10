@@ -18,10 +18,14 @@ public class TickHandler implements ITick{
 	}
 
 	@Override
-	public void garbageCollect() {}
+	public void garbageCollect() 
+	{
+		
+	}
 
 	@Override
-	public Phase getPhase() {
+	public Phase getPhase() 
+	{
 		return Phase.END;
 	}
 

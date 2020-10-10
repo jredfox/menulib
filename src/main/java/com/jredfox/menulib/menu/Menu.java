@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.jredfox.menulib.mod.MLConfig;
+import com.jredfox.menulib.sound.IMusicPlayer;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -115,9 +116,30 @@ public class Menu implements IMenu {
 	}
 	
 	@Override
+	public int hashCode()
+	{
+		return this.getId().hashCode();
+	}
+	
+	@Override
 	public String toString()
 	{
 		return this.getId().toString();
+	}
+
+	@Override
+	public int getFrames() 
+	{
+		return -1;
+	}
+
+	/**
+	 * null as mods will have their own music
+	 */
+	@Override
+	public IMusicPlayer getMusic() 
+	{
+		return null;
 	}
 	
 }

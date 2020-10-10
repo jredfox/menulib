@@ -16,14 +16,11 @@ public class MLCoreConfig {
 		File dir = new File(System.getProperty("user.dir"));
 		File filecfg = new File(dir, "config/menulib/menulibcore.cfg");
 		Configuration cfg = new Configuration(filecfg);
-		
 		cfg.load();
 		lockFrames = cfg.get("general", "lockMenuFrames", lockFrames).getBoolean();
 		frames = cfg.get("general", "lockedMenuFrames", vFrames).getInt();
 		debugFrames = cfg.get("general","debugFrames", debugFrames).getBoolean();
 		cfg.save();
-		
-//		ProxyCMM.flagCMMJson(dir);
 	}
 
 }

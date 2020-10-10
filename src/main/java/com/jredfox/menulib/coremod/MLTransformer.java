@@ -121,7 +121,7 @@ public class MLTransformer implements IClassTransformer{
 		
 		//if(!MusicEvent.fire(MusicHandler.musicTicker, this.currentMusic) return
 		InsnList list = new InsnList();
-		list.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/jredfox/menulib/eventhandler/MusicHandler", "musicTicker", "Lnet/minecraft/util/ResourceLocation;"));
+		list.add(new FieldInsnNode(Opcodes.GETSTATIC, "com/jredfox/menulib/event/MusicEvent", "musicTicker", "Lnet/minecraft/util/ResourceLocation;"));
 		list.add(new VarInsnNode(Opcodes.ALOAD, 0));
 		list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/audio/MusicTicker", new MCPSidedString("currentMusic", "field_147678_c").toString(), "Lnet/minecraft/client/audio/ISound;"));
 		list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/jredfox/menulib/event/MusicEvent", "fire", "(Lnet/minecraft/util/ResourceLocation;Lnet/minecraft/client/audio/ISound;)Z", false));
