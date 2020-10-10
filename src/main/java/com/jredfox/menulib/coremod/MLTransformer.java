@@ -32,9 +32,7 @@ public class MLTransformer implements IClassTransformer{
     public static final List<String> clazzes = (List<String>)JavaUtil.<String>asArray(new Object[]
     {
     	"net.minecraft.client.Minecraft",
-   		"net.minecraft.client.audio.MusicTicker",
-    	"lumien.custommainmenu.handler.CMMEventHandler",
-    	"lumien.custommainmenu.gui.GuiCustom",
+   		"net.minecraft.client.audio.MusicTicker"
     });
     
     //since I don't have my asm system I use a slightly better version for forge's switch case is gross but, it's better then if else
@@ -87,7 +85,7 @@ public class MLTransformer implements IClassTransformer{
 	public void transformFramerate(ClassNode classNode, String input) throws IOException 
 	{
 		//add getMenuFrames so minecraft can use them later
-//		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
+		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
 		
 		//start finding the injection point to change the 30 return value to a method call "getMenuFrames"
 		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");

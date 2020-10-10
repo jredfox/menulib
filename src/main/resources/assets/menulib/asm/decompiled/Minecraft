@@ -14,9 +14,10 @@ public class Minecraft{
 	 * if locked will be what the user configures else will be capped at 30 or higher depending on the game settings
 	 */
 	public int getMenuFrames() 
-    {
-    	int limit = this.gameSettings.limitFramerate;
-		return MLCoreConfig.lockFrames ? MLCoreConfig.frames : (limit > MLCoreConfig.vFrames ? limit : MLCoreConfig.vFrames);
+        {
+    	   IMenu menu = MenuRegistry.getCurrentMenu();
+    	   int frames = menu != null ? menu.getFrames() : -1;
+    	   return frames > -1 ? frames : NumberUtil.capMin(this.gameSettings.limitFramerate, 30);
 	}
 
 	public static Minecraft getMinecraft() {

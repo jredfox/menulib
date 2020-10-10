@@ -10,5 +10,12 @@ public class NumberUtil {
 			num = max;
 		return num;
 	}
+	
+	public static int capMin(int num, int min)
+	{
+		if(num < min)
+			num = min;
+		return num;
+	}
 
 }
