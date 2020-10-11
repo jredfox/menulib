@@ -80,17 +80,17 @@ public class Menu implements IMenu {
 	{
 		return this.id;
 	}
+	
+	@Override
+	public IMusicPlayer getMusicPlayer() 
+	{
+		return this.music;
+	}
 
 	@Override
 	public int getFrames() 
 	{
 		return this.frames;
-	}
-
-	@Override
-	public IMusicPlayer getMusicPlayer() 
-	{
-		return this.music;
 	}
 	
 	public static final GuiBasicButton previous = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.leftButtonPosX, MLConfig.leftButtonPosY, MLConfig.leftButtonWidth, MLConfig.leftButtonHeight, "menulib.previous.name");

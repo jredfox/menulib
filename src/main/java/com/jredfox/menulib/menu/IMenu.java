@@ -1,12 +1,13 @@
 package com.jredfox.menulib.menu;
 
 import com.jredfox.menulib.sound.IMusicPlayer;
+import com.jredfox.menulib.sound.IMusicPlayerHolder;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
-public interface IMenu {
+public interface IMenu extends IMusicPlayerHolder{
 	/**
 	 * called right after menu closes
 	 */
@@ -32,13 +33,13 @@ public interface IMenu {
 	 */
 	public ResourceLocation getId();
 	/**
-	 * return null for no music
-	 */
-	public IMusicPlayer getMusicPlayer();
-	/**
 	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
 	 */
 	public int getFrames();
+	/**
+	 * return null for no music
+	 */
+	public IMusicPlayer getMusicPlayer();
 	/**
 	 * if this is null it won't be displayed
 	 */

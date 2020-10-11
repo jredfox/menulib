@@ -122,9 +122,7 @@ public class MenuRegistry {
 	 */
 	public static GuiScreen getCurrentGui()
 	{
-		IMenu menu = getCurrentMenu();
-		GuiScreen screen = menu.get();
-		return screen;
+		return getCurrentMenu().get();
 	}
 	
 	public static IMenu getCurrentMenu()

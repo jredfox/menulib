@@ -9,7 +9,7 @@ import com.jredfox.menulib.misc.NumberUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
-public class TickHandler implements ITick{
+public class FrameHandler implements ITick{
 
 	@Override
 	public void tick() 

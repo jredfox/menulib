@@ -4,7 +4,8 @@ import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.coremod.MLCoreConfig;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
-import com.jredfox.menulib.eventhandler.TickHandler;
+import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
+import com.jredfox.menulib.eventhandler.FrameHandler;
 import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraft.client.gui.GuiMainMenu;
@@ -27,10 +28,11 @@ public class MLRegistry {
 	{
 		MinecraftForge.EVENT_BUS.register(new GuiHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicHandler());
+		TickRegistry.register(new MusicPlayerHandler(), Side.CLIENT);
 		
 		if(MLCoreConfig.debugFrames)
 		{
-			TickRegistry.register(new TickHandler(), Side.CLIENT);
+			TickRegistry.register(new FrameHandler(), Side.CLIENT);
 		}
 	}
 	
@@ -42,7 +44,6 @@ public class MLRegistry {
 		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
 		MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
 		MenuRegistry.register("thebetweenlands.client.gui.menu.GuiBLMainMenu", new ResourceLocation("thebetweenlands:mainmenu"));
-		MenuRegistry.register("com.evilnotch.lib.minecraft.basicmc.client.gui.GuiMainMenuBase", new ResourceLocation("minecraft:test"));
 	}
 
 }
