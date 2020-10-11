@@ -7,6 +7,7 @@ import org.apache.logging.log4j.core.util.ReflectionUtil;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.jredfox.menulib.mod.MLConfig;
 import com.jredfox.menulib.sound.IMusicPlayer;
+import com.jredfox.menulib.sound.MusicPlayerEmpty;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -25,7 +26,7 @@ public class Menu implements IMenu {
 	
 	public Menu(ResourceLocation id, Class<? extends GuiScreen> guiClass)
 	{
-		this(id, guiClass, null);
+		this(id, guiClass, MusicPlayerEmpty.musicPlayer);
 	}
 	
 	public Menu(ResourceLocation id, Class<? extends GuiScreen> guiClass, IMusicPlayer music)

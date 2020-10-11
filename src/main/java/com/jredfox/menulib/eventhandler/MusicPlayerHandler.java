@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.evilnotch.lib.minecraft.tick.ITick;
+import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.event.MusicEvent;
 import com.jredfox.menulib.event.MusicEvent.MusicState;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.sound.IMusicPlayer;
+import com.jredfox.menulib.sound.MusicPlayerEmpty;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -17,7 +19,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class MusicPlayerHandler implements ITick{
 
 	public Minecraft mc = Minecraft.getMinecraft();
-	public List<IMusicPlayer> gameMusic = new ArrayList();
+	public IMusicPlayer musicGame = MusicPlayerEmpty.musicPlayer;
 	public ISound currentMusic;
 	
 	@Override
@@ -26,18 +28,14 @@ public class MusicPlayerHandler implements ITick{
 		MusicState state = this.getState();
 		if(state == MusicState.GAME)
 		{
-			for(IMusicPlayer p : gameMusic)
-				p.tick();
+//			System.out.println("ticking game...");
+			this.musicGame.tick();
 		}
 		else if(state == MusicState.MENU)
 		{
+			if(TickRegistry.isRightTickClient(20))
+				System.out.println("ticking menu...");
 			MenuRegistry.getCurrentMenu().getMusicPlayer().tick();
-		}
-		
-		GuiScreen gui = this.mc.currentScreen;
-		if(gui instanceof IMusicPlayer && gui != MenuRegistry.getCurrentGui())
-		{
-			((IMusicPlayer)gui).tick();
 		}
 	}
 	

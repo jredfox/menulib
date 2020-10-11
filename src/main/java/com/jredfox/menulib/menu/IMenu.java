@@ -37,7 +37,7 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public int getFrames();
 	/**
-	 * return null for no music
+	 * return MusicPlayerEmpty.musicPlayer for no music
 	 */
 	public IMusicPlayer getMusicPlayer();
 	/**

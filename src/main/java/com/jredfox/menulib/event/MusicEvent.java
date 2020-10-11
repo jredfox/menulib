@@ -53,8 +53,9 @@ public class MusicEvent extends Event {
 	public static enum MusicState
 	{
 		GAME(),
-		GAMEGUI(),
-		MENU()
+		GUI(),
+		MENU(),
+		NONE()
 	}
 
 }
