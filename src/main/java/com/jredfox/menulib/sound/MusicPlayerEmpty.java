@@ -1,5 +1,6 @@
 package com.jredfox.menulib.sound;
 
+import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.event.MusicEvent.MusicState;
 
 import net.minecraft.util.ResourceLocation;
@@ -22,7 +23,7 @@ public class MusicPlayerEmpty implements IMusicPlayer{
 	}
 
 	@Override
-	public boolean replaceMusic() 
+	public boolean shouldReplace() 
 	{
 		return false;
 	}

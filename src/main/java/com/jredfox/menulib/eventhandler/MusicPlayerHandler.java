@@ -28,20 +28,23 @@ public class MusicPlayerHandler implements ITick{
 		MusicState state = this.getState();
 		if(state == MusicState.GAME)
 		{
-//			System.out.println("ticking game...");
 			this.musicGame.tick();
 		}
 		else if(state == MusicState.MENU)
 		{
-			if(TickRegistry.isRightTickClient(20))
-				System.out.println("ticking menu...");
 			MenuRegistry.getCurrentMenu().getMusicPlayer().tick();
+		}
+		
+		GuiScreen gui = this.mc.currentScreen;
+		if(gui instanceof IMusicPlayer)
+		{
+			((IMusicPlayer)gui).tick();
 		}
 	}
 	
 	public void play(IMusicPlayer player, ISound sound)
 	{
-		if(!player.replaceMusic() && this.currentMusic != null)
+		if(!player.shouldReplace() && this.currentMusic != null)
 		{
 			return;
 		}
