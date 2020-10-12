@@ -5,7 +5,7 @@ import com.jredfox.menulib.menu.IMenu;
 
 import net.minecraft.client.gui.GuiScreen;
 
-public interface IMusicMenu extends IMusicGui {
+public interface IMusicMenu extends IMusicGuiHolder {
 	
 	/**
 	 * a reference to the IMenu object for the IMusic

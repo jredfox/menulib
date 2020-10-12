@@ -21,16 +21,9 @@ public class CapabilityMusic extends CapWorld implements IMusicPlayerHolder{
 	}
 	
 	@Override
-	public void readFromNBT(World world, NBTTagCompound nbt, CapContainer container)
-	{
-		
-	}
-
+	public void readFromNBT(World world, NBTTagCompound nbt, CapContainer container) {}
 	@Override
-	public void writeToNBT(World world, NBTTagCompound nbt, CapContainer container) 
-	{
-		
-	}
+	public void writeToNBT(World world, NBTTagCompound nbt, CapContainer container) {}
 
 	@Override
 	public IMusicPlayer getMusicPlayer() 

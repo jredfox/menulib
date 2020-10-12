@@ -24,11 +24,18 @@ public class MusicPlayerHandler implements ITick{
 
 	public Minecraft mc = Minecraft.getMinecraft();
 	public ISound currentMusic;
+	public MusicState previous = MusicState.NONE;
 	
 	@Override
 	public void tick()
 	{
 		MusicState state = this.getState();
+		if(this.previous != state)
+		{
+			this.stop();//stop if the state of the music has changed
+		}
+		this.previous = state;
+		
 		if(state == MusicState.GAME)
 		{
 			IMusicPlayerHolder player = (IMusicPlayerHolder) CapabilityRegistry.getCapability(this.mc.world, CapReg.musicPlayerWorld);
@@ -61,8 +68,10 @@ public class MusicPlayerHandler implements ITick{
 	public void stop()
 	{
 		if(this.currentMusic != null)
+		{
 			this.mc.getSoundHandler().stopSound(this.currentMusic);
-		this.currentMusic = null;
+			this.currentMusic = null;
+		}
 	}
 
 	/**

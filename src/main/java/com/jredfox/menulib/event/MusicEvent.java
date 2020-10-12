@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.MenuRegistry;
-import com.jredfox.menulib.sound.IMusicGui;
+import com.jredfox.menulib.sound.IMusicGuiHolder;
 import com.jredfox.menulib.sound.IMusicPlayer;
 
 import net.minecraft.client.Minecraft;
@@ -34,7 +34,7 @@ public class MusicEvent extends Event {
 	{
 		this.musicId = player.getId();
 		this.state = player.getMusicState();
-		this.gui = player instanceof IMusicGui ? ((IMusicGui)player).getGui() : null;
+		this.gui = player instanceof IMusicGuiHolder ? ((IMusicGuiHolder)player).getGui() : null;
 		this.canPlay = true;
 		this.sound = sound;
 	}
