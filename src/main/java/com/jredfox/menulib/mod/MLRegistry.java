@@ -1,6 +1,8 @@
 package com.jredfox.menulib.mod;
 
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
+import com.jredfox.menulib.cap.CapReg;
 import com.jredfox.menulib.coremod.MLCoreConfig;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
@@ -19,6 +21,17 @@ public class MLRegistry {
 	{
 		register();
 		registerEvents();
+		registerCaps();
+	}
+	
+	/**
+	 * generic registry
+	 */
+	public static void register()
+	{
+		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
+		MenuRegistry.register("thebetweenlands.client.gui.menu.GuiBLMainMenu", new ResourceLocation("thebetweenlands:mainmenu"));
 	}
 	
 	/**
@@ -36,14 +49,9 @@ public class MLRegistry {
 		}
 	}
 	
-	/**
-	 * generic registry
-	 */
-	public static void register()
+	public static void registerCaps()
 	{
-		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
-		MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
-		MenuRegistry.register("thebetweenlands.client.gui.menu.GuiBLMainMenu", new ResourceLocation("thebetweenlands:mainmenu"));
+		CapabilityRegistry.registerRegistry(new CapReg());
 	}
 
 }

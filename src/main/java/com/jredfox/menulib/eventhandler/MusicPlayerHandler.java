@@ -3,12 +3,16 @@ package com.jredfox.menulib.eventhandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.ITick;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
+import com.jredfox.menulib.cap.CapReg;
+import com.jredfox.menulib.cap.CapabilityMusic;
 import com.jredfox.menulib.event.MusicEvent;
 import com.jredfox.menulib.event.MusicEvent.MusicState;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.sound.IMusicPlayer;
+import com.jredfox.menulib.sound.IMusicPlayerHolder;
 import com.jredfox.menulib.sound.MusicPlayerEmpty;
 
 import net.minecraft.client.Minecraft;
@@ -19,7 +23,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class MusicPlayerHandler implements ITick{
 
 	public Minecraft mc = Minecraft.getMinecraft();
-	public IMusicPlayer musicGame = MusicPlayerEmpty.musicPlayer;
 	public ISound currentMusic;
 	
 	@Override
@@ -28,17 +31,16 @@ public class MusicPlayerHandler implements ITick{
 		MusicState state = this.getState();
 		if(state == MusicState.GAME)
 		{
-			this.musicGame.tick();
+			IMusicPlayerHolder player = (IMusicPlayerHolder) CapabilityRegistry.getCapability(this.mc.world, CapReg.musicPlayerWorld);
+			player.getMusicPlayer().tick();
 		}
 		else if(state == MusicState.MENU)
 		{
 			MenuRegistry.getCurrentMenu().getMusicPlayer().tick();
 		}
-		
-		GuiScreen gui = this.mc.currentScreen;
-		if(gui instanceof IMusicPlayer)
+		else if(state == MusicState.GUI)
 		{
-			((IMusicPlayer)gui).tick();
+			((IMusicPlayerHolder)this.mc.currentScreen).getMusicPlayer().tick();
 		}
 	}
 	
@@ -48,13 +50,19 @@ public class MusicPlayerHandler implements ITick{
 		{
 			return;
 		}
-		if(MusicEvent.fire(player, sound))
+		if(MusicEvent.canPlay(player, sound))
 		{
-			if(this.currentMusic != null)
-				this.mc.getSoundHandler().stopSound(this.currentMusic);
+			this.stop();
 			this.currentMusic = sound;
 			this.mc.getSoundHandler().playSound(sound);
 		}
+	}
+	
+	public void stop()
+	{
+		if(this.currentMusic != null)
+			this.mc.getSoundHandler().stopSound(this.currentMusic);
+		this.currentMusic = null;
 	}
 
 	/**
@@ -62,7 +70,8 @@ public class MusicPlayerHandler implements ITick{
 	 */
 	public MusicState getState() 
 	{
-		return this.mc.world != null ? MusicState.GAME : MusicState.MENU;
+		GuiScreen gui = this.mc.currentScreen;
+		return this.mc.world != null ? (gui instanceof IMusicPlayerHolder ? MusicState.GUI : MusicState.GAME) : (gui instanceof IMusicPlayerHolder && gui != MenuRegistry.getCurrentGui() ? MusicState.GUI : MusicState.MENU);
 	}
 
 	@Override

@@ -40,10 +40,9 @@ public class MusicEvent extends Event {
 	}
 
 	/**
-	 * fires the MusicEvent
-	 * @return if the music canPlay
+	 * returns if the music canPlay
 	 */
-	public static boolean fire(IMusicPlayer player, ISound sound)
+	public static boolean canPlay(IMusicPlayer player, ISound sound)
 	{
 		MusicEvent e = new MusicEvent(player, sound);
 		MinecraftForge.EVENT_BUS.post(e);
