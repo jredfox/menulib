@@ -74,7 +74,7 @@ public class MenuRegistry {
 	 */
 	public static void advanceNextMenu()
 	{
-		getCurrentMenu().close();	
+		getCurrentMenu().close();
 		indexMenu = getNext(indexMenu);
 		currentMenu = menus.get(indexMenu);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();

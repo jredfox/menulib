@@ -5,7 +5,7 @@ import com.evilnotch.lib.minecraft.capability.CapWorld;
 import com.evilnotch.lib.minecraft.capability.ICapability;
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.IMusicPlayerHolder;
-import com.jredfox.menulib.sound.MusicPlayerEmpty;
+import com.jredfox.menulib.sound.MusicEmpty;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -17,7 +17,7 @@ public class CapabilityMusic extends CapWorld implements IMusicPlayerHolder{
 	public CapabilityMusic(World w)
 	{
 		int dimId = w.provider.getDimension();
-		this.music = MusicPlayerEmpty.musicPlayer;
+		this.music = MusicEmpty.musicPlayer;
 	}
 	
 	@Override

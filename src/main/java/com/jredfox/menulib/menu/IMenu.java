@@ -33,13 +33,13 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public ResourceLocation getId();
 	/**
-	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
-	 */
-	public int getFrames();
-	/**
 	 * return MusicPlayerEmpty.musicPlayer for no music
 	 */
 	public IMusicPlayer getMusicPlayer();
+	/**
+	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
+	 */
+	public int getFrames();
 	/**
 	 * if this is null it won't be displayed
 	 */

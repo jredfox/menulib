@@ -13,7 +13,7 @@ import com.jredfox.menulib.event.MusicEvent.MusicState;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.IMusicPlayerHolder;
-import com.jredfox.menulib.sound.MusicPlayerEmpty;
+import com.jredfox.menulib.sound.MusicEmpty;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -30,12 +30,7 @@ public class MusicPlayerHandler implements ITick{
 	public void tick()
 	{
 		MusicState state = this.getState();
-		if(this.previous != state)
-		{
-			this.stop();//stop if the state of the music has changed
-		}
-		this.previous = state;
-		
+		this.updateState(state);
 		if(state == MusicState.GAME)
 		{
 			IMusicPlayerHolder player = (IMusicPlayerHolder) CapabilityRegistry.getCapability(this.mc.world, CapReg.musicPlayerWorld);
@@ -51,6 +46,15 @@ public class MusicPlayerHandler implements ITick{
 		}
 	}
 	
+	public void updateState(MusicState state) 
+	{
+		if(this.previous != state)
+		{
+			this.stop();//stop if the state of the music has changed
+		}
+		this.previous = state;
+	}
+
 	public void play(IMusicPlayer player, ISound sound)
 	{
 		if(!player.shouldReplace() && this.currentMusic != null)
