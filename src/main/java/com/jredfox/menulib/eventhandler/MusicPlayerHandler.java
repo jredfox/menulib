@@ -57,10 +57,6 @@ public class MusicPlayerHandler implements ITick{
 
 	public void play(IMusicPlayer player, ISound sound)
 	{
-		if(!player.shouldReplace() && this.currentMusic != null)
-		{
-			return;
-		}
 		if(MusicEvent.canPlay(player, sound))
 		{
 			this.stop();

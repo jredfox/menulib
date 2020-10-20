@@ -17,13 +17,16 @@ public interface IMusicPlayer {
 	 */
 	public MusicState getMusicState();
 	/**
-	 * if true will replace current music player 
-	 * if false it will not play the music until the other one has finished playing
-	 */
-	public boolean shouldReplace();
-	/**
 	 * called every tick use this to calculate when to start playing music
 	 */
     public void tick();
     
+    //_____________START EXPERIMENTAL CODE HERE______________________________
+    
+    public ResourceLocation getCategory();
+    public boolean stopPrevious();
+    public boolean shouldReplace();
+    public int maxPlayCount();
+    
 }
+    
