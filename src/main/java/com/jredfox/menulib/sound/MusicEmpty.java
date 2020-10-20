@@ -31,4 +31,19 @@ public class MusicEmpty implements IMusicPlayer{
 	@Override
 	public void tick() {}
 
+	@Override
+	public ResourceLocation getCategory() {
+		return empty;
+	}
+
+	@Override
+	public boolean stopPrevious() {
+		return false;
+	}
+
+	@Override
+	public int maxPlayCount() {
+		return 1;
+	}
+
 }

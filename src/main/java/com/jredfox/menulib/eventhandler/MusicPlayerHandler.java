@@ -6,6 +6,7 @@ import java.util.List;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.ITick;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
+import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.cap.CapReg;
 import com.jredfox.menulib.cap.CapabilityMusic;
 import com.jredfox.menulib.event.MusicEvent;

@@ -37,7 +37,7 @@ public class MLTransformer implements IClassTransformer{
     
     //since I don't have my asm system I use a slightly better version for forge's switch case is gross but, it's better then if else
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] bytes) 
+	public byte[] transform(String ob, String name, byte[] bytes) 
 	{
 		if(bytes == null)
 			return null;
@@ -84,6 +84,7 @@ public class MLTransformer implements IClassTransformer{
 	 */
 	public void transformFramerate(ClassNode classNode, String input) throws IOException 
 	{
+		System.out.println("Patching menu frames");
 		//add getMenuFrames so minecraft can use them later
 		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
 		

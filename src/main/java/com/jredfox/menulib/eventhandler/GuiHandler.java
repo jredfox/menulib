@@ -3,6 +3,7 @@ package com.jredfox.menulib.eventhandler;
 import java.util.List;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
+import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.mod.MLConfig;
@@ -22,8 +23,7 @@ public class GuiHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpenPre(GuiOpenEvent e)
 	{
-		GuiScreen gui = e.getGui();
-		if(!MenuRegistry.isReplaceable(gui))
+		if(!MenuRegistry.isReplaceable(e.getGui()))
 			return;
 		e.setGui(fake_menu);
 	}
@@ -34,12 +34,10 @@ public class GuiHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onGuiOpen(GuiOpenEvent e)
 	{
-		GuiScreen gui = e.getGui();
-		if(!(gui instanceof GuiFakeMenu))
+		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		//temporary line of code so it works this is not the proper way to open a menu. if it came from a sub menu it shouldn't create a new one each time
-		e.setGui(menu.create());
+		e.setGui(menu.create());//TODO:
 		menu.open();
 	}
 	

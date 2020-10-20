@@ -1,5 +1,6 @@
 package com.jredfox.menulib.mod;
 
+import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraft.client.Minecraft;
