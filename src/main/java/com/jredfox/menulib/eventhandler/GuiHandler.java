@@ -67,20 +67,21 @@ public class GuiHandler {
 	@SubscribeEvent
 	public void guiButtonClick(GuiScreenEvent.ActionPerformedEvent.Pre e)
 	{
-		GuiScreen gui = e.getGui();
-		if(gui == null || !MenuRegistry.containsMenu(gui.getClass()))
-		{
+		if(e.getGui() != MenuRegistry.getCurrentGui())
 			return;
-		}
 		
-		//advance previous or next menu based upon the button
-		int buttonId = e.getButton().id;
-		if(buttonId == MLConfig.leftButtonId)
+		IMenu menu = MenuRegistry.getCurrentMenu();
+		GuiButton button = e.getButton();
+		GuiButton previous = menu.getPrevious();
+		GuiButton next = menu.getNext();
+		
+		//modders may have a custom button id so support whatever button id they may have
+		if(previous != null && previous.id == button.id)
 		{
 			MenuRegistry.advancePreviousMenu();
-			MLConfig.saveMenuIndex();//keep the save index separately for more options on modders
+			MLConfig.saveMenuIndex();//keep the save separate so modders can switch multiple times without lag
 		}
-		else if(buttonId == MLConfig.rightButtonId)
+		else if(next != null && next.id == button.id)
 		{
 			MenuRegistry.advanceNextMenu();
 			MLConfig.saveMenuIndex();
