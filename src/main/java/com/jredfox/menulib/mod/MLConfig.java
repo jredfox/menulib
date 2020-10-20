@@ -20,76 +20,40 @@ import net.minecraftforge.common.config.Property;
 public class MLConfig {
 	
 	public static boolean isLoaded = false;
-	
 	public static List<LineArray> mainMenus = new ArrayList();
-	public static boolean fancyPage = false;
 	public static boolean displayNewMenu = true;
 	public static ResourceLocation currentMenuIndex = null;
-	public static File cfgmenu = null;
 	
-	public static int leftButtonId = 498;
-	public static int leftButtonPosX = 5;
-	public static int leftButtonPosY = 5;
-	public static int leftButtonWidth = 20;
-	public static int leftButtonHeight = 20;
-	
-	public static int lFButtonPosX = 5;
-	public static int lFButtonPosY = 5;
-	public static int lFButtonWidth = 64;
-	public static int lFButtonHeight = 20;
-	
-	public static int rightButtonId = 499;
-	public static int rightButtonPosX = 30;
-	public static int rightButtonPosY = 5;
-	public static int rightButtonWidth = 20;
-	public static int rightButtonHeight = 20;
-	
-	public static int rFButtonPosX = 74;
-	public static int rFButtonPosY = 5;
-	public static int rFButtonWidth = 64;
-	public static int rFButtonHeight = 20;
-	
+	public static File cfgRoot;
+	public static File cfgMenu;
 	private static final String menu_comment = "format of menus is \"modid:mainmenu <class> = true/false\" changeing the menu order will change it in game";
 	
 	/**
 	 * load all configurations for menu lib
 	 */
-	public static void parse(File d) 
+	public static void loadConfigs(File d) 
 	{
-		cfgmenu = new File(d, "menulib/menulib.cfg");
-		
-		Configuration config = new Configuration(cfgmenu);
-		
+		cfgRoot = new File(d, MLReference.id);
+		cfgMenu = new File(cfgRoot, MLReference.id + ".cfg");
+		load();
+		MLConfigButton.load();
+	}
+	
+	private static void load() 
+	{
+		Configuration config = new Configuration(cfgMenu);
 		config.load();
+		
 		displayNewMenu = config.get("menulib","displayNewMenu",true).getBoolean();
 		currentMenuIndex = new ResourceLocation(config.get("menulib", "currentMenuIndex", "").getString());
-		
-		fancyPage = config.get("buttons","fancyButtons",false).getBoolean();
-		leftButtonId = config.get("buttons","leftId", leftButtonId).getInt();
-		leftButtonPosX = config.get("buttons", "leftPosX", leftButtonPosX).getInt();
-		leftButtonPosY = config.get("buttons", "leftPosY", leftButtonPosY).getInt();
-		leftButtonWidth = config.get("buttons", "leftWidth", leftButtonWidth).getInt();
-		leftButtonHeight = config.get("buttons", "leftHeight", leftButtonHeight).getInt();
-		lFButtonPosX = config.get("buttons", "leftFancyPosX", lFButtonPosX).getInt();
-		lFButtonPosY = config.get("buttons", "leftFancyPosY", lFButtonPosY).getInt();
-		lFButtonWidth = config.get("buttons", "leftFancyWidth", lFButtonWidth).getInt();
-		lFButtonHeight = config.get("buttons", "leftFancyHeight", lFButtonHeight).getInt();
-		rightButtonId = config.get("buttons","rightId", rightButtonId).getInt();
-		rightButtonPosX = config.get("buttons", "rightPosX", rightButtonPosX).getInt();
-		rightButtonPosY = config.get("buttons", "rightPosY", rightButtonPosY).getInt();
-		rightButtonWidth = config.get("buttons", "rightWidth", rightButtonWidth).getInt();
-		rightButtonHeight = config.get("buttons", "rightHeight", rightButtonHeight).getInt();
-		rFButtonPosX = config.get("buttons", "rightFancyPosX", rFButtonPosX).getInt();
-		rFButtonPosY = config.get("buttons", "rightFancyPosY", rFButtonPosY).getInt();
-		rFButtonWidth = config.get("buttons", "rightfancyWidth", rFButtonWidth).getInt();
-		rFButtonHeight = config.get("buttons", "rightFancyHeight", rFButtonHeight).getInt();
 
 		String[] order = config.get("menulib", "menus", new String[]{""},menu_comment).getStringList();
 		resetMenus(order);
+		
 		config.save();
 		isLoaded = true;
 	}
-	
+
 	private static void resetMenus(String[] order) 
 	{
 		mainMenus.clear();
@@ -114,7 +78,7 @@ public class MLConfig {
 
 	public static void saveMenusAndIndex() 
 	{
-		Configuration config = new Configuration(cfgmenu);
+		Configuration config = new Configuration(cfgMenu);
 		config.load();
 		
 		List<String> list = new ArrayList();
@@ -161,7 +125,7 @@ public class MLConfig {
 	public static void saveMenuIndex(ResourceLocation loc) 
 	{
 		long stamp = System.currentTimeMillis();
-		Configuration config = new Configuration(cfgmenu);
+		Configuration config = new Configuration(cfgMenu);
 		config.load();
 		setConfigIndex(config,loc);
 		currentMenuIndex = loc;

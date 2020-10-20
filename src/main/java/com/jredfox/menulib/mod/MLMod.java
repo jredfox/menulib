@@ -1,9 +1,7 @@
 package com.jredfox.menulib.mod;
 
-import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.MenuRegistry;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -16,7 +14,7 @@ public class MLMod {
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
 	{	
-		MLConfig.parse(event.getModConfigurationDirectory());
+		MLConfig.loadConfigs(event.getModConfigurationDirectory());
 		MLRegistry.run();
 	}
 	

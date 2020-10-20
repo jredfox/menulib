@@ -84,7 +84,6 @@ public class MLTransformer implements IClassTransformer{
 	 */
 	public void transformFramerate(ClassNode classNode, String input) throws IOException 
 	{
-		System.out.println("Patching menu frames");
 		//add getMenuFrames so minecraft can use them later
 		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
 		

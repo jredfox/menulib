@@ -6,6 +6,7 @@ import org.apache.logging.log4j.core.util.ReflectionUtil;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.jredfox.menulib.mod.MLConfig;
+import com.jredfox.menulib.mod.MLConfigButton;
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.MusicEmpty;
 
@@ -94,10 +95,10 @@ public class Menu implements IMenu {
 		return this.frames;
 	}
 	
-	public static final GuiBasicButton previous = new GuiBasicButton(MLConfig.leftButtonId, MLConfig.leftButtonPosX, MLConfig.leftButtonPosY, MLConfig.leftButtonWidth, MLConfig.leftButtonHeight, "menulib.previous.name");
-	public static final GuiBasicButton next = new GuiBasicButton(MLConfig.rightButtonId,  MLConfig.rightButtonPosX, MLConfig.rightButtonPosY, MLConfig.rightButtonWidth, MLConfig.rightButtonHeight, "menulib.next.name");
-	public static final GuiBasicButton previousFancy = new GuiBasicButton(MLConfig.leftButtonId,  MLConfig.lFButtonPosX, MLConfig.lFButtonPosY, MLConfig.lFButtonWidth, MLConfig.lFButtonHeight, "menulib.previousFancy.name");
-	public static final GuiBasicButton nextFancy = new GuiBasicButton(MLConfig.rightButtonId, MLConfig.rFButtonPosX, MLConfig.rFButtonPosY, MLConfig.rFButtonWidth, MLConfig.rFButtonHeight, "menulib.nextFancy.name");
+	public static final GuiBasicButton previous = new GuiBasicButton(MLConfigButton.previousId, MLConfigButton.previousX, MLConfigButton.previousY, MLConfigButton.previousWidth, MLConfigButton.previousHeight, "menulib.previous.name");
+	public static final GuiBasicButton previousFancy = new GuiBasicButton(MLConfigButton.previousId,  MLConfigButton.fPreviousX, MLConfigButton.fPreviousY, MLConfigButton.fPreviousWidth, MLConfigButton.fPreviousHeight, "menulib.previousfancy.name");
+	public static final GuiBasicButton next = new GuiBasicButton(MLConfigButton.nextId,  MLConfigButton.nextX, MLConfigButton.nextY, MLConfigButton.nextWidth, MLConfigButton.nextHeight, "menulib.next.name");
+	public static final GuiBasicButton nextFancy = new GuiBasicButton(MLConfigButton.nextId, MLConfigButton.fNextX, MLConfigButton.fNextY, MLConfigButton.fNextWidth, MLConfigButton.fNextHeight, "menulib.nextfancy.name");
 
 	static
 	{
@@ -108,13 +109,13 @@ public class Menu implements IMenu {
 	@Override
 	public GuiButton getPrevious() 
 	{
-		return !MLConfig.fancyPage ? previous : previousFancy;
+		return !MLConfigButton.fancyPage ? previous : previousFancy;
 	}
 
 	@Override
 	public GuiButton getNext() 
 	{
-		return !MLConfig.fancyPage ? next : nextFancy;
+		return !MLConfigButton.fancyPage ? next : nextFancy;
 	}
 
 }
