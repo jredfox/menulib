@@ -6,7 +6,7 @@ import com.jredfox.menulib.mod.MLReference;
 
 import net.minecraftforge.common.config.Configuration;
 
-public class MLCoreConfig {
+public class MLConfigCore {
 	
 	public static boolean debugFrames = false;//print the framerate for debug info
 	

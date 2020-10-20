@@ -3,7 +3,7 @@ package com.jredfox.menulib.mod;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.cap.CapReg;
-import com.jredfox.menulib.coremod.MLCoreConfig;
+import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
@@ -43,7 +43,7 @@ public class MLRegistry {
 		MinecraftForge.EVENT_BUS.register(new MusicHandler());
 		TickRegistry.register(new MusicPlayerHandler(), Side.CLIENT);
 		
-		if(MLCoreConfig.debugFrames)
+		if(MLConfigCore.debugFrames)
 		{
 			TickRegistry.register(new FrameHandler(), Side.CLIENT);
 		}

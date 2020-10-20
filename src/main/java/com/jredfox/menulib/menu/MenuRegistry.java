@@ -21,7 +21,8 @@ public class MenuRegistry {
 	protected static List<IMenu> menus = new ArrayList();
 	protected static Map<ResourceLocation,Integer> tempMenus = new HashMap();
 	public static int indexMenu = 0;
-	protected static IMenu currentMenu = null;
+	public static IMenu currentMenu;
+	public static IMenu previousMenu;
 	
 	public static void register(IMenu menu)
 	{
@@ -76,7 +77,7 @@ public class MenuRegistry {
 	{
 		getCurrentMenu().close();
 		indexMenu = getNext(indexMenu);
-		currentMenu = menus.get(indexMenu);
+		setMenu(indexMenu);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
@@ -88,7 +89,7 @@ public class MenuRegistry {
 	{
 		getCurrentMenu().close();
 		indexMenu = getPrevious(indexMenu);
-		currentMenu = menus.get(indexMenu);
+		setMenu(indexMenu);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
@@ -197,6 +198,7 @@ public class MenuRegistry {
 	public static void setMenu(int i) 
 	{
 		indexMenu = i;
+		previousMenu = currentMenu;
 		currentMenu = menus.get(i);
 	}
 

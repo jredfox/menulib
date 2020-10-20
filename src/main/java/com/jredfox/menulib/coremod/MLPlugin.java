@@ -16,7 +16,7 @@ public class MLPlugin implements IFMLLoadingPlugin
 {
 	static
 	{
-		MLCoreConfig.loadConfig();
+		MLConfigCore.loadConfig();
 	}
 	
 	@Override
