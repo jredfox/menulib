@@ -17,6 +17,10 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void open();
 	/**
+	 * clear the gui. this fires once the index switches
+	 */
+	public void clear();
+	/**
 	 * this creates a new gui and sets the gui field
 	 */
 	public GuiScreen create();

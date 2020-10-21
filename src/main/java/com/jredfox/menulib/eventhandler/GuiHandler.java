@@ -23,7 +23,14 @@ public class GuiHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void guiOpenPre(GuiOpenEvent e)
 	{
-		if(!MenuRegistry.isReplaceable(e.getGui()))
+		GuiScreen gui = e.getGui();
+		GuiScreen menuGui = MenuRegistry.getCurrentGui();
+		GuiScreen old = Minecraft.getMinecraft().currentScreen;
+		if(menuGui == old && menuGui != gui && menuGui != null)
+		{
+			MenuRegistry.getCurrentMenu().close();//needs to close here if the menu goes into a sub menu
+		}
+		if(!MenuRegistry.isReplaceable(gui))
 			return;
 		e.setGui(fake_menu);
 	}
@@ -37,8 +44,8 @@ public class GuiHandler {
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		e.setGui(MenuRegistry.getOrCreateGui());
 		menu.open();
+		e.setGui(MenuRegistry.getOrCreateGui());
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 public class MusicEmpty implements IMusicPlayer{
 
 	public static final ResourceLocation empty = new ResourceLocation("menulib:empty");
+	public static final ResourceLocation none = new ResourceLocation("menulib:none");
 	public static final MusicEmpty musicPlayer = new MusicEmpty();
 	
 	@Override
@@ -33,7 +34,7 @@ public class MusicEmpty implements IMusicPlayer{
 
 	@Override
 	public ResourceLocation getCategory() {
-		return empty;
+		return none;
 	}
 
 	@Override

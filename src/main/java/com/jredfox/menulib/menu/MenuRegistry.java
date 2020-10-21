@@ -199,9 +199,12 @@ public class MenuRegistry {
 
 	public static void setMenu(int i) 
 	{
-		indexMenu = i;
 		if(currentMenu != null)
+		{
 			currentMenu.close();
+			currentMenu.clear();
+		}
+		indexMenu = i;
 		previousMenu = currentMenu;
 		currentMenu = menus.get(i);
 	}
