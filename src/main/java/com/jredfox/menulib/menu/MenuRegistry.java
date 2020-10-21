@@ -201,21 +201,20 @@ public class MenuRegistry {
 	{
 		indexMenu = i;
 		if(currentMenu != null)
-			currentMenu.clear();
+			currentMenu.close();
 		previousMenu = currentMenu;
 		currentMenu = menus.get(i);
 	}
 
-	public static boolean setMenu(ResourceLocation loc) 
+	public static void setMenu(ResourceLocation loc) 
 	{
 		int index = getIndex(loc);
 		if(index == -1)
 		{
-			System.out.println("null menu when trying to set index:" + MLConfig.currentMenuIndex);
-			return false;
+			System.out.println("invalid menu index:" + MLConfig.currentMenuIndex + " setting it:" + menus.get(0).getId());
+			index = 0;
 		}
 		setMenu(index);
-		return true;
 	}
 
 	public static void checkConfig() 

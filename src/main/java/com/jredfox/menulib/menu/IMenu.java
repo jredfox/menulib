@@ -25,10 +25,6 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public GuiScreen get();
 	/**
-	 * clears the gui field to prevent ram leaks
-	 */
-	public void clear();
-	/**
 	 * get the gui class
 	 */
 	public Class<? extends GuiScreen> getGuiClass();

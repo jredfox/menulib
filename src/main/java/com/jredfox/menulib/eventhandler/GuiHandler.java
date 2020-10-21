@@ -21,7 +21,7 @@ public class GuiHandler {
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onGuiOpenPre(GuiOpenEvent e)
+	public void guiOpenPre(GuiOpenEvent e)
 	{
 		if(!MenuRegistry.isReplaceable(e.getGui()))
 			return;
@@ -32,7 +32,7 @@ public class GuiHandler {
 	 * set gui after mods are stopping looking for the main screen
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onGuiOpen(GuiOpenEvent e)
+	public void guiOpen(GuiOpenEvent e)
 	{
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
@@ -45,7 +45,7 @@ public class GuiHandler {
 	 * add left and right button to this gui if it's not already added
 	 */
 	@SubscribeEvent
-	public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post e)
+	public void guiInit(GuiScreenEvent.InitGuiEvent.Post e)
 	{
 		if(e.getGui() != MenuRegistry.getCurrentGui())
 			return;
@@ -63,7 +63,7 @@ public class GuiHandler {
 	}
 	
 	@SubscribeEvent
-	public void guiButtonClick(GuiScreenEvent.ActionPerformedEvent.Pre e)
+	public void buttonClick(GuiScreenEvent.ActionPerformedEvent.Pre e)
 	{
 		if(e.getGui() != MenuRegistry.getCurrentGui())
 			return;

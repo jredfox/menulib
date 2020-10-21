@@ -47,6 +47,7 @@ public class Menu implements IMenu {
 	@Override
 	public void close() 
 	{
+		this.gui = null;
 		System.out.println("close:\t" + this.getId());
 	}
 
@@ -122,12 +123,6 @@ public class Menu implements IMenu {
 	public GuiButton getNext() 
 	{
 		return !MLConfigButton.fancyPage ? next : nextFancy;
-	}
-
-	@Override
-	public void clear() 
-	{
-		this.gui = null;
 	}
 
 }
