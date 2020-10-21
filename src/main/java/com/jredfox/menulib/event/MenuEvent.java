@@ -30,6 +30,14 @@ public class MenuEvent {
 		}
 	}
 	
+	public static class Clear extends MenuEvent 
+	{
+		public Clear(IMenu menu) 
+		{
+			super(menu);
+		}
+	}
+	
 	public static class Button extends MenuEvent
 	{
 		public Button(IMenu menu) 

@@ -20,18 +20,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class GuiHandler {
 	
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
+	private static boolean flag;
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void guiOpenPre(GuiOpenEvent e)
 	{
-		GuiScreen gui = e.getGui();
 		GuiScreen menuGui = MenuRegistry.getCurrentGui();
-		GuiScreen old = Minecraft.getMinecraft().currentScreen;
-		if(menuGui == old && menuGui != gui && menuGui != null)
-		{
-			MenuRegistry.getCurrentMenu().close();//needs to close here if the menu goes into a sub menu
-		}
-		if(!MenuRegistry.isReplaceable(gui))
+		flag = menuGui == Minecraft.getMinecraft().currentScreen && menuGui != null;
+		
+		if(!MenuRegistry.isReplaceable(e.getGui()))
 			return;
 		e.setGui(fake_menu);
 	}
@@ -42,7 +39,11 @@ public class GuiHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void guiOpen(GuiOpenEvent e)
 	{
-		if(!(e.getGui() instanceof GuiFakeMenu))
+		GuiScreen gui = e.getGui();
+		if(flag && MenuRegistry.getCurrentGui() != gui && !(gui instanceof GuiFakeMenu))
+			MenuRegistry.getCurrentMenu().close();//needs to close here if the menu goes into a sub menu
+		
+		if(!(gui instanceof GuiFakeMenu))
 			return;
 		IMenu menu = MenuRegistry.getCurrentMenu();
 		menu.open();

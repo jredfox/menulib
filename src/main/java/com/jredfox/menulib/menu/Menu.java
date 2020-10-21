@@ -80,19 +80,19 @@ public class Menu implements IMenu {
 	@Override
 	public void open() 
 	{
-//		System.out.println("opening:" + this.getId());
+//		System.out.println("open:" + this.getId());
 	}
 
 	@Override
 	public void close() 
 	{
-		System.out.println("closing:" + this.getId());
+//		System.out.println("close:" + this.getId());
 	}
 	
 	@Override
 	public void clear()
 	{
-		this.gui = null;
+//		this.gui = null;
 	}
 	
 	@Override
