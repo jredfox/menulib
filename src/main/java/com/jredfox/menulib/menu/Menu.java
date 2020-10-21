@@ -45,10 +45,16 @@ public class Menu implements IMenu {
 	}
 
 	@Override
-	public void close() {}
+	public void close() 
+	{
+		System.out.println("close:\t" + this.getId());
+	}
 
 	@Override
-	public void open() {}
+	public void open() 
+	{
+//		System.out.println("open:\t" + this.getId());
+	}
 
 	@Override
 	public GuiScreen create() 
@@ -116,6 +122,12 @@ public class Menu implements IMenu {
 	public GuiButton getNext() 
 	{
 		return !MLConfigButton.fancyPage ? next : nextFancy;
+	}
+
+	@Override
+	public void clear() 
+	{
+		this.gui = null;
 	}
 
 }

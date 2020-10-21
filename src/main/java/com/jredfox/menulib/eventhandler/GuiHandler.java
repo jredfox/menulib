@@ -37,7 +37,7 @@ public class GuiHandler {
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		e.setGui(menu.create());//TODO:
+		e.setGui(MenuRegistry.getOrCreateGui());
 		menu.open();
 	}
 	

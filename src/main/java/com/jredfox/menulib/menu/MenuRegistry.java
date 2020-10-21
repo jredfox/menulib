@@ -75,7 +75,6 @@ public class MenuRegistry {
 	 */
 	public static void advanceNextMenu()
 	{
-		getCurrentMenu().close();
 		indexMenu = getNext(indexMenu);
 		setMenu(indexMenu);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
@@ -87,7 +86,6 @@ public class MenuRegistry {
 	 */
 	public static void advancePreviousMenu()
 	{
-		getCurrentMenu().close();
 		indexMenu = getPrevious(indexMenu);
 		setMenu(indexMenu);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
@@ -114,10 +112,9 @@ public class MenuRegistry {
 	 */
 	public static GuiScreen createCurrentGui()
 	{
-		IMenu menu = getCurrentMenu();
-		GuiScreen screen = menu.create();
-		return screen;
+		return getCurrentMenu().create();
 	}
+	
 	/**
 	 * gets the current gui from the current IMenu without creating a new one for custom stuffs
 	 */
@@ -129,6 +126,11 @@ public class MenuRegistry {
 	public static IMenu getCurrentMenu()
 	{
 		return currentMenu;
+	}
+	
+	public static GuiScreen getOrCreateGui()
+	{
+		return getCurrentGui() != null ? getCurrentGui() : getCurrentMenu().create();
 	}
 	
 	public static List<IMenu> getMenus() 
@@ -198,6 +200,8 @@ public class MenuRegistry {
 	public static void setMenu(int i) 
 	{
 		indexMenu = i;
+		if(currentMenu != null)
+			currentMenu.clear();
 		previousMenu = currentMenu;
 		currentMenu = menus.get(i);
 	}
