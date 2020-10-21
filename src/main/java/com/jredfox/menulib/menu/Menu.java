@@ -43,25 +43,25 @@ public class Menu implements IMenu {
 		this.music = music;
 		this.frames = frames;
 	}
-
+	
 	@Override
-	public void close() 
+	public ResourceLocation getId() 
 	{
-		System.out.println("closing:" + this.getId());
-	}
-
-	@Override
-	public void open() 
-	{
-//		System.out.println("opening:" + this.getId());
+		return this.id;
 	}
 	
 	@Override
-	public void clear()
+	public Class<? extends GuiScreen> getGuiClass() 
 	{
-		this.gui = null;
+		return this.guiClass;
 	}
-
+	
+	@Override
+	public GuiScreen get() 
+	{
+		return this.gui;
+	}
+	
 	@Override
 	public GuiScreen create() 
 	{
@@ -76,23 +76,23 @@ public class Menu implements IMenu {
 			return null;
 		}
 	}
-
+	
 	@Override
-	public GuiScreen get() 
+	public void open() 
 	{
-		return this.gui;
+//		System.out.println("opening:" + this.getId());
 	}
 
 	@Override
-	public Class<? extends GuiScreen> getGuiClass() 
+	public void close() 
 	{
-		return this.guiClass;
+		System.out.println("closing:" + this.getId());
 	}
-
+	
 	@Override
-	public ResourceLocation getId() 
+	public void clear()
 	{
-		return this.id;
+		this.gui = null;
 	}
 	
 	@Override

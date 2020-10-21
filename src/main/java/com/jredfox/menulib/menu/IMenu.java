@@ -9,41 +9,41 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IMenu extends IMusicPlayerHolder{
 	/**
-	 * called right after menu closes
+	 * this is the resource location to identify your main menu
 	 */
-	public void close();
-	/**
-	 * called when the menu opens
-	 */
-	public void open();
-	/**
-	 * clear the gui. this fires once the index switches
-	 */
-	public void clear();
-	/**
-	 * this creates a new gui and sets the gui field
-	 */
-	public GuiScreen create();
-	/**
-	 * grabs current gui populated from createGui()
-	 */
-	public GuiScreen get();
+	public ResourceLocation getId();
 	/**
 	 * get the gui class
 	 */
 	public Class<? extends GuiScreen> getGuiClass();
 	/**
-	 * this is the resource location to identify your main menu
+	 * grabs current gui populated from createGui()
 	 */
-	public ResourceLocation getId();
+	public GuiScreen get();
 	/**
-	 * return MusicPlayerEmpty.musicPlayer for no music
+	 * this creates a new gui and sets the gui field
 	 */
-	public IMusicPlayer getMusicPlayer();
+	public GuiScreen create();
+	/**
+	 * called when the menu opens
+	 */
+	public void open();
+	/**
+	 * called right after menu closes
+	 */
+	public void close();
+	/**
+	 * clear the gui. this fires once the index switches
+	 */
+	public void clear();
 	/**
 	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
 	 */
 	public int getFrames();
+	/**
+	 * return MusicPlayerEmpty.musicPlayer for no music
+	 */
+	public IMusicPlayer getMusicPlayer();
 	/**
 	 * if this is null it won't be displayed
 	 */

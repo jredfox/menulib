@@ -75,8 +75,7 @@ public class MenuRegistry {
 	 */
 	public static void advanceNextMenu()
 	{
-		indexMenu = getNext(indexMenu);
-		setMenu(indexMenu);
+		setMenu(getNext(indexMenu));
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
@@ -86,8 +85,7 @@ public class MenuRegistry {
 	 */
 	public static void advancePreviousMenu()
 	{
-		indexMenu = getPrevious(indexMenu);
-		setMenu(indexMenu);
+		setMenu(getPrevious(indexMenu));
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
@@ -214,8 +212,8 @@ public class MenuRegistry {
 		int index = getIndex(loc);
 		if(index == -1)
 		{
-			System.out.println("invalid menu index:" + MLConfig.currentMenuIndex + " setting it:" + menus.get(0).getId());
-			index = 0;
+			System.out.println("invalid menu index:" + MLConfig.currentMenuIndex);
+			return;
 		}
 		setMenu(index);
 	}
