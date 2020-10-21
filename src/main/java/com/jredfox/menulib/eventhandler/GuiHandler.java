@@ -2,6 +2,7 @@ package com.jredfox.menulib.eventhandler;
 
 import java.util.List;
 
+import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.IMenu;
@@ -62,9 +63,9 @@ public class GuiHandler {
 			List<GuiButton> li = e.getButtonList();
 			GuiButton prev = menu.getPrevious();
 			GuiButton next = menu.getNext();
-			if(prev != null && !li.contains(prev))
+			if(prev != null)
 				li.add(prev);
-			if(next != null && !li.contains(next))
+			if(next != null)
 				li.add(next);
 		}
 	}
