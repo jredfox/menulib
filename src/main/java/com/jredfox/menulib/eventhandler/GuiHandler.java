@@ -8,8 +8,10 @@ import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.event.GuiEvent;
 import com.jredfox.menulib.event.MenuEvent;
 import com.jredfox.menulib.menu.IMenu;
+import com.jredfox.menulib.menu.Menu;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.mod.MLConfig;
+import com.jredfox.menulib.mod.MLConfigButton;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -57,10 +59,9 @@ public class GuiHandler {
 	@SubscribeEvent
 	public void menuClose(GuiEvent.Close event)
 	{	
-		IMenu menu = MenuRegistry.getCurrentMenu();
-		if(menu.get() == event.gui)
+		if(MenuRegistry.getCurrentGui() == event.gui)
 		{
-			MenuRegistry.close(menu);
+			MenuRegistry.close(MenuRegistry.getCurrentMenu());
 		}
 	}
 	
@@ -75,12 +76,13 @@ public class GuiHandler {
 		if(MenuRegistry.hasButtons())
 		{
 			IMenu menu = MenuRegistry.getCurrentMenu();
-			MenuEvent.Button menuButton = new MenuEvent.Button(menu);
-			MinecraftForge.EVENT_BUS.post(menuButton);
-			
 			List<GuiButton> li = e.getButtonList();
-			for(GuiButton b : menuButton.buttonList)
-				li.add(b);
+			GuiButton prev = menu.getPrevious();
+			GuiButton next = menu.getNext();
+			if(prev != null)
+				li.add(prev);
+			if(next != null)
+				li.add(next);
 		}
 	}
 	

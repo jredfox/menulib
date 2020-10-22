@@ -14,7 +14,6 @@ public class MLMod {
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
 	{	
-		MLConfig.loadConfigs(event.getModConfigurationDirectory());
 		MLRegistry.run();
 	}
 	

@@ -1,5 +1,7 @@
 package com.jredfox.menulib.menu;
 
+import java.util.Set;
+
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.IMusicPlayerHolder;
 
@@ -52,5 +54,4 @@ public interface IMenu extends IMusicPlayerHolder{
 	 * if this is null it won't be displayed
 	 */
 	public GuiButton getNext();
-
 }

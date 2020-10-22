@@ -45,23 +45,5 @@ public class MenuEvent extends Event{
 			super(menu);
 		}
 	}
-	
-	public static class Button extends MenuEvent
-	{
-		public Set<GuiButton> buttonList = new HashSet();
-		
-		public Button(IMenu menu) 
-		{
-			super(menu);
-			this.add(menu.getPrevious());
-			this.add(menu.getNext());
-		}
-		
-		public void add(GuiButton button)
-		{
-			if(button != null)
-				this.buttonList.add(button);
-		}
-	}
 
 }

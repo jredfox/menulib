@@ -31,12 +31,11 @@ public class MLConfig {
 	/**
 	 * load all configurations for menu lib
 	 */
-	public static void loadConfigs(File d) 
+	public static void load(File d) 
 	{
 		cfgRoot = new File(d, MLReference.id);
 		cfgMenu = new File(cfgRoot, MLReference.id + ".cfg");
 		load();
-		MLConfigButton.load();
 	}
 	
 	private static void load() 
