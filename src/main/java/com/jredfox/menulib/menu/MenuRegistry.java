@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.line.LineArray;
+import com.jredfox.menulib.event.MenuEvent;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.mod.MLConfig;
 
@@ -15,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 public class MenuRegistry {
 	
@@ -22,7 +24,6 @@ public class MenuRegistry {
 	protected static Map<ResourceLocation,Integer> tempMenus = new HashMap();
 	public static int indexMenu = 0;
 	public static IMenu currentMenu;
-	public static IMenu previousMenu;
 	
 	public static void register(IMenu menu)
 	{
@@ -128,7 +129,8 @@ public class MenuRegistry {
 	
 	public static GuiScreen getOrCreateGui()
 	{
-		return getCurrentGui() != null ? getCurrentGui() : getCurrentMenu().create();
+		IMenu menu = getCurrentMenu();
+		return menu.get() != null ? menu.get() : menu.create();
 	}
 	
 	public static List<IMenu> getMenus() 
@@ -199,12 +201,29 @@ public class MenuRegistry {
 	{
 		if(currentMenu != null)
 		{
-			currentMenu.close();
-			currentMenu.clear();
+			close(currentMenu);
+			clear(currentMenu);
 		}
 		indexMenu = i;
-		previousMenu = currentMenu;
 		currentMenu = menus.get(i);
+	}
+	
+	public static void close(IMenu menu)
+	{
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Close(menu));
+		menu.close();
+	}
+	
+	public static void open(IMenu menu)
+	{
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
+		menu.open();
+	}
+	
+	public static void clear(IMenu menu)
+	{
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Clear(menu));
+		menu.clear();
 	}
 
 	public static void setMenu(ResourceLocation loc) 

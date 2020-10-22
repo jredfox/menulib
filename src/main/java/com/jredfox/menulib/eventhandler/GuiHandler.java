@@ -5,6 +5,8 @@ import java.util.List;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.menulib.event.GuiEvent;
+import com.jredfox.menulib.event.MenuEvent;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.mod.MLConfig;
@@ -14,20 +16,19 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiHandler {
 	
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
-	private static boolean flag;
+	public static GuiScreen old;
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void guiOpenPre(GuiOpenEvent e)
 	{
-		GuiScreen menuGui = MenuRegistry.getCurrentGui();
-		flag = menuGui == Minecraft.getMinecraft().currentScreen && menuGui != null;
-		
+		old = Minecraft.getMinecraft().currentScreen;
 		if(!MenuRegistry.isReplaceable(e.getGui()))
 			return;
 		e.setGui(fake_menu);
@@ -38,16 +39,29 @@ public class GuiHandler {
 	 */
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void guiOpen(GuiOpenEvent e)
-	{
-		GuiScreen gui = e.getGui();
-		if(flag && MenuRegistry.getCurrentGui() != gui && !(gui instanceof GuiFakeMenu))
-			MenuRegistry.getCurrentMenu().close();//needs to close here if the menu goes into a sub menu
-		
-		if(!(gui instanceof GuiFakeMenu))
+	{	
+		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
 		IMenu menu = MenuRegistry.getCurrentMenu();
-		menu.open();
+		MenuRegistry.open(menu);
 		e.setGui(MenuRegistry.getOrCreateGui());
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void fireClose(GuiOpenEvent e)
+	{
+		if(old != null && old != e.getGui())
+			MinecraftForge.EVENT_BUS.post(new GuiEvent.Close(old));
+	}
+	
+	@SubscribeEvent
+	public void menuClose(GuiEvent.Close event)
+	{	
+		IMenu menu = MenuRegistry.getCurrentMenu();
+		if(menu.get() == event.gui)
+		{
+			MenuRegistry.close(menu);
+		}
 	}
 	
 	/**
@@ -61,13 +75,12 @@ public class GuiHandler {
 		if(MenuRegistry.hasButtons())
 		{
 			IMenu menu = MenuRegistry.getCurrentMenu();
+			MenuEvent.Button menuButton = new MenuEvent.Button(menu);
+			MinecraftForge.EVENT_BUS.post(menuButton);
+			
 			List<GuiButton> li = e.getButtonList();
-			GuiButton prev = menu.getPrevious();
-			GuiButton next = menu.getNext();
-			if(prev != null)
-				li.add(prev);
-			if(next != null)
-				li.add(next);
+			for(GuiButton b : menuButton.buttonList)
+				li.add(b);
 		}
 	}
 	

@@ -33,7 +33,7 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void close();
 	/**
-	 * clear the gui. this fires once the index switches
+	 * clear the gui. this fires once the IMenu index switches
 	 */
 	public void clear();
 	/**
