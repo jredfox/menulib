@@ -210,17 +210,19 @@ public class MenuRegistry {
 	
 	public static void close(IMenu menu)
 	{
-		System.out.println("closing:" + menu.getId());
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Close(menu));
 		menu.close();
 	}
 	
 	public static void open(IMenu menu)
 	{
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
 		menu.open();
 	}
 	
 	public static void switchMenu(IMenu menu)
 	{
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.SwitchMenu(menu));
 		menu.switchMenu();
 	}
 

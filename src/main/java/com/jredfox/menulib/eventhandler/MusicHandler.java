@@ -4,6 +4,8 @@ import com.jredfox.menulib.event.MusicEvent;
 import com.jredfox.menulib.misc.GameState;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MusicHandler {

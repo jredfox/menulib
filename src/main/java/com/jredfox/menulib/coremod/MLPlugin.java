@@ -22,7 +22,11 @@ public class MLPlugin implements IFMLLoadingPlugin
 	@Override
 	public String[] getASMTransformerClass()
 	{
-		return new String[]{"com.jredfox.menulib.coremod.MLTransformer"};
+		return new String[]
+		{
+				"com.jredfox.menulib.coremod.MLTransformer",
+				"com.jredfox.menulib.compat.MLTransformerCompat"
+		};
 	}
 
 	@Override

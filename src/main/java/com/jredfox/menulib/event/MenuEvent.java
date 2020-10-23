@@ -38,9 +38,9 @@ public class MenuEvent extends Event{
 		}
 	}
 	
-	public static class Clear extends MenuEvent 
+	public static class SwitchMenu extends MenuEvent 
 	{
-		public Clear(IMenu menu) 
+		public SwitchMenu(IMenu menu) 
 		{
 			super(menu);
 		}

@@ -47,11 +47,10 @@ public class MLTransformer implements IClassTransformer{
 			if(index != -1)
 			{
 				ClassNode node = ASMHelper.getClassNode(bytes);
-				String base = "assets/menulib/asm/" + (FMLCorePlugin.isObf ? "srg/" : "deob/");
 				switch (index)
 				{
 					case 0:
-						transformFramerate(node, base);
+						transformFramerate(node);
 					break;
 					
 					case 1:
@@ -59,16 +58,7 @@ public class MLTransformer implements IClassTransformer{
 					break;
 				}
 				
-				//legacy mess I have to manually clear the cache of classnodes, manually do classwriter sh*t then return and or dump the file
-				ASMHelper.clearCacheNodes();
-				MCWriter classWriter = new MCWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-		        node.accept(classWriter);
-		        byte[] transformed = classWriter.toByteArray();
-		        if(ConfigCore.dumpASM)
-		        {
-		        	ASMHelper.dumpFile(name + "-test", transformed);
-		        }
-		        return transformed;
+		        return writeClass(node, name);
 			}
 		}
 		catch(Throwable t)
@@ -82,10 +72,10 @@ public class MLTransformer implements IClassTransformer{
 	 * patches the framerate to be equal to the game instead of locking it at 30 always
 	 * @throws IOException 
 	 */
-	public void transformFramerate(ClassNode classNode, String input) throws IOException 
+	public void transformFramerate(ClassNode classNode) throws IOException 
 	{
 		//add getMenuFrames so minecraft can use them later
-		MethodNode mainmenu = ASMHelper.addMethod(classNode, input + "Minecraft", "getMenuFrames", "()I");
+		MethodNode mainmenu = ASMHelper.addMethod(classNode, getInputBase() + "Minecraft", "getMenuFrames", "()I");
 		
 		//start finding the injection point to change the 30 return value to a method call "getMenuFrames"
 		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");
@@ -115,6 +105,24 @@ public class MLTransformer implements IClassTransformer{
 	public void transformMusic(ClassNode node)
 	{
 		
+	}
+	
+	public static byte[] writeClass(ClassNode node, String name) throws IOException
+	{
+		ASMHelper.clearCacheNodes();
+		MCWriter classWriter = new MCWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        node.accept(classWriter);
+        byte[] transformed = classWriter.toByteArray();
+        if(ConfigCore.dumpASM)
+        {
+        	ASMHelper.dumpFile(name, transformed);
+        }
+        return transformed;
+	}
+
+	public static String getInputBase()
+	{
+		return "assets/menulib/asm/" + (FMLCorePlugin.isObf ? "srg/" : "deob/");
 	}
 
 }

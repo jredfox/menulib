@@ -27,11 +27,11 @@ public class GuiEvent extends Event {
 	
 	public static class Close extends GuiEvent
 	{
-		public GuiScreen newGui;
-		public Close(GuiScreen toClose, GuiScreen newGui)
+		public GuiScreen screen;
+		public Close(GuiScreen closing, GuiScreen screen)
 		{
-			super(toClose);
-			this.newGui = newGui;
+			super(closing);
+			this.screen = screen;
 		}
 	}
 

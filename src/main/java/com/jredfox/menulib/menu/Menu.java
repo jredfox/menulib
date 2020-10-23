@@ -123,5 +123,25 @@ public class Menu implements IMenu {
 	{
 		return !MLConfigButton.fancyPage ? next : nextFancy;
 	}
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		if(!(other instanceof IMenu))
+			return false;
+		return this.getId().equals( ((IMenu)other).getId() );
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return this.getId().hashCode();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getId().toString();
+	}
 
 }

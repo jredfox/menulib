@@ -58,7 +58,7 @@ public class GuiHandler {
 	
 	@SubscribeEvent
 	public void menuClose(GuiEvent.Close event)
-	{	
+	{
 		if(MenuRegistry.getCurrentGui() == event.gui)
 		{
 			MenuRegistry.close(MenuRegistry.getCurrentMenu());

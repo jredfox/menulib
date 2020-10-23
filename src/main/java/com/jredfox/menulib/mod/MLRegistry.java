@@ -5,6 +5,7 @@ import java.io.File;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.cap.CapReg;
+import com.jredfox.menulib.compat.MenuCMM;
 import com.jredfox.menulib.compat.MenuTBL;
 import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.eventhandler.FrameHandler;
@@ -24,8 +25,8 @@ public class MLRegistry {
 	public static void run()
 	{
 		loadConfigs();
-		registerMenus();
-		registerModMenus();
+		register();
+		registerCompat();
 		registerEvents();
 		registerCaps();
 	}
@@ -39,18 +40,21 @@ public class MLRegistry {
 	/**
 	 * generic registry
 	 */
-	public static void registerMenus()
+	public static void register()
 	{
 		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
 	}
 	
-	public static void registerModMenus()
+	public static void registerCompat()
 	{
 		if(Loader.isModLoaded("fossil"))
 			MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
 		if(Loader.isModLoaded("thebetweenlands"))
 			MenuRegistry.register(new MenuTBL());
-//		MenuRegistry.register(new MenuCMM());
+		if(Loader.isModLoaded("custommainmenu"))
+		{
+			MenuRegistry.register(new MenuCMM());
+		}
 	}
 	
 	/**
