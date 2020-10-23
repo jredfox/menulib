@@ -1,4 +1,4 @@
-package com.jredfox.menulib.compat;
+package com.jredfox.menulib.compat.coremod;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;

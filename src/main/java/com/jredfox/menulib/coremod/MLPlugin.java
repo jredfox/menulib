@@ -25,7 +25,7 @@ public class MLPlugin implements IFMLLoadingPlugin
 		return new String[]
 		{
 				"com.jredfox.menulib.coremod.MLTransformer",
-				"com.jredfox.menulib.compat.MLTransformerCompat"
+				"com.jredfox.menulib.compat.coremod.MLTransformerCompat"
 		};
 	}
 

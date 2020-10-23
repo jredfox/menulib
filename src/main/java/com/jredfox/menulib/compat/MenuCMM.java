@@ -1,11 +1,9 @@
 package com.jredfox.menulib.compat;
 
-import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.jredfox.menulib.menu.Menu;
 
 import lumien.custommainmenu.CustomMainMenu;
 import lumien.custommainmenu.gui.GuiCustom;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
