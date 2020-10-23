@@ -40,6 +40,10 @@ public class MLTransformerCompat implements IClassTransformer{
 			patchGuiCustom(node, MLTransformer.getInputBase());
 			return MLTransformer.writeClass(node, name);
 		}
+		else if(name.equals(""))
+		{
+			
+		}
 		}
 		catch(Throwable t)
 		{

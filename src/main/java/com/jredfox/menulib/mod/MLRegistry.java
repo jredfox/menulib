@@ -5,8 +5,10 @@ import java.io.File;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.cap.CapReg;
-import com.jredfox.menulib.compat.MenuCMM;
-import com.jredfox.menulib.compat.MenuTBL;
+import com.jredfox.menulib.compat.event.CMMJsonRegistry;
+import com.jredfox.menulib.compat.eventhandler.MLCMMJson;
+import com.jredfox.menulib.compat.menu.MenuCMM;
+import com.jredfox.menulib.compat.menu.MenuTBL;
 import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.eventhandler.FrameHandler;
 import com.jredfox.menulib.eventhandler.GuiHandler;
@@ -52,7 +54,10 @@ public class MLRegistry {
 		if(Loader.isModLoaded("thebetweenlands"))
 			MenuRegistry.register(new MenuTBL());
 		if(Loader.isModLoaded("custommainmenu"))
+		{
 			MenuRegistry.register(new MenuCMM());
+			CMMJsonRegistry.registry.add(new MLCMMJson());
+		}
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package com.jredfox.menulib.mod;
 
+import com.jredfox.menulib.compat.event.CMMJsonRegistry;
 import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraftforge.fml.common.Mod;

@@ -1,4 +1,4 @@
-package com.jredfox.menulib.compat;
+package com.jredfox.menulib.compat.menu;
 
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.jredfox.menulib.menu.IMenu;
