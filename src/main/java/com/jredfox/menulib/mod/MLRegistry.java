@@ -16,6 +16,7 @@ import com.jredfox.menulib.menu.MenuRegistry;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MLRegistry {
@@ -23,7 +24,8 @@ public class MLRegistry {
 	public static void run()
 	{
 		loadConfigs();
-		register();
+		registerMenus();
+		registerModMenus();
 		registerEvents();
 		registerCaps();
 	}
@@ -37,11 +39,17 @@ public class MLRegistry {
 	/**
 	 * generic registry
 	 */
-	public static void register()
+	public static void registerMenus()
 	{
 		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
-		MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
-		MenuRegistry.register(new MenuTBL());
+	}
+	
+	public static void registerModMenus()
+	{
+		if(Loader.isModLoaded("fossil"))
+			MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
+		if(Loader.isModLoaded("thebetweenlands"))
+			MenuRegistry.register(new MenuTBL());
 //		MenuRegistry.register(new MenuCMM());
 	}
 	

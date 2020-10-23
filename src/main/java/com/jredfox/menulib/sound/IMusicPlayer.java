@@ -1,10 +1,7 @@
 package com.jredfox.menulib.sound;
 
-import com.jredfox.menulib.event.MusicEvent;
-import com.jredfox.menulib.event.MusicEvent.MusicState;
+import com.jredfox.menulib.misc.GameState;
 
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 public interface IMusicPlayer {
@@ -15,7 +12,7 @@ public interface IMusicPlayer {
 	/**
 	 * the intended music state
 	 */
-	public MusicState getMusicState();
+	public GameState getGameState();
 	/**
 	 * called every tick use this to calculate when to start playing music
 	 */

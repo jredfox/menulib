@@ -1,7 +1,6 @@
 package com.jredfox.menulib.sound;
 
-import com.evilnotch.lib.minecraft.tick.TickRegistry;
-import com.jredfox.menulib.event.MusicEvent.MusicState;
+import com.jredfox.menulib.misc.GameState;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -18,9 +17,9 @@ public class MusicEmpty implements IMusicPlayer{
 	}
 
 	@Override
-	public MusicState getMusicState() 
+	public GameState getGameState() 
 	{
-		return MusicState.NONE;
+		return GameState.NONE;
 	}
 
 	@Override

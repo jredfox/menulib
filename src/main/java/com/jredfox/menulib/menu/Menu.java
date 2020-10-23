@@ -1,8 +1,6 @@
 package com.jredfox.menulib.menu;
 
 import java.lang.reflect.Constructor;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.logging.log4j.core.util.ReflectionUtil;
 
@@ -80,19 +78,13 @@ public class Menu implements IMenu {
 	}
 	
 	@Override
-	public void open() 
-	{
-		
-	}
+	public void open() {}
 
 	@Override
-	public void close() 
-	{
-		
-	}
+	public void close() {}
 	
 	@Override
-	public void clear()
+	public void switchMenu()
 	{
 		this.gui = null;
 	}

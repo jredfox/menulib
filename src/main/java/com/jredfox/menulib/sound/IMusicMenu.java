@@ -1,9 +1,7 @@
 package com.jredfox.menulib.sound;
 
-import com.jredfox.menulib.event.MusicEvent.MusicState;
 import com.jredfox.menulib.menu.IMenu;
-
-import net.minecraft.client.gui.GuiScreen;
+import com.jredfox.menulib.misc.GameState;
 
 public interface IMusicMenu extends IMusicGuiHolder {
 	
@@ -13,9 +11,9 @@ public interface IMusicMenu extends IMusicGuiHolder {
 	public IMenu getMenu();
 	
 	@Override
-	public default MusicState getMusicState()
+	public default GameState getGameState()
 	{
-		return MusicState.MENU;
+		return GameState.MENU;
 	}
 
 }

@@ -1,13 +1,14 @@
 package com.jredfox.menulib.sound;
 
 import com.jredfox.menulib.event.MusicEvent.MusicState;
+import com.jredfox.menulib.misc.GameState;
 
 public interface IMusicGui extends IMusicGuiHolder{
 	
 	@Override
-	public default MusicState getMusicState()
+	public default GameState getGameState()
 	{
-		return MusicState.GUI;
+		return GameState.GUI;
 	}
 
 }

@@ -53,7 +53,7 @@ public class GuiHandler {
 	public void fireClose(GuiOpenEvent e)
 	{
 		if(old != null && old != e.getGui())
-			MinecraftForge.EVENT_BUS.post(new GuiEvent.Close(old));
+			MinecraftForge.EVENT_BUS.post(new GuiEvent.Close(old, e.getGui()));
 	}
 	
 	@SubscribeEvent

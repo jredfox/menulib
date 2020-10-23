@@ -21,7 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class MenuRegistry {
 	
 	protected static List<IMenu> menus = new ArrayList();
-	protected static Map<ResourceLocation,Integer> tempMenus = new HashMap();
+	protected static Map<ResourceLocation, Integer> tempMenus = new HashMap();
 	public static int indexMenu = 0;
 	public static IMenu currentMenu;
 	
@@ -202,7 +202,7 @@ public class MenuRegistry {
 		if(currentMenu != null)
 		{
 			close(currentMenu);
-			clear(currentMenu);
+		    switchMenu(currentMenu);
 		}
 		indexMenu = i;
 		currentMenu = menus.get(i);
@@ -210,20 +210,18 @@ public class MenuRegistry {
 	
 	public static void close(IMenu menu)
 	{
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Close(menu));
+		System.out.println("closing:" + menu.getId());
 		menu.close();
 	}
 	
 	public static void open(IMenu menu)
 	{
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
 		menu.open();
 	}
 	
-	public static void clear(IMenu menu)
+	public static void switchMenu(IMenu menu)
 	{
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Clear(menu));
-		menu.clear();
+		menu.switchMenu();
 	}
 
 	public static void setMenu(ResourceLocation loc) 

@@ -31,13 +31,13 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void open();
 	/**
-	 * called right after menu closes
+	 * called when the menu closes
 	 */
 	public void close();
 	/**
-	 * clear the gui. this fires once the IMenu index switches
+	 * fired when your IMenu gets switched
 	 */
-	public void clear();
+	public void switchMenu();
 	/**
 	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
 	 */

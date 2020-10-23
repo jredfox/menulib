@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.sound.IMusicGuiHolder;
 import com.jredfox.menulib.sound.IMusicPlayer;
 
@@ -26,14 +27,14 @@ public class MusicEvent extends Event {
 	
 	public ResourceLocation musicId;
 	public boolean canPlay;
-	public MusicState state;
+	public GameState state;
 	public GuiScreen gui;
 	public ISound sound;
 
 	public MusicEvent(IMusicPlayer player, ISound sound)
 	{
 		this.musicId = player.getId();
-		this.state = player.getMusicState();
+		this.state = player.getGameState();
 		this.gui = player instanceof IMusicGuiHolder ? ((IMusicGuiHolder)player).getGui() : null;
 		this.canPlay = true;
 		this.sound = sound;
