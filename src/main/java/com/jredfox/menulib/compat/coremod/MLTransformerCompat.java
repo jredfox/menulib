@@ -10,9 +10,12 @@ import com.evilnotch.lib.asm.util.ASMHelper;
 import com.jredfox.menulib.coremod.MLTransformer;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-
+/**
+ * made to fix some CMM bugs
+ * A: remove it from overriding all other mods
+ * B: fix several issues in GuiCustom one with wrapped button ids, the other with firing button events so it shows the current gui instead of a fake
+ */
 public class MLTransformerCompat implements IClassTransformer{
-
 	
 	public static void patchGuiCustom(ClassNode classNode, String inputBase)
 	{

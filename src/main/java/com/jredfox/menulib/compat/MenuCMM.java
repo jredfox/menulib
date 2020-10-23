@@ -11,7 +11,7 @@ public class MenuCMM extends Menu{
 
 	public MenuCMM()
 	{
-		super(new ResourceLocation("cmm:menu"), GuiCustom.class);
+		super(new ResourceLocation("cmm:mainmenu"), GuiCustom.class);
 	}
 	
 	@Override

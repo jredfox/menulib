@@ -16,7 +16,7 @@ public class MenuTBL extends Menu{
 	
 	public MenuTBL()
 	{
-		super(new ResourceLocation("tbl:mainmenu"), ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"));
+		super(new ResourceLocation("tbl:swamp"), ReflectionUtil.classForName("thebetweenlands.client.gui.menu.GuiBLMainMenu"));
 	}
 
 	@Override

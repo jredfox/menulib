@@ -48,13 +48,11 @@ public class MLRegistry {
 	public static void registerCompat()
 	{
 		if(Loader.isModLoaded("fossil"))
-			MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mainmenu"));
+			MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mineshaft"));
 		if(Loader.isModLoaded("thebetweenlands"))
 			MenuRegistry.register(new MenuTBL());
 		if(Loader.isModLoaded("custommainmenu"))
-		{
 			MenuRegistry.register(new MenuCMM());
-		}
 	}
 	
 	/**
