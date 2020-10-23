@@ -210,20 +210,22 @@ public class MenuRegistry {
 	
 	public static void close(IMenu menu)
 	{
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Close(menu));
 		menu.close();
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Close(menu));
 	}
 	
 	public static void open(IMenu menu)
 	{
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
+//		System.out.println("opening:" + menu.getId());
 		menu.open();
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
 	}
 	
 	public static void switchMenu(IMenu menu)
 	{
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.SwitchMenu(menu));
+//		System.out.println("switching:" + menu.getId());
 		menu.switchMenu();
+		MinecraftForge.EVENT_BUS.post(new MenuEvent.SwitchMenu(menu));
 	}
 
 	public static void setMenu(ResourceLocation loc) 

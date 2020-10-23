@@ -39,7 +39,14 @@ public class Menu implements IMenu {
 	{
 		this.id = id;
 		this.guiClass = guiClass;
-		this.ctr = ReflectionUtil.getDefaultConstructor(this.guiClass);
+		try
+		{
+			this.ctr = ReflectionUtil.getDefaultConstructor(this.guiClass);
+		}
+		catch(Exception e)
+		{
+			this.ctr = null;
+		}
 		this.music = music;
 		this.frames = frames;
 	}
