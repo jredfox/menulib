@@ -9,12 +9,14 @@ import com.jredfox.menulib.compat.event.CMMJsonRegistry;
 import com.jredfox.menulib.compat.eventhandler.MLCMMJson;
 import com.jredfox.menulib.compat.menu.MenuCMM;
 import com.jredfox.menulib.compat.menu.MenuTBL;
+import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.eventhandler.FrameHandler;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.proxy.ModProxy;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
@@ -53,7 +55,7 @@ public class MLRegistry {
 			MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mineshaft"));
 		if(Loader.isModLoaded("thebetweenlands"))
 			MenuRegistry.register(new MenuTBL());
-		if(Loader.isModLoaded("custommainmenu"))
+		if(CMMUtil.getProxy().isLoaded)
 		{
 			MenuRegistry.register(new MenuCMM());
 			CMMJsonRegistry.registry.add(new MLCMMJson());
@@ -80,9 +82,20 @@ public class MLRegistry {
 		CapabilityRegistry.registerRegistry(new CapReg());
 	}
 	
-	public static void postInit() 
+	public static void runPost() 
 	{
-		if(Loader.isModLoaded("custommainmenu"))
+		post();
+		postCompat();
+	}
+
+	public static void post()
+	{
+		MenuRegistry.init();
+	}
+
+	public static void postCompat()
+	{
+		if(CMMUtil.getProxy().isLoaded)
 		{
 			CMMJsonRegistry.checkReload();
 		}

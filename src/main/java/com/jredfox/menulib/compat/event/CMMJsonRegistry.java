@@ -14,6 +14,7 @@ import com.evilnotch.lib.main.loader.LoaderMain;
 import com.evilnotch.lib.main.loader.LoadingStage;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.compat.menu.MenuCMM;
+import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.mod.MLConfig;
 
 public class CMMJsonRegistry {
@@ -45,34 +46,42 @@ public class CMMJsonRegistry {
 		{
 			File mainmenu = new File(MLConfig.cfgRoot.getParent(), "CustomMainMenu/mainmenu.json");
 			CMMJsonRegistry.fire(mainmenu);
-			MenuCMM.reload();
+			CMMUtil.reload();
 			CMMJsonRegistry.reloadFlag = false;
 		}
 	}
 	
+	/**
+	 * here cause evil notch lib is bugged
+	 */
 	public static JSONObject getJson(File armor) 
 	{
 		FileReader reader = null;
-	      try 
-	      {
-	    	  reader = new FileReader(armor);
-	         JSONObject json = (JSONObject)JavaUtil.jsonParser.parse((Reader)(reader));
-	         return json;
-	      } 
-	      catch (JSONParseException | IOException var2) 
-	      {
-	         var2.printStackTrace();
-	         return null;
-	      }
-	      finally
-	      {
-	    	  if(reader != null)
-				try {
+	    try 
+	    {
+	    	reader = new FileReader(armor);
+	        JSONObject json = (JSONObject)JavaUtil.jsonParser.parse((Reader)(reader));
+	        return json;
+	    } 
+	    catch (Exception var2) 
+	    {
+	       var2.printStackTrace();
+	       return null;
+	    }
+	    finally
+	    {
+	    	if(reader != null)
+	    	{
+	    		try 
+	    		{
 					reader.close();
-				} catch (IOException e) {
+				} 
+	    		catch (IOException e) 
+	    		{
 					e.printStackTrace();
 				}
-	      }
+	    	}
+	    }
 	}
 
 }

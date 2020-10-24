@@ -33,8 +33,7 @@ public class MLMod {
 	@EventHandler
 	public void postinit(FMLPostInitializationEvent event)
 	{
-		MLRegistry.postInit();
-		MenuRegistry.init();
+		MLRegistry.runPost();
 	}
 
 }

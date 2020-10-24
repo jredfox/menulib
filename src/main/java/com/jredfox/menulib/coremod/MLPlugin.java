@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.evilnotch.lib.asm.ConfigCore;
 import com.evilnotch.lib.asm.FMLCorePlugin;
+import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.lib.main.loader.LoadingStage;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
