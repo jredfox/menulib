@@ -65,7 +65,7 @@ public class MLTransformerCompat implements IClassTransformer{
 		MethodInsnNode m = new MethodInsnNode(Opcodes.INVOKESTATIC, "org/apache/commons/io/IOUtils", "closeQuietly", "(Ljava/io/InputStream;)V", false);
 		for(AbstractInsnNode ab : method.instructions.toArray())
 		{
-			if(ab instanceof MethodInsnNode && ASMHelper.equals(m, (MethodInsnNode) ab))
+			if(ab instanceof MethodInsnNode && ASMHelper.equals(m, (MethodInsnNode) ab) && ab.getPrevious() instanceof VarInsnNode)
 			{
 				VarInsnNode var = (VarInsnNode) ab.getPrevious();
 				if(var.var == 4)
