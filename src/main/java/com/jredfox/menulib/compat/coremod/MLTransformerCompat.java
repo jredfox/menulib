@@ -4,6 +4,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -61,13 +62,18 @@ public class MLTransformerCompat implements IClassTransformer{
 	{
 		MethodNode method = ASMHelper.getMethodNode(classNode, "load", "()V");
 		AbstractInsnNode spot = null;
-		MethodInsnNode m = new MethodInsnNode(Opcodes.INVOKESTATIC, "com/google/common/io/ByteStreams", "copy", "(Ljava/io/InputStream;Ljava/io/OutputStream;)J", false);
+		MethodInsnNode m = new MethodInsnNode(Opcodes.INVOKESTATIC, "org/apache/commons/io/IOUtils", "closeQuietly", "(Ljava/io/InputStream;)V", false);
 		for(AbstractInsnNode ab : method.instructions.toArray())
 		{
-			if(ab instanceof MethodInsnNode && ASMHelper.equals(m, (MethodInsnNode) ab) && ab.getNext().getOpcode() == Opcodes.POP2)
+			if(ab instanceof MethodInsnNode && ASMHelper.equals(m, (MethodInsnNode) ab))
 			{
-				spot = ab.getNext();//insert after this method after it POP2
-				break;
+				VarInsnNode var = (VarInsnNode) ab.getPrevious();
+				if(var.var == 4)
+				{
+					MethodInsnNode i = (MethodInsnNode) ab;
+					spot = ab;
+					break;
+				}
 			}
 		}
 		InsnList list = new InsnList();
