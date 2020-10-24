@@ -16,8 +16,6 @@ import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.compat.menu.MenuCMM;
 import com.jredfox.menulib.mod.MLConfig;
 
-import lumien.custommainmenu.CustomMainMenu;
-
 public class CMMJsonRegistry {
 	
 	/**

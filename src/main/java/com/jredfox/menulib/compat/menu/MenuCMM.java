@@ -1,13 +1,10 @@
 package com.jredfox.menulib.compat.menu;
 
-import java.io.File;
 import java.lang.reflect.Method;
 
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.jredfox.menulib.menu.Menu;
 
-import lumien.custommainmenu.CustomMainMenu;
-import lumien.custommainmenu.gui.GuiCustom;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 

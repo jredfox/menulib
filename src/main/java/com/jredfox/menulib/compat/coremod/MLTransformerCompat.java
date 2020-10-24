@@ -28,12 +28,10 @@ public class MLTransformerCompat implements IClassTransformer{
 		{
 		if(name.equals("lumien.custommainmenu.handler.CMMEventHandler"))
 		{
-			System.out.println("transforming cmm:" + name);
 			return ASMHelper.replaceClass(MLTransformer.getInputBase() + "CMMEventHandler");//replaced as I re-wrote most of it
 		}
 		else if(name.equals("lumien.custommainmenu.gui.GuiCustom"))
 		{
-			System.out.println("transforming cmm:" + name);
 			ClassNode node = ASMHelper.getClassNode(bytes);
 			patchGuiCustom(node, MLTransformer.getInputBase());
 			return MLTransformer.writeClass(node, name);
