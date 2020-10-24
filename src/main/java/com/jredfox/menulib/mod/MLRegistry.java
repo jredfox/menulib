@@ -79,5 +79,13 @@ public class MLRegistry {
 	{
 		CapabilityRegistry.registerRegistry(new CapReg());
 	}
+	
+	public static void postInit() 
+	{
+		if(Loader.isModLoaded("custommainmenu"))
+		{
+			CMMJsonRegistry.checkReload();
+		}
+	}
 
 }

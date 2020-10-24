@@ -19,12 +19,6 @@ import net.minecraft.launchwrapper.IClassTransformer;
  * C: add a json hook so modders can add their wrapped button for cmm main menu fires everytime the json file is deleted creating a new default
  */
 public class MLTransformerCompat implements IClassTransformer{
-	
-	public static void patchGuiCustom(ClassNode classNode, String inputBase)
-	{
-		ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom", "initGui", "()V", "func_73866_w_");
-		ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom","actionPerformed", "(Lnet/minecraft/client/gui/GuiButton;)V", "func_146284_a");
-	}
 
 	@Override
 	public byte[] transform(String ob, String name, byte[] bytes) 
@@ -55,6 +49,12 @@ public class MLTransformerCompat implements IClassTransformer{
 			t.printStackTrace();
 		}
 		return bytes;
+	}
+	
+	public static void patchGuiCustom(ClassNode classNode, String inputBase)
+	{
+		ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom", "initGui", "()V", "func_73866_w_");
+		ASMHelper.replaceMethod(classNode, inputBase + "GuiCustom","actionPerformed", "(Lnet/minecraft/client/gui/GuiButton;)V", "func_146284_a");
 	}
 
 	public static void hookConfigurationLoader(ClassNode classNode)

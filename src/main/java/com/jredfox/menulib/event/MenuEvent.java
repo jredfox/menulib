@@ -22,17 +22,17 @@ public class MenuEvent extends Event{
 		this.menu = menu;
 	}
 	
-	public static class Close extends MenuEvent 
+	public static class Open extends MenuEvent 
 	{
-		public Close(IMenu menu) 
+		public Open(IMenu menu) 
 		{
 			super(menu);
 		}
 	}
 	
-	public static class Open extends MenuEvent 
+	public static class Close extends MenuEvent 
 	{
-		public Open(IMenu menu) 
+		public Close(IMenu menu) 
 		{
 			super(menu);
 		}

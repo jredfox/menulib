@@ -45,7 +45,7 @@ public class Menu implements IMenu {
 		}
 		catch(Exception e)
 		{
-			this.ctr = null;
+			
 		}
 		this.music = music;
 		this.frames = frames;

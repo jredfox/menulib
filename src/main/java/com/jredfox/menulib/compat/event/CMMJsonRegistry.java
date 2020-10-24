@@ -10,7 +10,13 @@ import java.util.List;
 import org.ralleytn.simple.json.JSONObject;
 import org.ralleytn.simple.json.JSONParseException;
 
+import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.lib.main.loader.LoadingStage;
 import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.menulib.compat.menu.MenuCMM;
+import com.jredfox.menulib.mod.MLConfig;
+
+import lumien.custommainmenu.CustomMainMenu;
 
 public class CMMJsonRegistry {
 	
@@ -18,15 +24,32 @@ public class CMMJsonRegistry {
 	 * register your CMMAutoJSon Event Handlers in pre init as it fires during init
 	 */
 	public static List<ICMMJsonEvent> registry = new ArrayList(0);
-	
+	public static boolean reloadFlag;
+			
 	public static void fire(File mainmenu)
 	{
+		if(LoaderMain.currentLoadingStage.ordinal() < LoadingStage.POSTINIT.ordinal())
+		{
+			reloadFlag = true;
+			return;
+		}
 		JSONObject json = getJson(mainmenu);
 		for(ICMMJsonEvent cmm : registry)
 		{
 			cmm.fire(json);
 		}
 		JavaUtil.saveJSON(json, mainmenu, true);
+	}
+	
+	public static void checkReload()
+	{
+		if(CMMJsonRegistry.reloadFlag)
+		{
+			File mainmenu = new File(MLConfig.cfgRoot.getParent(), "CustomMainMenu/mainmenu.json");
+			CMMJsonRegistry.fire(mainmenu);
+			MenuCMM.reload();
+			CMMJsonRegistry.reloadFlag = false;
+		}
 	}
 	
 	public static JSONObject getJson(File armor) 

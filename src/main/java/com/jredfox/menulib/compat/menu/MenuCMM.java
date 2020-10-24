@@ -1,5 +1,6 @@
 package com.jredfox.menulib.compat.menu;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import com.evilnotch.lib.api.ReflectionUtil;
@@ -14,7 +15,7 @@ public class MenuCMM extends Menu{
 	
 	public static Class<? extends GuiScreen> guiCustom = ReflectionUtil.classForName("lumien.custommainmenu.gui.GuiCustom");
 	public static Class customMainMenu = ReflectionUtil.classForName("lumien.custommainmenu.CustomMainMenu");
-	public Object INSTANCE = ReflectionUtil.getObject(null, customMainMenu, "INSTANCE");
+	public static Object INSTANCE = ReflectionUtil.getObject(null, customMainMenu, "INSTANCE");
 	public static Method reload = ReflectionUtil.getMethod(customMainMenu, "reload");
 	public static Method getGui = ReflectionUtil.getMethod(ReflectionUtil.classForName("lumien.custommainmenu.configuration.Config"), "getGUI", String.class);
 	
@@ -37,19 +38,19 @@ public class MenuCMM extends Menu{
 		this.syncGui();
 		return this.get();
 	}
-
-	public void reload()
-	{
-		invoke(reload, INSTANCE);
-	}
-
+	
 	public void syncGui() 
 	{
 		Object config = getConfig();
 		this.gui = (GuiScreen) invoke(getGui, config, "mainmenu");
 	}
 	
-	public Object getConfig()
+	public static void reload()
+	{
+		invoke(reload, INSTANCE);
+	}
+	
+	public static Object getConfig()
 	{
 		return ReflectionUtil.getObject(INSTANCE, customMainMenu, "config");
 	}
