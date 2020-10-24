@@ -66,7 +66,7 @@ public class MLTransformerCompat implements IClassTransformer{
 		{
 			if(ab instanceof MethodInsnNode && ASMHelper.equals(m, (MethodInsnNode) ab) && ab.getNext().getOpcode() == Opcodes.POP2)
 			{
-				spot = ab;
+				spot = ab.getNext();//insert after this method after it POP2
 				break;
 			}
 		}
