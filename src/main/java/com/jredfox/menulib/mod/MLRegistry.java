@@ -2,6 +2,7 @@ package com.jredfox.menulib.mod;
 
 import java.io.File;
 
+import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.cap.CapReg;
@@ -15,8 +16,8 @@ import com.jredfox.menulib.eventhandler.FrameHandler;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
+import com.jredfox.menulib.menu.Menu;
 import com.jredfox.menulib.menu.MenuRegistry;
-import com.jredfox.menulib.proxy.ModProxy;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
@@ -46,18 +47,18 @@ public class MLRegistry {
 	 */
 	public static void register()
 	{
-		MenuRegistry.register(GuiMainMenu.class, new ResourceLocation("mainmenu"));
+		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("mainmenu"), GuiMainMenu.class));
 	}
 	
 	public static void registerCompat()
 	{
 		if(Loader.isModLoaded("fossil"))
-			MenuRegistry.register("fossilsarcheology.client.gui.FAMainMenuGUI", new ResourceLocation("fossil:mineshaft"));
+			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
 		if(Loader.isModLoaded("thebetweenlands"))
-			MenuRegistry.register(new MenuTBL());
+			MenuRegistry.INSTANCE.register(new MenuTBL());
 		if(CMMUtil.getProxy().isLoaded)
 		{
-			MenuRegistry.register(new MenuCMM());
+//			MenuRegistry.INSTANCE.register(new MenuCMM());
 			CMMJsonRegistry.registry.add(new MLCMMJson());
 		}
 	}
@@ -90,7 +91,7 @@ public class MLRegistry {
 
 	public static void post()
 	{
-		MenuRegistry.init();
+		MenuRegistry.INSTANCE.load();
 	}
 
 	public static void postCompat()

@@ -1,348 +1,121 @@
 package com.jredfox.menulib.menu;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.util.line.LineArray;
-import com.jredfox.menulib.event.MenuEvent;
 import com.jredfox.menulib.eventhandler.GuiHandler;
-import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 
-public class MenuRegistry {
+public class MenuRegistry
+{
+	public IMenu menu;
+	public IMenu previous;
+	public List<IMenu> menus = new ArrayList();
+	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
-	protected static List<IMenu> menus = new ArrayList();
-	protected static Map<ResourceLocation, Integer> tempMenus = new HashMap();
-	public static int indexMenu = 0;
-	public static IMenu currentMenu;
-	
-	public static void register(IMenu menu)
+	public void register(IMenu menu)
 	{
-		menus.remove(menu);
-		menus.add(menu);
-		tempMenus.put(menu.getId(), -1);
+		this.menus.remove(menu);
+		this.menus.add(menu);
+	}
+
+	public IMenu getMenu()
+	{
+		return this.menu;
 	}
 	
-	public static void register(int index, IMenu menu)
+	public IMenu getPrevious()
 	{
-		menus.remove(menu);
-		menus.add(menu);
-		tempMenus.put(menu.getId(), index);
+		return this.previous;
 	}
 	
-	/**
-	 * proxy friendly
-	 */
-	public static IMenu register(String clazz, ResourceLocation id)
+	public GuiScreen getGui()
 	{
-		Class<? extends GuiScreen> guiClazz = ReflectionUtil.classForName(clazz);
-		return guiClazz == null ? null : register(guiClazz, id);
+		return this.getMenu().get();
 	}
 	
-	/**
-	 * Returns menu so you can manipulate data after adding one
-	 * to make an IMenu method use register IMenu
-	 * or simply make a new Menu instance(Menu implements IMenu) and override what you need 
-	 */
-	public static IMenu register(Class<? extends GuiScreen> guiClazz, ResourceLocation id)
+	public GuiScreen getGuiOpen()
 	{
-		IMenu menu = new Menu(id, guiClazz);
-		menus.remove(menu);
-		menus.add(menu);
-		tempMenus.put(id, -1);
-		return menu;
+		return this.getGui() != null ? this.getGui() : this.getMenu().create();
 	}
 	
-	public static IMenu register(int index, Class<? extends GuiScreen> guiClazz, ResourceLocation id)
+	public void next()
 	{
-		IMenu menu = new Menu(id, guiClazz);
-		menus.remove(menu);
-		menus.add(menu);
-		tempMenus.put(id, index);
-		return menu;
-	}
-	
-	/**
-	 * used by button guis to advanced current gui to the next gui
-	 */
-	public static void advanceNextMenu()
-	{
-		setMenu(getNext(indexMenu));
+		int index = this.getIndex() + 1;
+		if(index == this.menus.size())
+			index = 0;
+		this.close(this.menu);
+		this.switchMenu(this.menu);
+		this.menu = this.menus.get(index);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 	
-	/**
-	 * used by button guis to advanced current gui to the next gui
-	 */
-	public static void advancePreviousMenu()
+	public void previous()
 	{
-		setMenu(getPrevious(indexMenu));
+		int index = this.getIndex() - 1;
+		if(index == -1)
+			index = this.menus.size() - 1;
+		this.close(this.menu);
+		this.switchMenu(this.menu);
+		this.menu = this.menus.get(index);
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 	
-	protected static int getNext(int index) 
+	public int getIndex() 
 	{
-		if(index + 1 == MenuRegistry.getMenus().size() )
-			return 0;
-		index++;
-		return index;
+		return this.menus.indexOf(this.menu);
 	}
 	
-	protected static int getPrevious(int index) 
+	public boolean isMenu(GuiScreen gui)
 	{
-		if( (index -1) == -1)
-			return menus.size()-1;
-		index--;
-		return index;
-	}
-	/**
-	 * creates a new gui from the current IMenu
-	 */
-	public static GuiScreen createCurrentGui()
-	{
-		return getCurrentMenu().create();
-	}
-	
-	/**
-	 * gets the current gui from the current IMenu without creating a new one for custom stuffs
-	 */
-	public static GuiScreen getCurrentGui()
-	{
-		return getCurrentMenu().get();
-	}
-	
-	public static IMenu getCurrentMenu()
-	{
-		return currentMenu;
-	}
-	
-	public static GuiScreen getOrCreateGui()
-	{
-		IMenu menu = getCurrentMenu();
-		return menu.get() != null ? menu.get() : menu.create();
-	}
-	
-	public static List<IMenu> getMenus() 
-	{
-		return menus;
-	}
-	
-	public static int getMenuSize() 
-	{
-		return menus.size();
-	}
-	
-	public static boolean containsMenu(Class clazz) 
-	{
-		for(int i=0;i<menus.size();i++)
+		if(gui == null) 
+			return false;
+		
+		for(IMenu m : this.menus)
 		{
-			if(menus.get(i).getGuiClass().equals(clazz))
+			if(m.getGuiClass().equals(gui.getClass()))
 				return true;
 		}
 		return false;
 	}
 	
-	public static void removeMenu(ResourceLocation loc)
-	{
-		Iterator<IMenu> it = menus.iterator();
-		while(it.hasNext())
-		{
-			IMenu m = it.next();
-			if(m.getId().equals(loc))
-			{
-				it.remove();
-				break;
-			}
-		}
-		tempMenus.remove(loc);
-	}
-	
 	/**
-	 * re-order the menus list also skip any menus that are disabled
+	 * should the event handler replace the current gui on open
 	 */
-	public static void init() 
+	public boolean shouldReplace(GuiScreen gui)
 	{
-		mergeTemp();
-		reorderLists();
-		checkConfig();
-		setConfigIndex();
+		return gui instanceof GuiMainMenu || this.isMenu(gui);
 	}
 
-	public static void mergeTemp() 
+	public void load()
 	{
-		for(Map.Entry<ResourceLocation, Integer> map : tempMenus.entrySet())
-		{
-			int index = map.getValue();
-			if(index == -1)
-				MLConfig.saveMenuToConfig(map.getKey());
-			else
-				MLConfig.saveMenuToConfig(index, map.getKey());
-		}
-		tempMenus.clear();
+		this.menu = this.menus.get(0);
 	}
 
-	public static void setConfigIndex() 
-	{
-		setMenu(MLConfig.currentMenuIndex);
-	}
-
-	public static void setMenu(int i) 
-	{
-		if(currentMenu != null)
-		{
-			close(currentMenu);
-		    switchMenu(currentMenu);
-		}
-		indexMenu = i;
-		currentMenu = menus.get(i);
-	}
-	
-	public static void close(IMenu menu)
-	{
-		menu.close();
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Close(menu));
-	}
-	
-	public static void open(IMenu menu)
+	public void open(IMenu menu) 
 	{
 		menu.open();
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
+	}
+
+	public void close(IMenu menu) 
+	{
+		menu.close();
 	}
 	
-	public static void switchMenu(IMenu menu)
+	public void switchMenu(IMenu menu)
 	{
 		menu.switchMenu();
-		MinecraftForge.EVENT_BUS.post(new MenuEvent.SwitchMenu(menu));
 	}
 
-	public static void setMenu(ResourceLocation loc) 
+	public boolean hasButtons()
 	{
-		int index = getIndex(loc);
-		if(index == -1)
-		{
-			System.out.println("invalid menu index:" + MLConfig.currentMenuIndex);
-			return;
-		}
-		setMenu(index);
-	}
-
-	public static void checkConfig() 
-	{
-		if(MLConfig.isDirty)
-		{
-			if(MLConfig.displayNewMenu && MLConfig.addedMenus)
-			{
-				MLConfig.currentMenuIndex = menus.get(menus.size()-1).getId();//when adding a new menu display it
-			}
-			MLConfig.saveMenusAndIndex();
-		}
-	}
-
-	public static void reorderLists() 
-	{
-		List<IMenu> list = new ArrayList<IMenu>();
-		Iterator<LineArray> it = MLConfig.mainMenus.iterator();
-		while(it.hasNext())
-		{
-			LineArray line = it.next();
-			if(!line.getBoolean())
-			{
-				continue;
-			}
-			ResourceLocation loc = line.getResourceLocation();
-			if(line.hasStringMeta())
-			{
-				Class c = ReflectionUtil.classForName(line.getMetaString());
-				if(c == null)
-				{
-					System.out.println("null class when parsing menu for:" + line.getMetaString());
-					it.remove();
-					MLConfig.isDirty = true;
-					continue;
-				}
-				IMenu menu = new Menu(loc, c);
-				if(!list.contains(menu))
-					list.add(menu);
-			}
-			else
-			{
-				IMenu menu = getMenu(loc);
-				if(menu == null)
-				{
-					System.out.println("null menu when parsing found for:" + loc);
-					it.remove();
-					MLConfig.isDirty = true;
-					continue;
-				}
-				if(!list.contains(menu))
-					list.add(menu);
-			}
-		}
-		menus = list;
-		
-		if(com.evilnotch.lib.main.Config.debug)
-			System.out.println("ConfigMenu.isDirty:" + MLConfig.isDirty);
-		
-		//more optimized then setting then saving the config twice
-		if(!hasMenu(MLConfig.currentMenuIndex))
-		{
-			ResourceLocation loc = menus.get(0).getId();
-			System.out.println("null currentIndex found:" + MLConfig.currentMenuIndex + " setting currentIndex to 0:" + loc);
-			MLConfig.currentMenuIndex = loc;
-			MLConfig.isDirty = true;
-		}
+		return this.menus.size() > 1;
 	}
 	
-	public static boolean hasMenu(ResourceLocation loc)
-	{
-		return getMenu(loc) != null;
-	}
-
-	public static IMenu getMenu(ResourceLocation loc) 
-	{
-		for(IMenu menu : menus)
-		{
-			if(menu.getId().equals(loc))
-				return menu;
-		}
-		return null;
-	}
-
-	public static int getIndex(ResourceLocation loc) 
-	{
-		for(int i=0;i<menus.size();i++)
-		{
-			IMenu menu = menus.get(i);
-			if(menu.getId().equals(loc))
-				return i;
-		}
-		return -1;
-	}
-	
-	/**
-	 * should buttons be added to IMenus
-	 */
-	public static boolean hasButtons()
-	{
-		return MenuRegistry.getMenuSize() > 1;
-	}
-	
-	/**
-	 * is this gui replaceable for IMenus
-	 */
-	public static boolean isReplaceable(GuiScreen gui)
-	{
-		return gui instanceof GuiMainMenu || gui != null && containsMenu(gui.getClass() );
-	}
 }

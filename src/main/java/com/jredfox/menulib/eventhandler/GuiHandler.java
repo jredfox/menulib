@@ -31,7 +31,7 @@ public class GuiHandler {
 	public void guiOpenPre(GuiOpenEvent e)
 	{
 		old = Minecraft.getMinecraft().currentScreen;
-		if(!MenuRegistry.isReplaceable(e.getGui()))
+		if(!MenuRegistry.INSTANCE.shouldReplace(e.getGui()))
 			return;
 		e.setGui(fake_menu);
 	}
@@ -44,9 +44,9 @@ public class GuiHandler {
 	{	
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
-		IMenu menu = MenuRegistry.getCurrentMenu();
-		MenuRegistry.open(menu);
-		e.setGui(MenuRegistry.getOrCreateGui());
+		IMenu menu = MenuRegistry.INSTANCE.getMenu();
+		MenuRegistry.INSTANCE.open(menu);
+		e.setGui(MenuRegistry.INSTANCE.getGuiOpen());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -59,9 +59,9 @@ public class GuiHandler {
 	@SubscribeEvent
 	public void menuClose(GuiEvent.Close event)
 	{
-		if(MenuRegistry.getCurrentGui() == event.gui)
+		if(MenuRegistry.INSTANCE.getGui() == event.gui)
 		{
-			MenuRegistry.close(MenuRegistry.getCurrentMenu());
+			MenuRegistry.INSTANCE.close(MenuRegistry.INSTANCE.getMenu());
 		}
 	}
 	
@@ -71,11 +71,11 @@ public class GuiHandler {
 	@SubscribeEvent
 	public void guiInit(GuiScreenEvent.InitGuiEvent.Post e)
 	{
-		if(e.getGui() != MenuRegistry.getCurrentGui())
+		if(e.getGui() != MenuRegistry.INSTANCE.getGui())
 			return;
-		if(MenuRegistry.hasButtons())
+		if(MenuRegistry.INSTANCE.hasButtons())
 		{
-			IMenu menu = MenuRegistry.getCurrentMenu();
+			IMenu menu = MenuRegistry.INSTANCE.getMenu();
 			List<GuiButton> li = e.getButtonList();
 			GuiButton prev = menu.getPrevious();
 			GuiButton next = menu.getNext();
@@ -89,10 +89,10 @@ public class GuiHandler {
 	@SubscribeEvent
 	public void buttonClick(GuiScreenEvent.ActionPerformedEvent.Pre e)
 	{
-		if(e.getGui() != MenuRegistry.getCurrentGui())
+		if(e.getGui() != MenuRegistry.INSTANCE.getGui())
 			return;
 		
-		IMenu menu = MenuRegistry.getCurrentMenu();
+		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		GuiButton button = e.getButton();
 		GuiButton previous = menu.getPrevious();
 		GuiButton next = menu.getNext();
@@ -100,12 +100,12 @@ public class GuiHandler {
 		//modders may have a custom button id so support whatever button id they may have
 		if(previous != null && previous.id == button.id)
 		{
-			MenuRegistry.advancePreviousMenu();
+			MenuRegistry.INSTANCE.previous();
 			MLConfig.saveMenuIndex();//keep the save separate so modders can switch multiple times without lag
 		}
 		else if(next != null && next.id == button.id)
 		{
-			MenuRegistry.advanceNextMenu();
+			MenuRegistry.INSTANCE.next();
 			MLConfig.saveMenuIndex();
 		}
 	}

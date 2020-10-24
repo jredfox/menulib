@@ -118,7 +118,7 @@ public class MLConfig {
 
 	public static void saveMenuIndex()
 	{
-		saveMenuIndex(MenuRegistry.getCurrentMenu().getId());
+		saveMenuIndex(MenuRegistry.INSTANCE.getMenu().getId());
 	}
 	
 	public static void saveMenuIndex(ResourceLocation loc) 

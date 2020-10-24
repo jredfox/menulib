@@ -39,7 +39,7 @@ public class MusicPlayerHandler implements ITick{
 		}
 		else if(state == MusicState.MENU)
 		{
-			MenuRegistry.getCurrentMenu().getMusicPlayer().tick();
+			MenuRegistry.INSTANCE.getMenu().getMusicPlayer().tick();
 		}
 		else if(state == MusicState.GUI)
 		{
@@ -81,7 +81,7 @@ public class MusicPlayerHandler implements ITick{
 	public MusicState getState() 
 	{
 		GuiScreen gui = this.mc.currentScreen;
-		return this.mc.world != null ? (gui instanceof IMusicPlayerHolder ? MusicState.GUI : MusicState.GAME) : (gui instanceof IMusicPlayerHolder && gui != MenuRegistry.getCurrentGui() ? MusicState.GUI : MusicState.MENU);
+		return this.mc.world != null ? (gui instanceof IMusicPlayerHolder ? MusicState.GUI : MusicState.GAME) : (gui instanceof IMusicPlayerHolder && gui != MenuRegistry.INSTANCE.getGui() ? MusicState.GUI : MusicState.MENU);
 	}
 
 	@Override
