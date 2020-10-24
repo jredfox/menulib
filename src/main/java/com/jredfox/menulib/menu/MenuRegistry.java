@@ -216,14 +216,12 @@ public class MenuRegistry {
 	
 	public static void open(IMenu menu)
 	{
-//		System.out.println("opening:" + menu.getId());
 		menu.open();
 		MinecraftForge.EVENT_BUS.post(new MenuEvent.Open(menu));
 	}
 	
 	public static void switchMenu(IMenu menu)
 	{
-//		System.out.println("switching:" + menu.getId());
 		menu.switchMenu();
 		MinecraftForge.EVENT_BUS.post(new MenuEvent.SwitchMenu(menu));
 	}
