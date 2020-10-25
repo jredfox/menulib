@@ -1,37 +1,39 @@
 package net.minecraft.client;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
-import com.jredfox.menulib.coremod.MLCoreConfig;
+import com.jredfox.menulib.menu.IMenu;
+import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.misc.NumberUtil;
 
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.world.World;
 
 public class Minecraft{
 	
 	public GameSettings gameSettings;
+	public GuiScreen currentScreen;
+	public World world;
 
 	/**
 	 * if locked will be what the user configures else will be capped at 30 or higher depending on the game settings
 	 */
 	public int getMenuFrames() 
-        {
-    	   IMenu menu = MenuRegistry.getCurrentMenu();
-    	   int frames = menu != null ? menu.getFrames() : -1;
-    	   return frames > -1 ? frames : NumberUtil.capMin(this.gameSettings.limitFramerate, 30);
+    {
+		IMenu menu = MenuRegistry.INSTANCE.getMenu();
+    	int frames = menu != null ? menu.getFrames() : -1;
+    	return frames > -1 ? frames : NumberUtil.capMin(this.gameSettings.limitFramerate, 30);
 	}
 
 	public static Minecraft getMinecraft() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void displayGuiScreen(GuiFakeMenu fakeMenu) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public SoundHandler getSoundHandler() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

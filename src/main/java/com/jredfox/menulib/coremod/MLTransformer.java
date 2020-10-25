@@ -31,7 +31,7 @@ public class MLTransformer implements IClassTransformer{
 	
     public static final List<String> clazzes = (List<String>)JavaUtil.<String>asArray(new Object[]
     {
-    	"net.minecraft.client.Minecraft#",
+    	"net.minecraft.client.Minecraft",
    		"net.minecraft.client.audio.MusicTicker"
     });
     

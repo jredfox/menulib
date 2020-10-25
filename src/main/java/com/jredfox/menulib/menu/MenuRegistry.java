@@ -48,11 +48,7 @@ public class MenuRegistry
 		int index = this.getIndex() + 1;
 		if(index == this.menus.size())
 			index = 0;
-		this.close(this.menu);
-		this.switchMenu(this.menu);
-		this.menu = this.menus.get(index);
-		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
+		this.setMenu(index);
 	}
 	
 	public void previous()
@@ -60,16 +56,21 @@ public class MenuRegistry
 		int index = this.getIndex() - 1;
 		if(index == -1)
 			index = this.menus.size() - 1;
-		this.close(this.menu);
-		this.switchMenu(this.menu);
-		this.menu = this.menus.get(index);
-		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
+		this.setMenu(index);
 	}
 	
 	public int getIndex() 
 	{
 		return this.menus.indexOf(this.menu);
+	}
+	
+	public void setMenu(int index) 
+	{
+		this.close(this.menu);
+		this.switchMenu(this.menu);
+		this.menu = this.menus.get(index);
+		Minecraft.getMinecraft().getSoundHandler().stopSounds();
+		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 	
 	public boolean isMenu(GuiScreen gui)
