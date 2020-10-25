@@ -45,6 +45,8 @@ public class GuiHandler {
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
+		if(!menu.isEnabled())
+			throw new RuntimeException("cannot display a disabled IMenu:" + menu.getId() + " why are you not using MenuRegistry methods?");
 		MenuRegistry.INSTANCE.open(menu);
 		e.setGui(MenuRegistry.INSTANCE.getGuiOpen());
 	}
