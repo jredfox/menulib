@@ -24,6 +24,8 @@ public class MLTransformerCompat implements IClassTransformer{
 	@Override
 	public byte[] transform(String ob, String name, byte[] bytes) 
 	{
+		if(bytes == null)
+			return null;
 		try
 		{
 		if(name.equals("lumien.custommainmenu.handler.CMMEventHandler"))

@@ -46,7 +46,6 @@ public class CMMJsonRegistry {
 		{
 			File mainmenu = new File(MLConfig.cfgRoot.getParent(), "CustomMainMenu/mainmenu.json");
 			CMMJsonRegistry.fire(mainmenu);
-			CMMUtil.reload();
 			CMMJsonRegistry.reloadFlag = false;
 		}
 	}

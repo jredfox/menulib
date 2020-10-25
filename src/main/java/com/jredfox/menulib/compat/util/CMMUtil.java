@@ -16,7 +16,6 @@ public class CMMUtil {
 	public static Object INSTANCE = ReflectionUtil.getObject(null, customMainMenu, "INSTANCE");
 	public static Method reload = ReflectionUtil.getMethod(customMainMenu, "reload");
 	public static Method getGui = ReflectionUtil.getMethod(ReflectionUtil.classForName("lumien.custommainmenu.configuration.Config"), "getGUI", String.class);
-	public static ModProxy proxy;
 	
 	public static void reload()
 	{
@@ -48,13 +47,6 @@ public class CMMUtil {
 			t.printStackTrace();
 		}
 		return null;
-	}
-
-	public static ModProxy getProxy() 
-	{
-		if(proxy == null)
-			proxy = new ModProxy("custommainmenu");
-		return proxy;
 	}
 
 }

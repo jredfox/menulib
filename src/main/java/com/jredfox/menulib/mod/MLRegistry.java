@@ -18,6 +18,7 @@ import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
 import com.jredfox.menulib.menu.Menu;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.proxy.ModProxy;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,8 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MLRegistry {
+	
+	public static ModProxy proxyCMM = new ModProxy("custommainmenu");
 	
 	public static void run()
 	{
@@ -56,9 +59,9 @@ public class MLRegistry {
 			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
 		if(Loader.isModLoaded("thebetweenlands"))
 			MenuRegistry.INSTANCE.register(new MenuTBL());
-		if(CMMUtil.getProxy().isLoaded)
+		if(proxyCMM.isLoaded)
 		{
-//			MenuRegistry.INSTANCE.register(new MenuCMM());
+			MenuRegistry.INSTANCE.register(new MenuCMM());
 			CMMJsonRegistry.registry.add(new MLCMMJson());
 		}
 	}
@@ -96,7 +99,7 @@ public class MLRegistry {
 
 	public static void postCompat()
 	{
-		if(CMMUtil.getProxy().isLoaded)
+		if(proxyCMM.isLoaded)
 		{
 			CMMJsonRegistry.checkReload();
 		}

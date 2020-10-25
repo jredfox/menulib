@@ -22,6 +22,7 @@ public class MLMod {
 	public void preinit(FMLPreInitializationEvent event)
 	{	
 		MLRegistry.run();
+		MenuRegistry.INSTANCE.menus.get(0).setEnabled(false);
 	}
 	
 	@EventHandler

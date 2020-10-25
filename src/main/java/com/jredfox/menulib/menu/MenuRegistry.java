@@ -13,6 +13,8 @@ import net.minecraft.client.gui.GuiScreen;
 public class MenuRegistry
 {
 	public IMenu menu;
+	public List<IMenu> coded;
+	public List<IMenu> userAdded;
 	public List<IMenu> menus = new ArrayList();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -29,10 +31,7 @@ public class MenuRegistry
 	
 	public void update()
 	{
-		if(!this.menu.isEnabled())
-		{
-			this.previous();
-		}
+		
 	}
 
 	public GuiScreen getGui()
@@ -103,15 +102,7 @@ public class MenuRegistry
 
 	public void load()
 	{
-		this.menu = this.getFirst();
-	}
-	
-	public IMenu getFirst()
-	{
-		for(IMenu m : this.menus)
-			if(m.isEnabled())
-				return m;
-		return null;
+		this.menu = this.menus.get(0);
 	}
 
 	public void open(IMenu menu) 
