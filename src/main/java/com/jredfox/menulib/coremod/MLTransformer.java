@@ -24,7 +24,11 @@ import com.evilnotch.lib.asm.FMLCorePlugin;
 import com.evilnotch.lib.asm.classwriter.MCWriter;
 import com.evilnotch.lib.asm.util.ASMHelper;
 import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.menulib.menu.IMenu;
+import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.misc.NumberUtil;
 
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 public class MLTransformer implements IClassTransformer{
@@ -50,7 +54,7 @@ public class MLTransformer implements IClassTransformer{
 				switch (index)
 				{
 					case 0:
-						transformFramerate(node);
+						transformFramerate(name, node);
 					break;
 					
 					case 1:
@@ -72,10 +76,11 @@ public class MLTransformer implements IClassTransformer{
 	 * patches the framerate to be equal to the game instead of locking it at 30 always
 	 * @throws IOException 
 	 */
-	public void transformFramerate(ClassNode classNode) throws IOException 
+	public void transformFramerate(String name, ClassNode classNode) throws IOException 
 	{
 		//add getMenuFrames so minecraft can use them later
-		MethodNode mainmenu = ASMHelper.addMethod(classNode, getInputBase() + "Minecraft", "getMenuFrames", "()I");
+		MethodNode mainmenu = ASMHelper.addMethod(classNode, "com/jredfox/menulib/coremod/gen/Methods.class", "getMenuFrames", "()I");
+		ASMHelper.patchMethod(mainmenu, name, "com/jredfox/menulib/coremod/gen/Methods");
 		
 		//start finding the injection point to change the 30 return value to a method call "getMenuFrames"
 		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");

@@ -13,7 +13,6 @@ import net.minecraft.client.gui.GuiScreen;
 public class MenuRegistry
 {
 	public IMenu menu;
-	public IMenu previous;
 	public List<IMenu> menus = new ArrayList();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -28,11 +27,14 @@ public class MenuRegistry
 		return this.menu;
 	}
 	
-	public IMenu getPrevious()
+	public void update()
 	{
-		return this.previous;
+		if(!this.menu.isEnabled())
+		{
+			this.previous();
+		}
 	}
-	
+
 	public GuiScreen getGui()
 	{
 		return this.getMenu().get();
@@ -69,10 +71,15 @@ public class MenuRegistry
 		this.close(this.menu);
 		this.switchMenu(this.menu);
 		this.menu = this.menus.get(index);
+		this.display();
+	}
+	
+	public void display()
+	{
 		Minecraft.getMinecraft().getSoundHandler().stopSounds();
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
-	
+
 	public boolean isMenu(GuiScreen gui)
 	{
 		if(gui == null) 
@@ -87,7 +94,7 @@ public class MenuRegistry
 	}
 	
 	/**
-	 * should the event handler replace the current gui on open
+	 * should the gui event handler replace the current gui on open
 	 */
 	public boolean shouldReplace(GuiScreen gui)
 	{
@@ -96,7 +103,15 @@ public class MenuRegistry
 
 	public void load()
 	{
-		this.menu = this.menus.get(0);
+		this.menu = this.getFirst();
+	}
+	
+	public IMenu getFirst()
+	{
+		for(IMenu m : this.menus)
+			if(m.isEnabled())
+				return m;
+		return null;
 	}
 
 	public void open(IMenu menu) 
@@ -114,7 +129,7 @@ public class MenuRegistry
 		menu.switchMenu();
 	}
 
-	public boolean hasButtons()
+	public boolean isBrowsable() 
 	{
 		return this.menus.size() > 1;
 	}

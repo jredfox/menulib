@@ -73,7 +73,7 @@ public class GuiHandler {
 	{
 		if(e.getGui() != MenuRegistry.INSTANCE.getGui())
 			return;
-		if(MenuRegistry.INSTANCE.hasButtons())
+		if(MenuRegistry.INSTANCE.isBrowsable())
 		{
 			IMenu menu = MenuRegistry.INSTANCE.getMenu();
 			List<GuiButton> li = e.getButtonList();

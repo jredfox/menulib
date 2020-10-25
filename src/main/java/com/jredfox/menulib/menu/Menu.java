@@ -22,8 +22,9 @@ public class Menu implements IMenu {
 	public int frames;
 	
 	//objects
-	public GuiScreen gui;
-	public Constructor ctr;//cache the constructor
+	protected GuiScreen gui;
+	protected Constructor ctr;//cache the constructor
+	protected boolean enabled = true;
 	
 	public Menu(ResourceLocation id, Class<? extends GuiScreen> guiClass)
 	{
@@ -94,6 +95,19 @@ public class Menu implements IMenu {
 	public void switchMenu()
 	{
 		this.gui = null;
+	}
+	
+	@Override
+	public boolean isEnabled() 
+	{
+		return this.enabled;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) 
+	{
+		this.enabled = enabled;
+		MenuRegistry.INSTANCE.update();
 	}
 	
 	@Override

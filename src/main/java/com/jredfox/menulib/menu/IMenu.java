@@ -39,6 +39,14 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void switchMenu();
 	/**
+	 * is your menu enabled
+	 */
+	public boolean isEnabled();
+	/**
+	 * make your menu enabled or disabled
+	 */
+	public void setEnabled(boolean enabled);
+	/**
 	 * setting this to above -1 will result in a fixed framerate rather then whatever the game values are set to
 	 */
 	public int getFrames();
