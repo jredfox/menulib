@@ -49,9 +49,7 @@ public class MenuRegistry
 	{
 		IMenu nextMenu = this.menus.get(index);
 		if(!nextMenu.isEnabled())
-		{
 			throw new RuntimeException("cannot set index to a disabled IMenu:" + nextMenu.getId());
-		}
 		this.close(this.menu);
 		this.switchMenu(this.menu);
 		this.menu = nextMenu;
