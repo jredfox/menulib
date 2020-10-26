@@ -107,7 +107,7 @@ public class Menu implements IMenu {
 	public void setEnabled(boolean enabled) 
 	{
 		this.enabled = enabled;
-		MenuRegistry.INSTANCE.update();
+		MenuRegistry.INSTANCE.update(this);
 	}
 	
 	@Override
