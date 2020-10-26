@@ -104,22 +104,26 @@ public class MenuRegistry
 	{
 		if(!menu.isEnabled())
 		{
-			this.menus.remove(menu);
 			if(this.isDisplaying(menu))
 			{
 				IMenu index = this.getPrevious();
 				if(index == null)
 					index = this.getNext();
+				this.menus.remove(menu);
 				this.setMenu(index);
+			}
+			else
+			{
+				this.menus.remove(menu);
 			}
 		}
 		else if(!this.menus.contains(menu))
 		{
-			this.menus.add(this.getReAddedIndex(menu), menu);
+			this.menus.add(this.getAddedIndex(menu), menu);
 		}
 	}
 	
-	public int getReAddedIndex(IMenu index)
+	public int getAddedIndex(IMenu index)
 	{
 		for(int i = this.registry.indexOf(index) - 1; i >= 0 ; i--)
 		{
