@@ -39,21 +39,13 @@ public class MenuRegistry
 	{
 		return this.getGui() != null ? this.getGui() : this.getMenu().create();
 	}
-
-	public int getIndex() 
-	{
-		return this.menus.indexOf(this.menu);
-	}
 	
-	public void setMenu(int index) 
+	/**
+	 * should the gui event handler replace the current gui on open
+	 */
+	public boolean shouldReplace(GuiScreen gui)
 	{
-		IMenu nextMenu = this.menus.get(index);
-		if(!nextMenu.isEnabled())
-			throw new RuntimeException("cannot set index to a disabled IMenu:" + nextMenu.getId());
-		this.close(this.menu);
-		this.switchMenu(this.menu);
-		this.menu = nextMenu;
-		this.display();
+		return gui instanceof GuiMainMenu || this.isMenu(gui);
 	}
 
 	public boolean isMenu(GuiScreen gui)
@@ -67,14 +59,6 @@ public class MenuRegistry
 				return true;
 		}
 		return false;
-	}
-	
-	/**
-	 * should the gui event handler replace the current gui on open
-	 */
-	public boolean shouldReplace(GuiScreen gui)
-	{
-		return gui instanceof GuiMainMenu || this.isMenu(gui);
 	}
 
 	public void open(IMenu menu) 
@@ -97,6 +81,7 @@ public class MenuRegistry
 		return this.size() > 1;
 	}
 	
+	//START WIP CODE________________________________
 	public int size()
 	{
 		int size = 0;
@@ -106,13 +91,12 @@ public class MenuRegistry
 		return size;
 	}
 
-	//START WIP CODE________________________________
 	public void load()
 	{
 		this.menus.clear();
 		this.menus.addAll(this.coded);
 		this.loadUser();
-		this.menu = this.menus.get(this.getFirstIndex());
+		this.menu = this.getFirst();
 	}
 
 	public void loadUser()
@@ -125,28 +109,50 @@ public class MenuRegistry
 	 */
 	public void update()
 	{
-		if(this.menu != null && !this.menu.isEnabled() && this.mc.currentScreen == this.getGui())
+		if(this.isDisplaying() && !this.menu.isEnabled())
 		{
-			int index = this.getPreviousIndex();
-			if(index == -1)
-				index = this.getNextIndex();
+			IMenu index = this.getPrevious();
+			if(index == null)
+				index = this.getNext();
 			this.setMenu(index);
 		}
 	}
 	
+	public boolean isDisplaying()
+	{
+		return this.menu != null &&  this.menu.get() == this.mc.currentScreen;
+	}
+	
+	public int getIndex() 
+	{
+		return this.menus.indexOf(this.menu);
+	}
+	
+	public void setMenu(IMenu nextMenu) 
+	{
+		if(!nextMenu.isEnabled())
+			throw new RuntimeException("cannot set index to a disabled IMenu:" + nextMenu.getId());
+		else if(!this.menus.contains(nextMenu))
+			throw new RuntimeException("an unregistred IMenu has been attempted to be set to the current menu:" + nextMenu.getId());
+		this.close(this.menu);
+		this.switchMenu(this.menu);
+		this.menu = nextMenu;
+		this.display();
+	}
+	
 	public void next()
 	{
-		int index = this.getNextIndex();
-		if(index == -1)
-			index = this.getFirstIndex();
+		IMenu index = this.getNext();
+		if(index == null)
+			index = this.getFirst();
 		this.setMenu(index);
 	}
 	
 	public void previous()
 	{
-		int index = this.getPreviousIndex();
-		if(index == -1)
-			index = this.getLastIndex();
+		IMenu index = this.getPrevious();
+		if(index == null)
+			index = this.getLast();
 		this.setMenu(index);
 	}
 	
@@ -156,42 +162,45 @@ public class MenuRegistry
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 
-	public int getPreviousIndex() 
+	public IMenu getPrevious() 
 	{
 		for(int i = this.getIndex() - 1; i >= 0 ; i--)
 		{
-			if(this.menus.get(i).isEnabled())
-				return i;
+			IMenu menu = this.menus.get(i);
+			if(menu.isEnabled())
+				return menu;
 		}
-		return -1;
+		return null;
 	}
 	
-	public int getNextIndex() 
+	public IMenu getNext() 
 	{
 		for(int i = this.getIndex() + 1; i < this.menus.size() ; i++)
 		{
-			if(this.menus.get(i).isEnabled())
-				return i;
+			IMenu menu = this.menus.get(i);
+			if(menu.isEnabled())
+				return menu;
 		}
-		return -1;
+		return null;
 	}
 	
-	public int getLastIndex() 
+	public IMenu getLast() 
 	{
 		for(int i = this.menus.size() - 1; i >= 0; i--)
 		{
-			if(this.menus.get(i).isEnabled())
-				return i;
+			IMenu menu = this.menus.get(i);
+			if(menu.isEnabled())
+				return menu;
 		}
-		return -1;
+		return null;
 	}
 
-	public int getFirstIndex()
+	public IMenu getFirst()
 	{
 		for(IMenu m : this.menus)
 			if(m.isEnabled())
-				return this.menus.indexOf(m);
-		return -1;
+				return m;
+		return null;
 	}
 	
 }
