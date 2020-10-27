@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 public class MenuRegistry
 {
 	public IMenu menu;
+	public int index;
 	public List<IMenu> registry = new ArrayList();
 	public List<IMenu> menus = new ArrayList();
 	public List<IMenu> user = new ArrayList();
@@ -33,6 +34,11 @@ public class MenuRegistry
 	public IMenu getMenu()
 	{
 		return this.menu;
+	}
+	
+	public int getIndex()
+	{
+		return this.index;
 	}
 
 	public GuiScreen getGui()
@@ -65,6 +71,14 @@ public class MenuRegistry
 		}
 		return false;
 	}
+	
+	public IMenu getMenu(ResourceLocation id)
+	{
+		for(IMenu m : this.registry)
+			if(m.getId().equals(id))
+				return m;
+		return null;
+	}
 
 	public void open(IMenu menu) 
 	{
@@ -86,40 +100,84 @@ public class MenuRegistry
 		return this.menus.size() > 1;
 	}
 	
+	public void previous()
+	{
+		IMenu menu = this.getPrevious();
+		if(menu == null)
+			menu = this.getLast();
+		this.setMenu(menu);
+	}
+
+	public void next()
+	{
+		IMenu menu = this.getNext();
+		if(menu == null)
+			menu = this.getFirst();
+		this.setMenu(menu);
+	}
+	
+	public void setMenu(IMenu nextMenu) 
+	{
+		this.sanityCheck(nextMenu);
+		this.close(this.menu);
+		this.switchMenu(this.menu);
+		this.menu = nextMenu;
+		this.index = this.menus.indexOf(this.menu);
+		this.display();
+	}
+	
+	public void sanityCheck(IMenu nextMenu)
+	{
+		if(!nextMenu.isEnabled())
+			throw new RuntimeException("cannot set index to a disabled IMenu:" + nextMenu.getId());
+		else if(!this.menus.contains(nextMenu))
+			throw new RuntimeException("cannot set index to an unregistered IMenu:" + nextMenu.getId());
+	}
+
+	/**
+	 * stops all sounds and displays a fake gui menu so an IMenu will be displayed
+	 */
+	public void display()
+	{
+		Minecraft.getMinecraft().getSoundHandler().stopSounds();
+		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
+	}
+	
+	public IMenu getFirst() 
+	{
+		return this.menus.get(0);
+	}
+	
+	public IMenu getLast() 
+	{
+		return this.menus.get(this.menus.size() - 1);
+	}
+	
+	public IMenu getPrevious()
+	{
+		int index = this.getIndex() - 1;
+		return index == -1 ? null : this.menus.get(index);
+	}
+	
+	public IMenu getNext()
+	{
+		int index = this.getIndex() + 1;
+		return index == this.menus.size() ? null : this.menus.get(index);
+	}
+	
 	//START WIP CODE________________________________
 	
 	public void load()
 	{
 		this.menus.clear();
 		for(IMenu m : this.registry)
-		{
 			if(m.isEnabled())
-			{
 				this.menus.add(m);
-			}
-		}
 		this.menu = this.getFirst();
 	}
 	
 	/**
-	 * set an IMenu enabled even if it's disabled already.
-	 */
-	public void setMenuEnabled(ResourceLocation id, boolean enabled)
-	{
-		getMenu(id).setEnabled(enabled);
-	}
-	
-	public IMenu getMenu(ResourceLocation id)
-	{
-		for(IMenu m : this.registry)
-			if(m.getId().equals(id))
-				return m;
-		return null;
-	}
-	
-	/**
-	 * if the menu is disabled and displaying will update the the nearest left menu if none is found the nearest right menu
-	 * if the menu is enabled and not on the menu list it will re-add them based on the configed index
+	 * sync enabling/disabling a menu
 	 */
 	public void update(IMenu menu)
 	{
@@ -146,8 +204,27 @@ public class MenuRegistry
 		}
 	}
 	
+	public boolean isDisplaying(IMenu menu)
+	{
+		return menu.get() != null && menu.get() == this.mc.currentScreen;
+	}
+	
 	/**
-	 * sync the button visibility and being enabled to whether or not the main menu is browsable
+	 * grabs the index from the registry and then assigns it to the enabled menu list
+	 */
+	public int getAddedIndex(IMenu index)
+	{
+		for(int i = this.registry.indexOf(index) - 1; i >= 0 ; i--)
+		{
+			IMenu m = this.registry.get(i);
+			if(m.isEnabled())
+				return this.menus.indexOf(m) + 1;
+		}
+		return 0;
+	}
+	
+	/**
+	 * sync the button visibility and being enabled to whether or not the main menu is browseable
 	 */
 	public void syncButtons(IMenu menu) 
 	{
@@ -165,89 +242,6 @@ public class MenuRegistry
 		boolean enabled = this.isBrowsable();
 		b.enabled = enabled;
 		b.visible = enabled;
-	}
-
-	/**
-	 * grabs the index from the registry and then assigns it to the enabled menu list
-	 */
-	public int getAddedIndex(IMenu index)
-	{
-		for(int i = this.registry.indexOf(index) - 1; i >= 0 ; i--)
-		{
-			IMenu m = this.registry.get(i);
-			if(m.isEnabled())
-				return this.menus.indexOf(m) + 1;
-		}
-		return 0;
-	}
-
-	public boolean isDisplaying(IMenu menu)
-	{
-		return menu.get() != null && menu.get() == this.mc.currentScreen;
-	}
-	
-	public void setMenu(IMenu nextMenu) 
-	{
-		this.sanityCheck(nextMenu);
-		this.close(this.menu);
-		this.switchMenu(this.menu);
-		this.menu = nextMenu;
-		this.display();
-	}
-	
-	public void sanityCheck(IMenu nextMenu)
-	{
-		if(!nextMenu.isEnabled())
-			throw new RuntimeException("cannot set index to a disabled IMenu:" + nextMenu.getId());
-		else if(!this.menus.contains(nextMenu))
-			throw new RuntimeException("an unregistred IMenu has been attempted to be set to the current menu:" + nextMenu.getId());
-	}
-	
-	public void previous()
-	{
-		IMenu menu = this.getPrevious();
-		if(menu == null)
-			menu = this.getLast();
-		this.setMenu(menu);
-	}
-
-	public void next()
-	{
-		IMenu menu = this.getNext();
-		if(menu == null)
-			menu = this.getFirst();
-		this.setMenu(menu);
-	}
-	
-	public IMenu getPrevious()
-	{
-		int index = this.menus.indexOf(this.menu) - 1;
-		return index == -1 ? null : this.menus.get(index);
-	}
-	
-	public IMenu getNext()
-	{
-		int index = this.menus.indexOf(this.menu) + 1;
-		return index == this.menus.size() ? null : this.menus.get(index);
-	}
-
-	/**
-	 * stops all sounds and displays a fake gui menu so an IMenu will be displayed
-	 */
-	public void display()
-	{
-		Minecraft.getMinecraft().getSoundHandler().stopSounds();
-		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
-	}
-	
-	public IMenu getFirst() 
-	{
-		return this.menus.get(0);
-	}
-	
-	public IMenu getLast() 
-	{
-		return this.menus.get(this.menus.size() - 1);
 	}
 	
 }

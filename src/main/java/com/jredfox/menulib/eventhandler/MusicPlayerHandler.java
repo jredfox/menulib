@@ -33,7 +33,7 @@ public class MusicPlayerHandler implements ITick{
 		if(TickRegistry.isRightTickClient(20 * 10) && TickRegistry.tickCountClient != 0)
 		{
 //			MenuRegistry.INSTANCE.registry.get(2).setEnabled(true);
-			System.out.println(MenuRegistry.INSTANCE.menus);
+//			System.out.println(MenuRegistry.INSTANCE.menus);
 		}
 		MusicState state = this.getState();
 		this.updateState(state);

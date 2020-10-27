@@ -99,9 +99,9 @@ public class GuiHandler {
 		//modders may have a custom button id so support whatever button id they may have
 		if(previous != null && previous.id == button.id)
 		{
-			menu.setEnabled(false);
-//			MenuRegistry.INSTANCE.previous();
-//			MLConfig.saveMenuIndex();//keep the save separate so modders can switch multiple times without lag
+//			menu.setEnabled(false);
+			MenuRegistry.INSTANCE.previous();
+			MLConfig.saveMenuIndex();//keep the save separate so modders can switch multiple times without lag
 		}
 		else if(next != null && next.id == button.id)
 		{

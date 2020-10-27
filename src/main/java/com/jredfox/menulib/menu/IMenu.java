@@ -55,11 +55,11 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public IMusicPlayer getMusicPlayer();
 	/**
-	 * if this is null it won't be displayed
+	 * do not return a new button each getter call as IMenus need a direct link to sync browsing button data for enabling/disabling
 	 */
 	public GuiButton getPrevious();
 	/**
-	 * if this is null it won't be displayed
+	 * do not return a new button each getter call as IMenus need a direct link to sync browsing button data for enabling/disabling
 	 */
 	public GuiButton getNext();
 }
