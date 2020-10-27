@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.evilnotch.lib.util.JavaUtil;
+import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 public class MenuRegistry
@@ -51,7 +55,7 @@ public class MenuRegistry
 
 	public boolean isMenu(GuiScreen gui)
 	{
-		if(gui == null) 
+		if(gui == null)
 			return false;
 		
 		for(IMenu m : this.menus)
@@ -127,19 +131,42 @@ public class MenuRegistry
 				if(index == null)
 					index = this.getNext();
 				this.menus.remove(menu);
-				this.setMenu(index);
+				this.setMenu(index);//no need to sync here as that is done in the gui event handler when it switches a menu
 			}
 			else
 			{
 				this.menus.remove(menu);
+				this.syncButtons(menu);
 			}
 		}
 		else if(!this.menus.contains(menu))
 		{
 			this.menus.add(this.getAddedIndex(menu), menu);
+			this.syncButtons(menu);
 		}
 	}
 	
+	/**
+	 * sync the button visibility and being enabled to whether or not the main menu is browsable
+	 */
+	public void syncButtons(IMenu menu) 
+	{
+		this.syncButton(menu.getPrevious());
+		this.syncButton(menu.getNext());
+	}
+	
+	/**
+	 * sync the button visibility and being enabled to whether or not the main menu is browsable
+	 */
+	protected void syncButton(GuiButton b) 
+	{
+		if(b == null)
+			return;
+		boolean enabled = this.isBrowsable();
+		b.enabled = enabled;
+		b.visible = enabled;
+	}
+
 	/**
 	 * grabs the index from the registry and then assigns it to the enabled menu list
 	 */

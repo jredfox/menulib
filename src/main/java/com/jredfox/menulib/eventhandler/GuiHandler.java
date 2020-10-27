@@ -74,19 +74,17 @@ public class GuiHandler {
 	{
 		if(e.getGui() != MenuRegistry.INSTANCE.getGui())
 			return;
-		if(MenuRegistry.INSTANCE.isBrowsable())
-		{
-			IMenu menu = MenuRegistry.INSTANCE.getMenu();
-			List<GuiButton> li = e.getButtonList();
-			GuiButton prev = menu.getPrevious();
-			GuiButton next = menu.getNext();
-			if(prev != null)
-				li.add(prev);
-			if(next != null)
-				li.add(next);
-		}
+		IMenu menu = MenuRegistry.INSTANCE.getMenu();
+		List<GuiButton> li = e.getButtonList();
+		GuiButton prev = menu.getPrevious();
+		GuiButton next = menu.getNext();
+		MenuRegistry.INSTANCE.syncButtons(menu);
+		if(prev != null)
+			li.add(prev);
+		if(next != null)
+			li.add(next);
 	}
-	
+
 	@SubscribeEvent
 	public void buttonClick(GuiScreenEvent.ActionPerformedEvent.Pre e)
 	{

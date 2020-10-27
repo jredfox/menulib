@@ -66,10 +66,6 @@ public class MLRegistry {
 			CMMJsonRegistry.registry.add(new MLCMMJson());
 		}
 		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("aetherii:test"), GuiAetherii.class));
-		
-//		for(IMenu m : MenuRegistry.INSTANCE.registry)
-//			if(!m.getId().equals(new ResourceLocation("fossil:mineshaft")))
-//				m.setEnabled(false);
 	}
 	
 	/**
