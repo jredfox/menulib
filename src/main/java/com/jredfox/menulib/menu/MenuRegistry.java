@@ -20,8 +20,8 @@ public class MenuRegistry
 	public IMenu menu;
 	public int index;
 	public List<IMenu> registry = new ArrayList();
-	public List<IMenu> menus = new ArrayList();
 	public List<IMenu> user = new ArrayList();
+	public List<IMenu> menus = new ArrayList();
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -233,7 +233,7 @@ public class MenuRegistry
 	
 	/**
 	 * sync the button changes
-	 * sync the index incase you added/removed a menu from this.menus
+	 * sync the index incase you added/removed a menu from menus
 	 */
 	public void syncChange(IMenu menu) 
 	{
