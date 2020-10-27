@@ -9,6 +9,7 @@ import com.jredfox.menulib.eventhandler.GuiHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 
 public class MenuRegistry
 {
@@ -93,7 +94,23 @@ public class MenuRegistry
 				this.menus.add(m);
 			}
 		}
-		this.menu = this.menus.get(0);
+		this.menu = this.getFirst();
+	}
+	
+	/**
+	 * set an IMenu enabled even if it's disabled already.
+	 */
+	public void setMenuEnabled(ResourceLocation id, boolean enabled)
+	{
+		getMenu(id).setEnabled(enabled);
+	}
+	
+	public IMenu getMenu(ResourceLocation id)
+	{
+		for(IMenu m : this.registry)
+			if(m.getId().equals(id))
+				return m;
+		return null;
 	}
 	
 	/**
@@ -123,20 +140,23 @@ public class MenuRegistry
 		}
 	}
 	
+	/**
+	 * grabs the index from the registry and then assigns it to the enabled menu list
+	 */
 	public int getAddedIndex(IMenu index)
 	{
 		for(int i = this.registry.indexOf(index) - 1; i >= 0 ; i--)
 		{
-			IMenu m = this.menus.get(i);
+			IMenu m = this.registry.get(i);
 			if(m.isEnabled())
-				return i + 1;
+				return this.menus.indexOf(m) + 1;
 		}
 		return 0;
 	}
 
 	public boolean isDisplaying(IMenu menu)
 	{
-		return menu.get() == this.mc.currentScreen;
+		return menu.get() != null && menu.get() == this.mc.currentScreen;
 	}
 	
 	public void setMenu(IMenu nextMenu) 

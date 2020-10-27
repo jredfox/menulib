@@ -10,14 +10,15 @@ import com.jredfox.menulib.compat.event.CMMJsonRegistry;
 import com.jredfox.menulib.compat.eventhandler.MLCMMJson;
 import com.jredfox.menulib.compat.menu.MenuCMM;
 import com.jredfox.menulib.compat.menu.MenuTBL;
-import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.eventhandler.FrameHandler;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
+import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.Menu;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.misc.GuiAetherii;
 import com.jredfox.menulib.proxy.ModProxy;
 
 import net.minecraft.client.gui.GuiMainMenu;
@@ -64,6 +65,11 @@ public class MLRegistry {
 			MenuRegistry.INSTANCE.register(new MenuCMM());
 			CMMJsonRegistry.registry.add(new MLCMMJson());
 		}
+		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("aetherii:test"), GuiAetherii.class));
+		
+//		for(IMenu m : MenuRegistry.INSTANCE.registry)
+//			if(!m.getId().equals(new ResourceLocation("fossil:mineshaft")))
+//				m.setEnabled(false);
 	}
 	
 	/**

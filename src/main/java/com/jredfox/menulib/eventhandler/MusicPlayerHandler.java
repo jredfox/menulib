@@ -30,6 +30,11 @@ public class MusicPlayerHandler implements ITick{
 	@Override
 	public void tick()
 	{
+		if(TickRegistry.isRightTickClient(20 * 10) && TickRegistry.tickCountClient != 0)
+		{
+			MenuRegistry.INSTANCE.registry.get(0).setEnabled(false);
+			System.out.println(MenuRegistry.INSTANCE.menus);
+		}
 		MusicState state = this.getState();
 		this.updateState(state);
 		if(state == MusicState.GAME)

@@ -1,3 +1,10 @@
 
 src/main/java/net/minecraft/client/audio/MusicTicker.java
 src/main/java/lumien/custommainmenu/configuration/ConfigurationLoader.java
+src/main/resources/assets/menulib/textures/main-menu/aetherii_0.png
+src/main/resources/assets/menulib/textures/main-menu/aetherii_1.png
+src/main/resources/assets/menulib/textures/main-menu/aetherii_2.png
+src/main/resources/assets/menulib/textures/main-menu/aetherii_3.png
+src/main/resources/assets/menulib/textures/main-menu/aetherii_4.png
+src/main/resources/assets/menulib/textures/main-menu/aetherii_5.png
+src/main/java/com/jredfox/menulib/misc/GuiAetherii.java
