@@ -127,14 +127,6 @@ public class MenuRegistry
 		this.syncChange(this.menu);
 		this.display();
 	}
-	
-	/**
-	 * call this if you added / removed a menu from menus or even switched a menu
-	 */
-	public void syncIndex() 
-	{
-		this.index = this.menus.indexOf(this.menu);
-	}
 
 	public void sanityCheck(IMenu nextMenu)
 	{
@@ -199,7 +191,8 @@ public class MenuRegistry
 				if(prevMenu == null)
 					prevMenu = this.getNext();
 				this.menus.remove(menu);
-				this.setMenu(prevMenu);//syncChange is done in setMenu so you don't have to do it twice
+				this.syncIndex();//needs to sync the index even when it's removed because setting the men
+				this.setMenu(prevMenu);
 			}
 			else
 			{
@@ -244,9 +237,17 @@ public class MenuRegistry
 	}
 	
 	/**
+	 * call this if you added / removed a menu from menus or even switched a menu
+	 */
+	public void syncIndex() 
+	{
+		this.index = this.menus.indexOf(this.menu);
+	}
+	
+	/**
 	 * sync the button visibility and being enabled to whether or not the main menu is browsable
 	 */
-	protected void syncButton(GuiButton b) 
+	public void syncButton(GuiButton b) 
 	{
 		if(b == null)
 			return;
