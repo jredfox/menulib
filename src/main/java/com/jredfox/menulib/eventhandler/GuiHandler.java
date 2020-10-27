@@ -74,11 +74,11 @@ public class GuiHandler {
 	{
 		if(e.getGui() != MenuRegistry.INSTANCE.getGui())
 			return;
+		
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		List<GuiButton> li = e.getButtonList();
 		GuiButton prev = menu.getPrevious();
 		GuiButton next = menu.getNext();
-		MenuRegistry.INSTANCE.syncChange(menu);
 		if(prev != null)
 			li.add(prev);
 		if(next != null)
@@ -99,14 +99,11 @@ public class GuiHandler {
 		//modders may have a custom button id so support whatever button id they may have
 		if(previous != null && previous.id == button.id)
 		{
-			menu.setEnabled(false);
-//			MenuRegistry.INSTANCE.previous();
-//			MLConfig.saveMenuIndex();//keep the save separate so modders can switch multiple times without lag
+			MenuRegistry.INSTANCE.previous();
 		}
 		else if(next != null && next.id == button.id)
 		{
 			MenuRegistry.INSTANCE.next();
-			MLConfig.saveMenuIndex();
 		}
 	}
 

@@ -122,7 +122,7 @@ public class MenuRegistry
 		this.close(this.menu);
 		this.switchMenu(this.menu);
 		this.menu = nextMenu;
-		this.syncIndex();
+		this.syncChange(this.menu);
 		this.display();
 	}
 	
@@ -197,7 +197,7 @@ public class MenuRegistry
 				if(prevMenu == null)
 					prevMenu = this.getNext();
 				this.menus.remove(menu);
-				this.setMenu(prevMenu);//no need to sync here as that is done in the gui event handler when it switches a menu
+				this.setMenu(prevMenu);//syncChange is done in setMenu so you don't have to do it twice
 			}
 			else
 			{
@@ -232,8 +232,7 @@ public class MenuRegistry
 	}
 	
 	/**
-	 * sync the button changes
-	 * sync the index incase you added/removed a menu from menus
+	 * sync the buttons & index data
 	 */
 	public void syncChange(IMenu menu) 
 	{
