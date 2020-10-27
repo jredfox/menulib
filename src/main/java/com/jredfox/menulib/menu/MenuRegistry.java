@@ -19,6 +19,7 @@ public class MenuRegistry
 {
 	public IMenu menu;
 	public int index;
+	public IMenu previous;
 	public List<IMenu> registry = new ArrayList();
 	public List<IMenu> user = new ArrayList();
 	public List<IMenu> menus = new ArrayList();
@@ -121,6 +122,7 @@ public class MenuRegistry
 		this.sanityCheck(nextMenu);
 		this.close(this.menu);
 		this.switchMenu(this.menu);
+		this.previous = this.menu;
 		this.menu = nextMenu;
 		this.syncChange(this.menu);
 		this.display();

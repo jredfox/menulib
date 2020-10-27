@@ -45,5 +45,13 @@ public class MenuEvent extends Event{
 			super(menu);
 		}
 	}
+	
+	public static class SelectMenu extends MenuEvent 
+	{
+		public SelectMenu(IMenu menu) 
+		{
+			super(menu);
+		}
+	}
 
 }
