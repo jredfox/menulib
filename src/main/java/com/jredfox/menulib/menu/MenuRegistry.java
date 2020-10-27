@@ -122,10 +122,18 @@ public class MenuRegistry
 		this.close(this.menu);
 		this.switchMenu(this.menu);
 		this.menu = nextMenu;
-		this.index = this.menus.indexOf(this.menu);
+		this.syncIndex();
 		this.display();
 	}
 	
+	/**
+	 * call this if you added / removed a menu from menus or even switched a menu
+	 */
+	public void syncIndex() 
+	{
+		this.index = this.menus.indexOf(this.menu);
+	}
+
 	public void sanityCheck(IMenu nextMenu)
 	{
 		if(!nextMenu.isEnabled())
@@ -185,22 +193,22 @@ public class MenuRegistry
 		{
 			if(this.isDisplaying(menu))
 			{
-				IMenu index = this.getPrevious();
-				if(index == null)
-					index = this.getNext();
+				IMenu prevMenu = this.getPrevious();
+				if(prevMenu == null)
+					prevMenu = this.getNext();
 				this.menus.remove(menu);
-				this.setMenu(index);//no need to sync here as that is done in the gui event handler when it switches a menu
+				this.setMenu(prevMenu);//no need to sync here as that is done in the gui event handler when it switches a menu
 			}
 			else
 			{
 				this.menus.remove(menu);
-				this.syncButtons(menu);
+				this.syncChange(menu);
 			}
 		}
 		else if(!this.menus.contains(menu))
 		{
 			this.menus.add(this.getAddedIndex(menu), menu);
-			this.syncButtons(menu);
+			this.syncChange(menu);
 		}
 	}
 	
@@ -224,10 +232,12 @@ public class MenuRegistry
 	}
 	
 	/**
-	 * sync the button visibility and being enabled to whether or not the main menu is browseable
+	 * sync the button changes
+	 * sync the index incase you added/removed a menu from this.menus
 	 */
-	public void syncButtons(IMenu menu) 
+	public void syncChange(IMenu menu) 
 	{
+		this.syncIndex();
 		this.syncButton(menu.getPrevious());
 		this.syncButton(menu.getNext());
 	}
