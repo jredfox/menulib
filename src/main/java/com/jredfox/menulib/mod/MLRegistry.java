@@ -42,7 +42,7 @@ public class MLRegistry {
 	
 	public static void loadConfigs() 
 	{
-		MLConfig.load(new File(MLConfigCore.getHome(), "config"));
+		MLConfig.load();
 		MLConfigButton.load();
 	}
 

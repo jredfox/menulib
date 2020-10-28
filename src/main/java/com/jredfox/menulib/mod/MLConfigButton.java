@@ -2,6 +2,8 @@ package com.jredfox.menulib.mod;
 
 import java.io.File;
 
+import com.jredfox.menulib.coremod.MLConfigCore;
+
 import net.minecraftforge.common.config.Configuration;
 
 public class MLConfigButton {
@@ -30,7 +32,7 @@ public class MLConfigButton {
 	
 	public static void load()
 	{
-		Configuration config = new Configuration(new File(MLConfig.cfgRoot, "buttons.cfg"));
+		Configuration config = new Configuration(new File(MLConfigCore.menuLibHome, "buttons.cfg"));
 		config.load();
 		fancyPage = config.get("general","fancyPage",false).getBoolean();
 		previousId = config.get("general","previousId", previousId).getInt();

@@ -126,12 +126,6 @@ public class Menu implements IMenu {
 	public static final GuiBasicButton previousFancy = new GuiBasicButton(MLConfigButton.previousId,  MLConfigButton.fPreviousX, MLConfigButton.fPreviousY, MLConfigButton.fPreviousWidth, MLConfigButton.fPreviousHeight, "menulib.previousfancy.name");
 	public static final GuiBasicButton next = new GuiBasicButton(MLConfigButton.nextId,  MLConfigButton.nextX, MLConfigButton.nextY, MLConfigButton.nextWidth, MLConfigButton.nextHeight, "menulib.next.name");
 	public static final GuiBasicButton nextFancy = new GuiBasicButton(MLConfigButton.nextId, MLConfigButton.fNextX, MLConfigButton.fNextY, MLConfigButton.fNextWidth, MLConfigButton.fNextHeight, "menulib.nextfancy.name");
-
-	static
-	{
-		if(!MLConfig.isLoaded)
-			throw new RuntimeException("MLConfig cannot be hotloaded!");
-	}
 	
 	@Override
 	public GuiButton getPrevious() 

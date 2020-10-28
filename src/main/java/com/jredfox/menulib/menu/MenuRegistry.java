@@ -7,6 +7,7 @@ import java.util.List;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.eventhandler.GuiHandler;
+import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -123,9 +124,15 @@ public class MenuRegistry
 		this.close(this.menu);
 		this.switchMenu(this.menu);
 		this.previous = this.menu;
-		this.menu = nextMenu;
-		this.syncChange(this.menu);
+		this.setMenuDirect(nextMenu);
+		MLConfig.saveIndex();
 		this.display();
+	}
+	
+	public void setMenuDirect(IMenu menu) 
+	{
+		this.menu = menu;
+		this.syncChange(menu);
 	}
 
 	public void sanityCheck(IMenu nextMenu)
@@ -175,9 +182,14 @@ public class MenuRegistry
 		for(IMenu m : this.registry)
 			if(m.isEnabled())
 				this.menus.add(m);
-		this.menu = this.getFirst();
+		
+		IMenu cfgIndex = this.getMenu(MLConfig.menuIndex);
+		IMenu menu = cfgIndex != null ? cfgIndex : this.getFirst();
+		if(cfgIndex == null)
+			System.out.println("menuIndex null setting it to:" + menu);
+		this.setMenuDirect(menu);
 	}
-	
+
 	/**
 	 * sync enabling/disabling a menu
 	 */

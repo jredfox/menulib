@@ -10,10 +10,12 @@ import net.minecraftforge.common.config.Configuration;
 public class MLConfigCore {
 	
 	public static boolean debugFrames = false;//print the framerate for debug info
+	public static File menuLibHome;
 	
-	public static void loadConfig()
+	public static void load()
 	{
-		File filecfg = new File(getHome(), "config/" + MLReference.id + "/" + MLReference.id + "core.cfg");
+		menuLibHome = new File(getHome(), "config/" + MLReference.id);
+		File filecfg = new File(menuLibHome, MLReference.id + "core.cfg");
 		Configuration cfg = new Configuration(filecfg);
 		cfg.load();
 		debugFrames = cfg.get("general", "debugFrames", debugFrames).getBoolean();

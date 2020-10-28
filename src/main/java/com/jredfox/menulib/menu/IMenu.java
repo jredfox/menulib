@@ -45,7 +45,7 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public boolean isEnabled();
 	/**
-	 * NOTE: if your IMenu is disabled and displaying then MenuRegistry.index will be -1
+	 * set your enabled field and data then call MenuRegistry.update(this) when done
 	 */
 	public void setEnabled(boolean enabled);
 	/**
@@ -57,11 +57,13 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public IMusicPlayer getMusicPlayer();
 	/**
-	 * do not return a new button each getter call as IMenus need a direct link to sync browsing button data for enabling/disabling
+	 * the button going to to the next menu in reverse order
+	 * if you return a new button each call you need to manually call MenuRegistry.syncButton() before returning it
 	 */
 	public GuiButton getPrevious();
 	/**
-	 * do not return a new button each getter call as IMenus need a direct link to sync browsing button data for enabling/disabling
+	 * the button going to the next menu
+	 * if you return a new button each call you need to manually call MenuRegistry.syncButton() before returning it
 	 */
 	public GuiButton getNext();
 }
