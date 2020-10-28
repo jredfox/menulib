@@ -3,6 +3,7 @@ package com.jredfox.menulib.menu;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.evilnotch.lib.main.loader.LoaderMain;
 import com.evilnotch.lib.main.loader.LoadingStage;
@@ -32,8 +33,15 @@ public class MenuRegistry
 	
 	public void register(IMenu menu)
 	{
-		this.registry.remove(menu);
+		this.remove(menu);
 		this.registry.add(menu);
+		MLConfig.addId(menu.getId());
+	}
+	
+	public void remove(IMenu menu)
+	{
+		this.registry.remove(menu);
+		MLConfig.removeId(menu.getId());
 	}
 
 	public IMenu getMenu()
@@ -184,20 +192,58 @@ public class MenuRegistry
 	
 	public void load()
 	{
-		this.menus.clear();
-		this.registry.addAll(this.user);
-		
+		this.registerUserMenus();
+		this.reorder();
+		this.populateMenus();
+		this.setInitMenu();
+//		MLConfig.save();
+		this.isLoaded = true;
+	}
+
+	/**
+	 * regular registry allows for overriding mods for user menus
+	 */
+	public void registerUserMenus() 
+	{
+		for(IMenu m : this.user)
+			this.register(m);
+	}
+
+	/**
+	 * config order sync
+	 */
+	public void reorder()
+	{
+		Set<ResourceLocation> locs = MLConfig.order;
+		List<IMenu> list = new ArrayList(this.registry.size());
+		for(ResourceLocation id : locs)
+		{
+			IMenu m = this.getMenu(id);
+			if(m == null)
+			{
+				System.out.println("skipping null menu:" + id);
+				continue;
+			}
+			list.add(m);
+		}
+		this.registry = list;
+		System.out.println("re-ordered list:" + this.registry + "\n" + MLConfig.order);
+	}
+	
+	public void populateMenus() 
+	{
 		for(IMenu m : this.registry)
 			if(m.isEnabled())
 				this.menus.add(m);
-		
-		//config menuIndex
+	}
+
+	public void setInitMenu() 
+	{
 		IMenu cfgIndex = this.getMenu(MLConfig.menuIndex);
 		IMenu menu = cfgIndex != null && cfgIndex.isEnabled() ? cfgIndex : this.getFirst();
 		if(cfgIndex != menu)
-			System.out.println("menuIndex" + MLConfig.menuIndex + " is null or disabled setting it to:" + menu);
+			System.out.println("menuIndex \"" + cfgIndex + "\" is null or disabled setting it to:" + menu);
 		this.setMenuDirect(menu);
-		this.isLoaded = true;
 	}
 
 	/**
