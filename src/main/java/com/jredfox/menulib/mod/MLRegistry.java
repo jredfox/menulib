@@ -35,7 +35,7 @@ public class MLRegistry {
 	{
 		loadConfigs();
 		register();
-		registerCompat();
+//		registerCompat();
 		registerEvents();
 		registerCaps();
 	}

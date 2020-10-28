@@ -129,6 +129,9 @@ public class MenuRegistry
 		this.display();
 	}
 	
+	/**
+	 * do not use unless you know what you are doing
+	 */
 	public void setMenuDirect(IMenu menu) 
 	{
 		this.menu = menu;
@@ -178,15 +181,19 @@ public class MenuRegistry
 	
 	public void load()
 	{
+		//set coded menus here
 		this.menus.clear();
+		this.registry.addAll(this.user);
+		
 		for(IMenu m : this.registry)
 			if(m.isEnabled())
 				this.menus.add(m);
 		
+		//config menuIndex
 		IMenu cfgIndex = this.getMenu(MLConfig.menuIndex);
-		IMenu menu = cfgIndex != null ? cfgIndex : this.getFirst();
-		if(cfgIndex == null)
-			System.out.println("menuIndex null setting it to:" + menu);
+		IMenu menu = cfgIndex != null && cfgIndex.isEnabled() ? cfgIndex : this.getFirst();
+		if(cfgIndex != menu)
+			System.out.println("menuIndex" + MLConfig.menuIndex + " is null or disabled setting it to:" + menu);
 		this.setMenuDirect(menu);
 	}
 
