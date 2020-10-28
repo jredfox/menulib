@@ -3,8 +3,10 @@ package com.jredfox.menulib.mod;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.evilnotch.lib.api.ReflectionUtil;
@@ -25,12 +27,10 @@ import net.minecraftforge.common.config.Property;
 public class MLConfig {
 	
 	public static boolean displayNew = true;
-	/**
-	 * use MenuRegistry.getMenu().getId() instead and it may lead to a null IMenu anyways
-	 */
 	public static ResourceLocation menuIndex;
-	public static Set<ResourceLocation> orderIds;
 	public static ResourceLocation newMenu;
+	public static Set<ResourceLocation> orderIds;
+	public static Map<ResourceLocation, String> keepIds;
 	
 	public static void load()
 	{
@@ -42,6 +42,7 @@ public class MLConfig {
 		//WIP menu order & custom user menus
 		String[] menus = cfg.getStringList("menus", "general", new String[]{}, "format is modid:menu <full.path.to.class> = enabled");
 		orderIds = new LinkedHashSet(menus.length + 10);
+		keepIds = new LinkedHashMap();
 		for(String s : menus)
 		{
 			LineArray line = new LineArray(s);
@@ -50,6 +51,7 @@ public class MLConfig {
 				line.setHead(true);
 			if(line.hasStringMeta())
 			{
+				keepIds.put(line.getResourceLocation(), s.trim());
 				Class guiClass = ReflectionUtil.classForName(line.meta.trim());
 				if(guiClass == null)
 				{
@@ -69,15 +71,8 @@ public class MLConfig {
 	{
 		if(orderIds.add(id))
 		{
-			//TODO:
-		}
-	}
-	
-	public static void removeId(ResourceLocation id)
-	{
-		if(orderIds.remove(id))
-		{
-			//TODO:
+			newMenu = id;
+			System.out.println("newMenu:" + newMenu);
 		}
 	}
 	
@@ -107,8 +102,9 @@ public class MLConfig {
 		int index = 0;
 		for(ResourceLocation id : orderIds)
 		{
-			orderList[index] = id.toString();
-			index++;
+			String keepId = keepIds.get(id);
+			String line = keepId != null ? keepId : id.toString();
+			orderList[index++] = line;
 		}
 		cfg.get("general", "menus", "").set(orderList);
 		

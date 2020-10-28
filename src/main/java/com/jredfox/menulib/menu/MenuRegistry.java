@@ -1,13 +1,17 @@
 package com.jredfox.menulib.menu;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.evilnotch.lib.main.loader.LoaderMain;
 import com.evilnotch.lib.main.loader.LoadingStage;
 import com.evilnotch.lib.util.JavaUtil;
+import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.mod.MLConfig;
@@ -206,9 +210,13 @@ public class MenuRegistry
 			MLConfig.addId(m.getId());
 		
 		//sync the config to the registry
-		for(ResourceLocation id : MLConfig.orderIds)
-			if(this.getMenu(id) == null)
-				MLConfig.removeId(id);
+		Iterator<ResourceLocation> it = MLConfig.orderIds.iterator();
+		while(it.hasNext())
+		{
+			ResourceLocation id = it.next();
+			if(!MLConfig.keepIds.keySet().contains(id) && this.getMenu(id) == null)
+				it.remove();
+		}
 	}
 
 	/**
@@ -237,6 +245,7 @@ public class MenuRegistry
 			}
 			list.add(m);
 		}
+		System.out.println("before ordering:" + this.registry);
 		this.registry = list;
 		System.out.println("re-ordered list:" + this.registry);
 	}
@@ -254,6 +263,10 @@ public class MenuRegistry
 		IMenu menu = cfgIndex != null && cfgIndex.isEnabled() ? cfgIndex : this.getFirst();
 		if(cfgIndex != menu)
 			System.out.println("menuIndex \"" + cfgIndex + "\" is null or disabled setting it to:" + menu);
+		
+		IMenu newMenu = MLConfig.displayNew && MLConfig.newMenu != null ? this.getMenu(MLConfig.newMenu) : null;
+		if(newMenu != null)
+			menu = newMenu;
 		this.setMenuDirect(menu);
 	}
 

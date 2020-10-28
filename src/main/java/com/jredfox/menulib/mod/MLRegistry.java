@@ -59,7 +59,9 @@ public class MLRegistry {
 		if(Loader.isModLoaded("fossil"))
 			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
 		if(Loader.isModLoaded("thebetweenlands"))
-			MenuRegistry.INSTANCE.register(new MenuTBL());
+		{
+//			MenuRegistry.INSTANCE.register(new MenuTBL());
+		}
 		if(proxyCMM.isLoaded)
 		{
 			MenuRegistry.INSTANCE.register(new MenuCMM());

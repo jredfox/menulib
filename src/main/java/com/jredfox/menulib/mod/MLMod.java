@@ -14,7 +14,7 @@ public class MLMod {
 	
 	static
 	{
-		LoaderMain.currentLoadingStage = LoadingStage.PREINIT;//evil notch lib if bugged
+		LoaderMain.currentLoadingStage = LoadingStage.PREINIT;//fix evil notch lib
 	}
 	
 	@EventHandler
