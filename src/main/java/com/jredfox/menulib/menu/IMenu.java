@@ -41,6 +41,10 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void switchMenu();
 	/**
+	 * clear your gui field
+	 */
+	public void clear();
+	/**
 	 * is your menu enabled
 	 */
 	public boolean isEnabled();

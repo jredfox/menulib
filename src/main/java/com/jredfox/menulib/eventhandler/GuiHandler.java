@@ -1,9 +1,11 @@
 package com.jredfox.menulib.eventhandler;
 
+import java.awt.datatransfer.ClipboardOwner;
 import java.util.List;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
+import com.evilnotch.lib.minecraft.event.client.ClientDisconnectEvent;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.event.GuiEvent;
 import com.jredfox.menulib.event.MenuEvent;
@@ -19,8 +21,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 public class GuiHandler {
 	
@@ -105,6 +110,15 @@ public class GuiHandler {
 		{
 			MenuRegistry.INSTANCE.next();
 		}
+	}
+	
+	@SubscribeEvent
+	public void guiNullifyer(FMLNetworkEvent.ClientConnectedToServerEvent e)
+	{
+	    Minecraft.getMinecraft().addScheduledTask(() ->
+	    {
+	    	MenuRegistry.INSTANCE.getMenu().clear();
+	    });
 	}
 
 }

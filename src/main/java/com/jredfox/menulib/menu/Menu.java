@@ -94,6 +94,12 @@ public class Menu implements IMenu {
 	@Override
 	public void switchMenu()
 	{
+		this.clear();
+	}
+	
+	@Override
+	public void clear()
+	{
 		this.gui = null;
 	}
 	

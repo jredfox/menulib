@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.evilnotch.lib.main.loader.LoaderMain;
+import com.evilnotch.lib.main.loader.LoadingStage;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.eventhandler.GuiHandler;
@@ -21,8 +23,9 @@ public class MenuRegistry
 	public IMenu menu;
 	public int index;
 	public IMenu previous;
+	public boolean isLoaded;
 	public List<IMenu> registry = new ArrayList();
-	public List<IMenu> user = new ArrayList();
+	public List<IMenu> user = new ArrayList();//stored seperatly so it can be removed when reloading
 	public List<IMenu> menus = new ArrayList();
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
@@ -181,7 +184,6 @@ public class MenuRegistry
 	
 	public void load()
 	{
-		//set coded menus here
 		this.menus.clear();
 		this.registry.addAll(this.user);
 		
@@ -195,6 +197,7 @@ public class MenuRegistry
 		if(cfgIndex != menu)
 			System.out.println("menuIndex" + MLConfig.menuIndex + " is null or disabled setting it to:" + menu);
 		this.setMenuDirect(menu);
+		this.isLoaded = true;
 	}
 
 	/**
@@ -202,6 +205,8 @@ public class MenuRegistry
 	 */
 	public void update(IMenu menu)
 	{
+		if(!this.isLoaded)
+			return;
 		if(!menu.isEnabled())
 		{
 			if(this.isDisplaying(menu))

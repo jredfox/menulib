@@ -40,15 +40,14 @@ public class MLConfig {
 				line.setHead(true);
 			if(line.hasStringMeta())
 			{
-				Class guiClass = ReflectionUtil.classForName(line.meta);
+				Class guiClass = ReflectionUtil.classForName(line.meta.trim());
 				if(guiClass == null)
 				{
-					System.out.println("skipping registering:" + line);
+					System.out.println("skipping user menu:" + line);
 					continue;
 				}
 				IMenu menu = new Menu(line.getResourceLocation(), guiClass);
-				if(!line.getBoolean())
-					menu.setEnabled(false);
+				menu.setEnabled(line.getBoolean());
 				MenuRegistry.INSTANCE.user.add(menu);
 			}
 		}
