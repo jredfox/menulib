@@ -2,8 +2,6 @@ package com.jredfox.menulib.mod;
 
 import com.evilnotch.lib.main.loader.LoaderMain;
 import com.evilnotch.lib.main.loader.LoadingStage;
-import com.jredfox.menulib.compat.util.CMMUtil;
-import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;

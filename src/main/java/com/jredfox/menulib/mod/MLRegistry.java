@@ -35,7 +35,7 @@ public class MLRegistry {
 	{
 		loadConfigs();
 		register();
-//		registerCompat();
+		registerCompat();
 		registerEvents();
 		registerCaps();
 	}
@@ -56,16 +56,16 @@ public class MLRegistry {
 	
 	public static void registerCompat()
 	{
-		if(Loader.isModLoaded("fossil"))
-			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
-		if(Loader.isModLoaded("thebetweenlands"))
-			MenuRegistry.INSTANCE.register(new MenuTBL());
+//		if(Loader.isModLoaded("fossil"))
+//			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
+//		if(Loader.isModLoaded("thebetweenlands"))
+//			MenuRegistry.INSTANCE.register(new MenuTBL());
 		if(proxyCMM.isLoaded)
 		{
 			MenuRegistry.INSTANCE.register(new MenuCMM());
 			CMMJsonRegistry.registry.add(new MLCMMJson());
 		}
-		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("aetherii:test"), GuiAetherii.class));
+//		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("aetherii:test"), GuiAetherii.class));
 	}
 	
 	/**

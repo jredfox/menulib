@@ -15,6 +15,7 @@ import com.evilnotch.lib.main.loader.LoadingStage;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.compat.menu.MenuCMM;
 import com.jredfox.menulib.compat.util.CMMUtil;
+import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.mod.MLConfig;
 
 public class CMMJsonRegistry {
@@ -44,7 +45,7 @@ public class CMMJsonRegistry {
 	{
 		if(CMMJsonRegistry.reloadFlag)
 		{
-			File mainmenu = new File(MLConfig.cfgRoot.getParent(), "CustomMainMenu/mainmenu.json");
+			File mainmenu = new File(MLConfigCore.getHome() + "/config", "CustomMainMenu/mainmenu.json");
 			CMMJsonRegistry.fire(mainmenu);
 			CMMJsonRegistry.reloadFlag = false;
 		}
