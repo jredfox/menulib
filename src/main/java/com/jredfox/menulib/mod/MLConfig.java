@@ -29,7 +29,7 @@ public class MLConfig {
 	public static boolean displayNew = true;
 	public static ResourceLocation menuIndex;
 	public static ResourceLocation newMenu;
-	public static Set<ResourceLocation> orderIds;
+	public static List<ResourceLocation> orderIds;
 	public static Map<ResourceLocation, String> keepIds;
 	
 	public static void load()
@@ -41,12 +41,12 @@ public class MLConfig {
 		
 		//WIP menu order & custom user menus
 		String[] menus = cfg.getStringList("menus", "general", new String[]{}, "format is modid:menu <full.path.to.class> = enabled");
-		orderIds = new LinkedHashSet(menus.length + 10);
+		orderIds = new ArrayList(menus.length + 10);
 		keepIds = new LinkedHashMap();
 		for(String s : menus)
 		{
 			LineArray line = new LineArray(s);
-			orderIds.add(line.getResourceLocation());
+			add(orderIds, line.getResourceLocation());
 			if(!line.hasHead())
 				line.setHead(true);
 			if(line.hasStringMeta())
@@ -67,13 +67,33 @@ public class MLConfig {
 		cfg.save();
 	}
 	
-	public static void addId(ResourceLocation id)
+	public static void addId(int index, ResourceLocation id)
 	{
-		if(orderIds.add(id))
+		if(add(orderIds, index, id))
 		{
 			newMenu = id;
-			System.out.println("newMenu:" + newMenu);
+//			System.out.println("newMenu:" + newMenu);
 		}
+	}
+	
+	public static boolean add(List list, Object obj)
+	{
+		if(!list.contains(obj))
+		{
+			list.add(obj);
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean add(List list, int index, Object obj)
+	{
+		if(!list.contains(obj))
+		{
+			list.add(index, obj);
+			return true;
+		}
+		return false;
 	}
 	
 	public static void saveIndex()

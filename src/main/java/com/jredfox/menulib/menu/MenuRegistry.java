@@ -41,6 +41,12 @@ public class MenuRegistry
 		this.registry.add(menu);
 	}
 	
+	public void register(int index, IMenu menu)
+	{
+		this.remove(menu);
+		this.registry.add(index, menu);
+	}
+	
 	public void remove(IMenu menu)
 	{
 		this.registry.remove(menu);
@@ -194,8 +200,8 @@ public class MenuRegistry
 	
 	public void load()
 	{
-		this.registerUserMenus();
 		this.syncConfig();
+		this.registerUserMenus();
 		this.reorder();
 		this.populateMenus();
 		this.setInitMenu();
@@ -207,16 +213,26 @@ public class MenuRegistry
 	{
 		//sync the registry to the config
 		for(IMenu m : this.registry)
-			MLConfig.addId(m.getId());
+			MLConfig.addId(this.getAddedConfigId(m), m.getId());
 		
 		//sync the config to the registry
 		Iterator<ResourceLocation> it = MLConfig.orderIds.iterator();
+		Set<ResourceLocation> keepIds = MLConfig.keepIds.keySet();
 		while(it.hasNext())
 		{
 			ResourceLocation id = it.next();
-			if(!MLConfig.keepIds.keySet().contains(id) && this.getMenu(id) == null)
+			if(!keepIds.contains(id) && this.getMenu(id) == null)
 				it.remove();
 		}
+	}
+
+	public int getAddedConfigId(IMenu m) 
+	{
+		int index = this.registry.indexOf(m) - 1;
+		if(index == -1)
+			return 0;
+		ResourceLocation id = this.registry.get(index).getId();
+		return MLConfig.orderIds.indexOf(id) + 1;
 	}
 
 	/**
@@ -233,7 +249,7 @@ public class MenuRegistry
 	 */
 	public void reorder()
 	{
-		Set<ResourceLocation> ids = MLConfig.orderIds;
+		List<ResourceLocation> ids = MLConfig.orderIds;
 		List<IMenu> list = new ArrayList(this.registry.size());
 		for(ResourceLocation id : ids)
 		{
@@ -245,9 +261,7 @@ public class MenuRegistry
 			}
 			list.add(m);
 		}
-		System.out.println("before ordering:" + this.registry);
 		this.registry = list;
-		System.out.println("re-ordered list:" + this.registry);
 	}
 	
 	public void populateMenus() 
