@@ -29,8 +29,7 @@ public class MLConfig {
 	 * use MenuRegistry.getMenu().getId() instead and it may lead to a null IMenu anyways
 	 */
 	public static ResourceLocation menuIndex;
-	public static Set<ResourceLocation> order;
-	public static boolean isDirty;
+	public static Set<ResourceLocation> orderIds;
 	public static ResourceLocation newMenu;
 	
 	public static void load()
@@ -42,11 +41,11 @@ public class MLConfig {
 		
 		//WIP menu order & custom user menus
 		String[] menus = cfg.getStringList("menus", "general", new String[]{}, "format is modid:menu <full.path.to.class> = enabled");
-		order = new LinkedHashSet(menus.length + 10);
+		orderIds = new LinkedHashSet(menus.length + 10);
 		for(String s : menus)
 		{
 			LineArray line = new LineArray(s);
-			order.add(line.getResourceLocation());
+			orderIds.add(line.getResourceLocation());
 			if(!line.hasHead())
 				line.setHead(true);
 			if(line.hasStringMeta())
@@ -62,32 +61,31 @@ public class MLConfig {
 				MenuRegistry.INSTANCE.user.add(menu);
 			}
 		}
-		System.out.println(order);
 
 		cfg.save();
 	}
 	
 	public static void addId(ResourceLocation id)
 	{
-//		if(order.add(id))
-//		{
-//			//TODO:
-//		}
+		if(orderIds.add(id))
+		{
+			//TODO:
+		}
 	}
 	
 	public static void removeId(ResourceLocation id)
 	{
-//		if(order.remove(id))
-//		{
-//			//TODO:
-//		}
+		if(orderIds.remove(id))
+		{
+			//TODO:
+		}
 	}
 	
 	public static void saveIndex()
 	{
 		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
 		cfg.load();
-		menuIndex = MenuRegistry.INSTANCE.menu.getId();
+		menuIndex = MenuRegistry.INSTANCE.getMenu().getId();
 		cfg.get("general", "menuIndex", "").set(menuIndex.toString());
 		cfg.save();
 	}
@@ -101,13 +99,13 @@ public class MLConfig {
 		cfg.load();
 		
 		//menuIndex
-		menuIndex = MenuRegistry.INSTANCE.menu.getId();
+		menuIndex = MenuRegistry.INSTANCE.getMenu().getId();
 		cfg.get("general", "menuIndex", "").set(menuIndex.toString());
 		
 		//menus
-		String[] orderList = new String[order.size()];
+		String[] orderList = new String[orderIds.size()];
 		int index = 0;
-		for(ResourceLocation id : order)
+		for(ResourceLocation id : orderIds)
 		{
 			orderList[index] = id.toString();
 			index++;
