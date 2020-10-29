@@ -1,19 +1,12 @@
 package com.jredfox.menulib.menu;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.evilnotch.lib.api.ReflectionUtil;
-import com.evilnotch.lib.main.loader.LoaderMain;
-import com.evilnotch.lib.main.loader.LoadingStage;
-import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
-import com.jredfox.menulib.compat.util.CMMUtil;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.mod.MLConfig;
 
@@ -21,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 public class MenuRegistry
@@ -31,7 +23,6 @@ public class MenuRegistry
 	public IMenu previous;
 	public boolean isLoaded;
 	public List<IMenu> registry = new ArrayList();
-	public List<IMenu> user = new ArrayList();//stored seperatly so it can be removed when reloading
 	public List<IMenu> menus = new ArrayList();
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
@@ -145,6 +136,7 @@ public class MenuRegistry
 		this.switchMenu(this.menu);
 		this.previous = this.menu;
 		this.setMenuDirect(nextMenu);
+		MLConfig.setDirty(true);
 		MLConfig.saveIndex();
 		this.display();
 	}
@@ -202,71 +194,74 @@ public class MenuRegistry
 	public void load()
 	{
 		this.syncConfig();
-		this.registerUserMenus();
-		this.reorder();
 		this.populateMenus();
 		this.setInitMenu();
 		MLConfig.save();
 		this.isLoaded = true;
 	}
 
+	/**
+	 * syncs the config order then syncs the registry to itself in the new list
+	 */
 	public void syncConfig() 
 	{
-		//sync the registry to the config
-		for(IMenu m : this.registry)
-			MLConfig.addId(this.getAddedConfigId(m), m.getId());
+		MLConfig.registerUserMenus();
+		List<IMenu> list = new ArrayList(this.registry.size());
 		
-		//sync the config to the registry
-		Iterator<ResourceLocation> it = MLConfig.orderIds.iterator();
-		Set<ResourceLocation> keepIds = MLConfig.keepIds.keySet();
-		while(it.hasNext())
+		//sync config order
+		for(String s : MLConfig.menu_order)
 		{
-			ResourceLocation id = it.next();
-			if(!keepIds.contains(id) && this.getMenu(id) == null)
-				it.remove();
+			LineArray line = new LineArray(s);
+			if(!line.hasHead())
+				line.setHead(true);
+			ResourceLocation id = line.getResourceLocation();
+			IMenu menu = this.getMenu(id);
+			if(menu == null)
+			{
+				System.out.println("skipping invalid menu:" + id);
+				MLConfig.setDirty(true);
+				continue;
+			}
+			menu.setEnabled(line.getBoolean());
+			list.add(menu);
 		}
+		
+		//sync registry to the new list
+		for(IMenu m : this.registry)
+		{
+			if(!this.contains(list, m))
+			{
+				if(MLConfig.userIds.contains(m.getId()))
+					list.add(m);
+				else
+					list.add(this.getAddedConfigId(m, list), m);
+				MLConfig.setDirty(true);
+				MLConfig.newMenu = m.getId();
+			}
+		}
+		this.registry = list;
 	}
 
-	public int getAddedConfigId(IMenu m) 
+	public boolean contains(List<IMenu> list, IMenu m)
+	{
+		for(IMenu compare : list)
+			if(compare.getId().equals(m.getId()))
+				return true;
+		return false;
+	}
+
+	public int getAddedConfigId(IMenu m, List<IMenu> compare) 
 	{
 		int index = this.registry.indexOf(m) - 1;
 		if(index == -1)
 			return 0;
-		ResourceLocation id = this.registry.get(index).getId();
-		return MLConfig.orderIds.indexOf(id) + 1;
-	}
-
-	/**
-	 * regular registry allows for overriding mods for user menus
-	 */
-	public void registerUserMenus() 
-	{
-		for(IMenu m : this.user)
-			this.register(m);
-	}
-
-	/**
-	 * config order sync
-	 */
-	public void reorder()
-	{
-		List<ResourceLocation> ids = MLConfig.orderIds;
-		List<IMenu> list = new ArrayList(this.registry.size());
-		for(ResourceLocation id : ids)
-		{
-			IMenu m = this.getMenu(id);
-			if(m == null)
-			{
-				System.out.println("skipping null menu:" + id);
-				continue;
-			}
-			list.add(m);
-		}
-		this.registry = list;
+		IMenu pair = this.registry.get(index);
+		return compare.indexOf(pair) + 1;
 	}
 	
 	public void populateMenus() 
 	{
+		this.menus = new ArrayList(this.registry.size());
 		for(IMenu m : this.registry)
 			if(m.isEnabled())
 				this.menus.add(m);
@@ -322,7 +317,7 @@ public class MenuRegistry
 	}
 	
 	/**
-	 * grabs the index from the registry and then assigns it to the enabled menu list
+	 * the algorithm is flawed doesn't work in every case
 	 */
 	public int getAddedIndex(IMenu index)
 	{

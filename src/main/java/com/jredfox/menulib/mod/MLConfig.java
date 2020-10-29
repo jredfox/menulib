@@ -20,6 +20,7 @@ import com.jredfox.menulib.menu.Menu;
 import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -29,10 +30,13 @@ public class MLConfig {
 	public static boolean displayNew = true;
 	public static ResourceLocation menuIndex;
 	public static ResourceLocation newMenu;
-	public static List<ResourceLocation> orderIds;
-	public static Map<ResourceLocation, String> keepIds;
 	
-	private static String menus_comment = "format is modid:menu <full.path.to.class> = enabled";
+	public static String[] menu_order;
+	public static String[] menu_user;
+	private static String comment_order = "configure order here. to disable a menu append \"= false\"";
+	private static String comment_user = "modid:menu <full.path.to.class>";
+	
+	public static boolean isDirty;
 	
 	public static void load()
 	{
@@ -40,99 +44,77 @@ public class MLConfig {
 		cfg.load();
 		displayNew = cfg.get("general", "displayNewMenu", displayNew).getBoolean();
 		menuIndex = new ResourceLocation(cfg.get("general", "menuIndex", "").getString());
-		
-		//WIP menu order & custom user menus
-		String[] menus = cfg.getStringList("menus", "general", new String[]{}, menus_comment);
-		orderIds = new ArrayList(menus.length + 10);
-		keepIds = new LinkedHashMap();
-		for(String s : menus)
-		{
-			LineArray line = new LineArray(s);
-			add(orderIds, line.getResourceLocation());
-			if(!line.hasHead())
-				line.setHead(true);
-			if(line.hasStringMeta())
-			{
-				keepIds.put(line.getResourceLocation(), s.trim());
-				Class guiClass = ReflectionUtil.classForName(line.meta.trim());
-				if(guiClass == null)
-				{
-					System.out.println("skipping user menu:" + line);
-					continue;
-				}
-				IMenu menu = new Menu(line.getResourceLocation(), guiClass);
-				menu.setEnabled(line.getBoolean());
-				MenuRegistry.INSTANCE.user.add(menu);
-			}
-		}
-
+		menu_order = cfg.getStringList("menus_order", "general", new String[]{}, comment_order);
+		menu_user =  cfg.getStringList("menus_user", "general", new String[]{}, comment_user);
 		cfg.save();
-	}
-	
-	public static void addId(int index, ResourceLocation id)
-	{
-		if(add(orderIds, index, id))
-			newMenu = id;
-	}
-	
-	public static boolean add(List list, Object obj)
-	{
-		if(!list.contains(obj))
-		{
-			list.add(obj);
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean add(List list, int index, Object obj)
-	{
-		if(!list.contains(obj))
-		{
-			list.add(index, obj);
-			return true;
-		}
-		return false;
 	}
 	
 	public static void saveIndex()
 	{
+		if(!isDirty)
+			return;
 		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
 		cfg.load();
-		
-		menuIndex = MenuRegistry.INSTANCE.getMenu().getId();
-		cfg.get("general", "menuIndex", "").set(menuIndex.toString());
-		
-		Property prop = cfg.get("general", "menus", new String[]{});
-		prop.setComment(menus_comment);
-		
+		saveIndex(cfg);
+		syncComments(cfg);
 		cfg.save();
+		setDirty(false);
 	}
-	
+
 	/**
 	 * saves the menuIndex and menu order
 	 */
 	public static void save()
 	{
+		if(!isDirty)
+			return;
 		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
 		cfg.load();
+		saveIndex(cfg);
 		
-		//menuIndex
+		String[] orderList = new String[MenuRegistry.INSTANCE.registry.size()];
+		int index = 0;
+		for(IMenu menu : MenuRegistry.INSTANCE.registry)
+			orderList[index++] = "" + menu.getId() + (!menu.isEnabled() ? " = false" : "");
+		cfg.get("general", "menus_order", new String[]{}).set(orderList);
+		syncComments(cfg);
+		cfg.save();
+		setDirty(false);
+	}
+	
+	private static void saveIndex(Configuration cfg)
+	{
 		menuIndex = MenuRegistry.INSTANCE.getMenu().getId();
 		cfg.get("general", "menuIndex", "").set(menuIndex.toString());
-		
-		//menus
-		String[] orderList = new String[orderIds.size()];
-		int index = 0;
-		for(ResourceLocation id : orderIds)
+	}
+	
+	private static void syncComments(Configuration cfg)
+	{
+		cfg.get("general", "menus_order", new String[]{}).setComment(comment_order);
+		cfg.get("general", "menus_user", new String[]{}).setComment(comment_user);
+	}
+	
+	public static Set<ResourceLocation> userIds = new HashSet();
+	public static void registerUserMenus()
+	{
+		for(String s : menu_user)
 		{
-			String keepId = keepIds.get(id);
-			String line = keepId != null ? keepId : id.toString();
-			orderList[index++] = line;
+			LineArray line = new LineArray(s);
+			ResourceLocation id = line.getResourceLocation();
+			Class<? extends GuiScreen> guiClass = ReflectionUtil.classForName(line.getMetaString());
+			if(guiClass == null)
+			{
+				System.out.println("skipping:" + line);
+				continue;
+			}
+			userIds.add(id);
+			IMenu menu = new Menu(id, guiClass);
+			MenuRegistry.INSTANCE.register(menu);
 		}
-		Property prop = cfg.get("general", "menus", new String[]{});
-		prop.set(orderList);
-		prop.setComment(menus_comment);
-		cfg.save();
+	}
+	
+	public static void setDirty(boolean dirty)
+	{
+		isDirty = dirty;
 	}
 }
