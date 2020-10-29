@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.main.loader.LoaderMain;
 import com.evilnotch.lib.main.loader.LoadingStage;
 import com.evilnotch.lib.util.JavaUtil;

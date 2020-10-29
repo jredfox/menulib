@@ -32,6 +32,8 @@ public class MLConfig {
 	public static List<ResourceLocation> orderIds;
 	public static Map<ResourceLocation, String> keepIds;
 	
+	private static String menus_comment = "format is modid:menu <full.path.to.class> = enabled";
+	
 	public static void load()
 	{
 		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
@@ -40,7 +42,7 @@ public class MLConfig {
 		menuIndex = new ResourceLocation(cfg.get("general", "menuIndex", "").getString());
 		
 		//WIP menu order & custom user menus
-		String[] menus = cfg.getStringList("menus", "general", new String[]{}, "format is modid:menu <full.path.to.class> = enabled");
+		String[] menus = cfg.getStringList("menus", "general", new String[]{}, menus_comment);
 		orderIds = new ArrayList(menus.length + 10);
 		keepIds = new LinkedHashMap();
 		for(String s : menus)
@@ -70,10 +72,7 @@ public class MLConfig {
 	public static void addId(int index, ResourceLocation id)
 	{
 		if(add(orderIds, index, id))
-		{
 			newMenu = id;
-//			System.out.println("newMenu:" + newMenu);
-		}
 	}
 	
 	public static boolean add(List list, Object obj)
@@ -100,8 +99,13 @@ public class MLConfig {
 	{
 		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
 		cfg.load();
+		
 		menuIndex = MenuRegistry.INSTANCE.getMenu().getId();
 		cfg.get("general", "menuIndex", "").set(menuIndex.toString());
+		
+		Property prop = cfg.get("general", "menus", new String[]{});
+		prop.setComment(menus_comment);
+		
 		cfg.save();
 	}
 	
@@ -126,8 +130,9 @@ public class MLConfig {
 			String line = keepId != null ? keepId : id.toString();
 			orderList[index++] = line;
 		}
-		cfg.get("general", "menus", "").set(orderList);
-		
+		Property prop = cfg.get("general", "menus", new String[]{});
+		prop.set(orderList);
+		prop.setComment(menus_comment);
 		cfg.save();
 	}
 }
