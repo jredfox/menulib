@@ -1,8 +1,10 @@
 package com.jredfox.menulib.menu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.evilnotch.lib.api.ReflectionUtil;
@@ -24,6 +26,7 @@ public class MenuRegistry
 	public boolean isLoaded;
 	public List<IMenu> registry = new ArrayList();
 	public List<IMenu> menus = new ArrayList();
+	protected Map<ResourceLocation, Integer> temp = new HashMap();
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -37,11 +40,13 @@ public class MenuRegistry
 	{
 		this.remove(menu);
 		this.registry.add(index, menu);
+		this.temp.put(menu.getId(), index);
 	}
 	
 	public void remove(IMenu menu)
 	{
 		this.registry.remove(menu);
+		this.temp.remove(menu.getId());
 	}
 
 	public IMenu getMenu()
@@ -205,6 +210,7 @@ public class MenuRegistry
 	 */
 	public void syncConfig() 
 	{
+		System.out.println();
 		MLConfig.registerUserMenus();
 		List<IMenu> list = new ArrayList(this.registry.size());
 		
@@ -231,14 +237,19 @@ public class MenuRegistry
 		{
 			if(!this.contains(list, m))
 			{
-				if(MLConfig.userIds.contains(m.getId()))
-					list.add(m);
+				Integer index = this.temp.get(m.getId());
+				if(index != null)
+				{
+					list.add(index, m);
+				}
 				else
-					list.add(this.getAddedConfigId(m, list), m);
-				MLConfig.setDirty(true);
-				MLConfig.newMenu = m.getId();
+				{
+					list.add(m);
+				}
+				MLConfig.setNewMenu(m.getId());
 			}
 		}
+		this.temp.clear();
 		this.registry = list;
 	}
 
@@ -248,15 +259,6 @@ public class MenuRegistry
 			if(compare.getId().equals(m.getId()))
 				return true;
 		return false;
-	}
-
-	public int getAddedConfigId(IMenu m, List<IMenu> compare) 
-	{
-		int index = this.registry.indexOf(m) - 1;
-		if(index == -1)
-			return 0;
-		IMenu pair = this.registry.get(index);
-		return compare.indexOf(pair) + 1;
 	}
 	
 	public void populateMenus() 

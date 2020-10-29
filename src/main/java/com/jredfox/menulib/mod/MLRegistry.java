@@ -60,11 +60,11 @@ public class MLRegistry {
 			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
 		if(Loader.isModLoaded("thebetweenlands"))
 		{
-			MenuRegistry.INSTANCE.register(new MenuTBL());
+//			MenuRegistry.INSTANCE.register(new MenuTBL());
 		}
 		if(proxyCMM.isLoaded)
 		{
-			MenuRegistry.INSTANCE.register(new MenuCMM());
+			MenuRegistry.INSTANCE.register(0, new MenuCMM());
 			CMMJsonRegistry.registry.add(new MLCMMJson());
 		}
 		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("aetherii:test"), GuiAetherii.class));

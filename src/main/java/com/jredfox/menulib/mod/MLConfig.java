@@ -33,8 +33,8 @@ public class MLConfig {
 	
 	public static String[] menu_order;
 	public static String[] menu_user;
-	private static String comment_order = "configure order here. to disable a menu append \"= false\"";
-	private static String comment_user = "modid:menu <full.path.to.class>";
+	private static final String comment_order = "configure order here. to disable a menu append \"= false\"";
+	private static final String comment_user = "modid:menu <full.path.to.class>";
 	
 	public static boolean isDirty;
 	
@@ -94,7 +94,6 @@ public class MLConfig {
 		cfg.get("general", "menus_user", new String[]{}).setComment(comment_user);
 	}
 	
-	public static Set<ResourceLocation> userIds = new HashSet();
 	public static void registerUserMenus()
 	{
 		for(String s : menu_user)
@@ -107,7 +106,6 @@ public class MLConfig {
 				System.out.println("skipping:" + line);
 				continue;
 			}
-			userIds.add(id);
 			IMenu menu = new Menu(id, guiClass);
 			MenuRegistry.INSTANCE.register(menu);
 		}
@@ -116,5 +114,14 @@ public class MLConfig {
 	public static void setDirty(boolean dirty)
 	{
 		isDirty = dirty;
+	}
+
+	/**
+	 * sets the config dirty and sets the newMenu to the new id
+	 */
+	public static void setNewMenu(ResourceLocation id) 
+	{
+		MLConfig.newMenu = id;
+		MLConfig.setDirty(true);
 	}
 }
