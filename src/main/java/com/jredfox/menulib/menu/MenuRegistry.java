@@ -198,6 +198,22 @@ public class MenuRegistry
 		return this.menu == menu && menu.get() != null && menu.get() == this.mc.currentScreen;
 	}
 	
+	/**
+	 * return if your IMenu is MenuRegistry.menu
+	 */
+	public boolean isMenuIndex(IMenu menu) 
+	{
+		return this.menu == menu;
+	}
+	
+	/**
+	 * @return false for null return true if non null and enabled
+	 */
+	public boolean isEnabledSafe(IMenu menu)
+	{
+		return menu != null && menu.isEnabled();
+	}
+	
 	public IMenu getFirst() 
 	{
 		return this.menus.get(0);
@@ -226,6 +242,76 @@ public class MenuRegistry
 		if(m == null)
 			m = this.getNext();
 		return m;
+	}
+	
+	public static Comparator menuComparator = new Comparator<IMenu>()
+	{
+		@Override
+		public int compare(IMenu m1, IMenu m2)
+		{
+			return ((Integer)MenuRegistry.INSTANCE.registry.indexOf(m1)).compareTo(MenuRegistry.INSTANCE.registry.indexOf(m2));
+		}
+	};
+	
+	/**
+	 * sync enabling/disabling a menu
+	 */
+	public void update(IMenu menu)
+	{
+		if(!this.isLoaded)
+			return;
+		if(!menu.isEnabled())
+		{
+			IMenu nearest = this.getNearestMenu();
+			boolean remove = this.menus.remove(menu);
+			if(!remove)
+				return;
+			
+			this.syncChange(menu);
+			MLConfig.setDirtyOrder(true);
+			
+			if(this.isDisplaying(menu))
+				this.setMenu(nearest);//this sets the config dirty, syncs any changes
+			else if(this.isMenuIndex(menu))
+				this.setMenu(nearest, false);//if your in the sub menus switch out of it
+		}
+		else if(!this.menus.contains(menu))
+		{
+			MLUtil.add(this.menus, menuComparator, menu);
+			this.syncChange(menu);
+			MLConfig.setDirtyOrder(true);
+		}
+		MLConfig.save();
+	}
+
+	/**
+	 * sync the buttons & index data
+	 */
+	public void syncChange(IMenu menu) 
+	{
+		this.syncIndex();
+		this.syncButton(menu.getPrevious());
+		this.syncButton(menu.getNext());
+	}
+	
+	/**
+	 * call this if you added / removed a menu from menus or even switched a menu
+	 */
+	public void syncIndex() 
+	{
+		this.index = this.menus.indexOf(this.menu);
+	}
+	
+	/**
+	 * sync the button visibility and being enabled to whether or not the main menu is browsable
+	 */
+	public void syncButton(GuiButton b) 
+	{
+		if(b == null)
+			return;
+		boolean enabled = this.isBrowsable();
+		b.enabled = enabled;
+		b.visible = enabled;
 	}
 	
 	public void load()
@@ -299,95 +385,13 @@ public class MenuRegistry
 	public void setInitMenu() 
 	{
 		IMenu cfgIndex = this.getMenu(MLConfig.menuIndex);
-		IMenu menu = cfgIndex != null && cfgIndex.isEnabled() ? cfgIndex : this.getFirst();
 		IMenu newMenu = MLConfig.displayNew && MLConfig.newMenu != null ? this.getMenu(MLConfig.newMenu) : null;
-		if(newMenu != null)
-			menu = newMenu;
-		
+		IMenu menu = this.isEnabledSafe(newMenu) ? newMenu : (this.isEnabledSafe(cfgIndex) ? cfgIndex : this.getFirst());
 		if(!menu.getId().equals(MLConfig.menuIndex))
 			MLConfig.setDirtyIndex(true);
 		
 		this.sanityCheck(menu);
 		this.setMenuDirect(menu);
-	}
-	
-	public static Comparator menuComparator = new Comparator<IMenu>()
-	{
-		@Override
-		public int compare(IMenu m1, IMenu m2)
-		{
-			return ((Integer)MenuRegistry.INSTANCE.registry.indexOf(m1)).compareTo(MenuRegistry.INSTANCE.registry.indexOf(m2));
-		}
-	};
-	
-	/**
-	 * sync enabling/disabling a menu
-	 */
-	public void update(IMenu menu)
-	{
-		if(!this.isLoaded)
-			return;
-		if(!menu.isEnabled())
-		{
-			IMenu nearest = this.getNearestMenu();
-			boolean remove = this.menus.remove(menu);
-			if(!remove)
-				return;
-			
-			this.syncChange(menu);
-			MLConfig.setDirtyOrder(true);
-			
-			if(this.isDisplaying(menu))
-				this.setMenu(nearest);//this sets the config dirty, syncs any changes
-			else if(this.isCurrentMenu(menu))
-				this.setMenu(nearest, false);//if your in the sub menus switch out of it
-			else
-			{
-				System.out.println("regular disable:" + menu);
-			}
-		}
-		else if(!this.menus.contains(menu))
-		{
-			MLUtil.add(this.menus, menuComparator, menu);
-			this.syncChange(menu);
-			MLConfig.setDirtyOrder(true);
-		}
-		MLConfig.save();
-	}
-
-	public boolean isCurrentMenu(IMenu menu) 
-	{
-		return this.menu == menu;
-	}
-
-	/**
-	 * sync the buttons & index data
-	 */
-	public void syncChange(IMenu menu) 
-	{
-		this.syncIndex();
-		this.syncButton(menu.getPrevious());
-		this.syncButton(menu.getNext());
-	}
-	
-	/**
-	 * call this if you added / removed a menu from menus or even switched a menu
-	 */
-	public void syncIndex() 
-	{
-		this.index = this.menus.indexOf(this.menu);
-	}
-	
-	/**
-	 * sync the button visibility and being enabled to whether or not the main menu is browsable
-	 */
-	public void syncButton(GuiButton b) 
-	{
-		if(b == null)
-			return;
-		boolean enabled = this.isBrowsable();
-		b.enabled = enabled;
-		b.visible = enabled;
 	}
 	
 }
