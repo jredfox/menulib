@@ -38,6 +38,7 @@ public class MLConfig {
 	public static boolean dirtyIndex;
 	public static boolean dirtyOrder;
 	public static ResourceLocation newMenu;
+	public static File mlcfg = new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg");
 	
 	public static void load()
 	{
@@ -55,15 +56,12 @@ public class MLConfig {
 	 */
 	public static void save()
 	{
+		if(!mlcfg.exists())
+			setDirty(true);
 		if(!dirtyIndex && !dirtyOrder)
-		{
-			System.out.println("returning config not dirty");
 			return;
-		}
-		else
-			System.out.println("dirtyIndex:" + dirtyIndex + ", dirtyOrder:" + dirtyOrder);
 		
-		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
+		Configuration cfg = new Configuration(mlcfg);
 		cfg.load();
 		
 		if(dirtyIndex)

@@ -79,8 +79,9 @@ public class MLTransformer implements IClassTransformer{
 	public void transformFramerate(String name, ClassNode classNode) throws IOException 
 	{
 		//add getMenuFrames so minecraft can use them later
-		MethodNode mainmenu = ASMHelper.addMethod(classNode, "com/jredfox/menulib/coremod/gen/Methods.class", "getMenuFrames", "()I");
-		ASMHelper.patchMethod(mainmenu, name, "com/jredfox/menulib/coremod/gen/Methods");
+		String methods = "com/jredfox/menulib/coremod/gen/" + new MCPSidedString("Methods", "MethodsOb").toString();
+		MethodNode mainmenu = ASMHelper.addMethod(classNode, methods + ".class", "getMenuFrames", "()I");
+		ASMHelper.patchMethod(mainmenu, name, methods);
 		
 		//start finding the injection point to change the 30 return value to a method call "getMenuFrames"
 		MethodNode node = ASMHelper.getMethodNode(classNode, new MCPSidedString("getLimitFramerate", "func_90020_K").toString(), "()I");

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.evilnotch.lib.api.ReflectionUtil;
+import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.misc.MLUtil;
@@ -27,8 +28,8 @@ public class MenuRegistry
 	public IMenu previous;
 	public boolean isLoaded;
 	public List<IMenu> registry = new ArrayList();
-	public List<IMenu> menus = new ArrayList();
-	protected Map<ResourceLocation, Integer> temp = new HashMap();
+	public List<IMenu> menus = new ArrayList(0);
+	protected Map<ResourceLocation, Integer> temp = new HashMap(0);
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -114,6 +115,11 @@ public class MenuRegistry
 	{
 		menu.switchMenu();
 	}
+	
+	public void clear(IMenu menu)
+	{
+		menu.clear();
+	}
 
 	public boolean isBrowsable() 
 	{
@@ -196,15 +202,16 @@ public class MenuRegistry
 		return index == this.menus.size() ? null : this.menus.get(index);
 	}
 	
-	//START WIP CODE________________________________
-	
 	public void load()
 	{
+		new LineArray("a");
+		long ms = System.currentTimeMillis();
 		this.syncConfig();
 		this.populateMenus();
 		this.setInitMenu();
 		MLConfig.save();
 		this.isLoaded = true;
+		JavaUtil.printTime(ms, "Done loading MenuRegistry:");
 	}
 
 	/**
@@ -213,6 +220,7 @@ public class MenuRegistry
 	public void syncConfig() 
 	{
 		MLConfig.registerUserMenus();
+		
 		List<IMenu> list = new ArrayList(this.registry.size());
 		
 		//sync config order
@@ -236,7 +244,7 @@ public class MenuRegistry
 		//sync registry to the new list
 		for(IMenu m : this.registry)
 		{
-			if(!this.contains(list, m))
+			if(!list.contains(m))
 			{
 				Integer index = this.temp.get(m.getId());
 				if(index != null)
@@ -253,14 +261,6 @@ public class MenuRegistry
 		}
 		this.temp.clear();
 		this.registry = list;
-	}
-
-	public boolean contains(List<IMenu> list, IMenu m)
-	{
-		for(IMenu compare : list)
-			if(compare.getId().equals(m.getId()))
-				return true;
-		return false;
 	}
 	
 	public void populateMenus() 
