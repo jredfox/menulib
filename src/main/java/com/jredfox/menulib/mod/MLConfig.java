@@ -29,14 +29,15 @@ public class MLConfig {
 	
 	public static boolean displayNew = true;
 	public static ResourceLocation menuIndex;
-	public static ResourceLocation newMenu;
 	
 	public static String[] menu_order;
 	public static String[] menu_user;
 	private static final String comment_order = "configure order here. to disable a menu append \"= false\"";
 	private static final String comment_user = "modid:menu <full.path.to.class>";
 	
-	public static boolean isDirty;
+	public static boolean dirtyIndex;
+	public static boolean dirtyOrder;
+	public static ResourceLocation newMenu;
 	
 	public static void load()
 	{
@@ -48,35 +49,34 @@ public class MLConfig {
 		menu_user =  cfg.getStringList("menus_user", "general", new String[]{}, comment_user);
 		cfg.save();
 	}
-	
-	public static void saveIndex()
-	{
-		if(!isDirty)
-			return;
-		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
-		cfg.load();
-		saveIndex(cfg);
-		syncComments(cfg);
-		cfg.save();
-		setDirty(false);
-	}
 
 	/**
 	 * saves the menuIndex and menu order
 	 */
 	public static void save()
 	{
-		if(!isDirty)
+		if(!dirtyIndex && !dirtyOrder)
+		{
+			System.out.println("returning config not dirty");
 			return;
+		}
+		else
+			System.out.println("dirtyIndex:" + dirtyIndex + ", dirtyOrder:" + dirtyOrder);
+		
 		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
 		cfg.load();
-		saveIndex(cfg);
 		
-		String[] orderList = new String[MenuRegistry.INSTANCE.registry.size()];
-		int index = 0;
-		for(IMenu menu : MenuRegistry.INSTANCE.registry)
-			orderList[index++] = "" + menu.getId() + (!menu.isEnabled() ? " = false" : "");
-		cfg.get("general", "menus_order", new String[]{}).set(orderList);
+		if(dirtyIndex)
+			saveIndex(cfg);
+		
+		if(dirtyOrder)
+		{
+			String[] orderList = new String[MenuRegistry.INSTANCE.registry.size()];
+			int index = 0;
+			for(IMenu menu : MenuRegistry.INSTANCE.registry)
+				orderList[index++] = "" + menu.getId() + (!menu.isEnabled() ? " = false" : "");
+			cfg.get("general", "menus_order", new String[]{}).set(orderList);
+		}
 		syncComments(cfg);
 		cfg.save();
 		setDirty(false);
@@ -111,9 +111,20 @@ public class MLConfig {
 		}
 	}
 	
-	public static void setDirty(boolean dirty)
+	private static void setDirty(boolean dirty)
 	{
-		isDirty = dirty;
+		dirtyIndex = dirty;
+		dirtyOrder = dirty;
+	}
+	
+	public static void setDirtyIndex(boolean dirty)
+	{
+		dirtyIndex = dirty;
+	}
+	
+	public static void setDirtyOrder(boolean dirty)
+	{
+		dirtyOrder = dirty;
 	}
 
 	/**
@@ -122,6 +133,5 @@ public class MLConfig {
 	public static void setNewMenu(ResourceLocation id) 
 	{
 		MLConfig.newMenu = id;
-		MLConfig.setDirty(true);
 	}
 }

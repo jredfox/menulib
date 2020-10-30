@@ -143,8 +143,8 @@ public class MenuRegistry
 		this.switchMenu(this.menu);
 		this.previous = this.menu;
 		this.setMenuDirect(nextMenu);
-		MLConfig.setDirty(true);
-		MLConfig.saveIndex();
+		MLConfig.setDirtyIndex(true);
+		MLConfig.save();
 		this.display();
 	}
 	
@@ -212,7 +212,6 @@ public class MenuRegistry
 	 */
 	public void syncConfig() 
 	{
-		System.out.println();
 		MLConfig.registerUserMenus();
 		List<IMenu> list = new ArrayList(this.registry.size());
 		
@@ -227,7 +226,7 @@ public class MenuRegistry
 			if(menu == null)
 			{
 				System.out.println("skipping invalid menu:" + id);
-				MLConfig.setDirty(true);
+				MLConfig.setDirtyOrder(true);
 				continue;
 			}
 			menu.setEnabled(line.getBoolean());
@@ -249,6 +248,7 @@ public class MenuRegistry
 					list.add(m);
 				}
 				MLConfig.setNewMenu(m.getId());
+				MLConfig.setDirtyOrder(true);
 			}
 		}
 		this.temp.clear();
@@ -275,12 +275,12 @@ public class MenuRegistry
 	{
 		IMenu cfgIndex = this.getMenu(MLConfig.menuIndex);
 		IMenu menu = cfgIndex != null && cfgIndex.isEnabled() ? cfgIndex : this.getFirst();
-		if(cfgIndex != menu)
-			System.out.println("menuIndex \"" + cfgIndex + "\" is null or disabled setting it to:" + menu);
-		
 		IMenu newMenu = MLConfig.displayNew && MLConfig.newMenu != null ? this.getMenu(MLConfig.newMenu) : null;
 		if(newMenu != null)
 			menu = newMenu;
+		
+		if(!menu.getId().equals(MLConfig.menuIndex))
+			MLConfig.setDirtyIndex(true);
 		this.setMenuDirect(menu);
 	}
 	
@@ -309,8 +309,8 @@ public class MenuRegistry
 					prevMenu = this.getNext();
 				this.menus.remove(menu);
 				this.syncIndex();//sync index to -1
+				MLConfig.setDirtyOrder(true);
 				this.setMenu(prevMenu);//this sets the config dirty, syncs any changes
-				MLConfig.setDirty(true);
 			}
 			else
 			{
@@ -318,7 +318,7 @@ public class MenuRegistry
 				if(removed)
 				{
 					this.syncChange(menu);
-					MLConfig.setDirty(true);
+					MLConfig.setDirtyOrder(true);
 				}
 			}
 		}
@@ -326,7 +326,7 @@ public class MenuRegistry
 		{
 			MLUtil.add(this.menus, menuComparator, menu);
 			this.syncChange(menu);
-			MLConfig.setDirty(true);
+			MLConfig.setDirtyOrder(true);
 		}
 		MLConfig.save();
 	}
