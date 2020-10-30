@@ -132,8 +132,9 @@ public class MLConfig {
 	/**
 	 * sets the config dirty and sets the newMenu to the new id
 	 */
-	public static void setNewMenu(ResourceLocation id) 
+	public static void setNewMenu(IMenu menu) 
 	{
-		MLConfig.newMenu = id;
+		if(menu.isEnabled())
+			MLConfig.newMenu = menu.getId();
 	}
 }

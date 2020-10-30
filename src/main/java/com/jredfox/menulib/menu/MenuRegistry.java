@@ -264,7 +264,7 @@ public class MenuRegistry
 				{
 					list.add(m);
 				}
-				MLConfig.setNewMenu(m.getId());
+				MLConfig.setNewMenu(m);
 				MLConfig.setDirtyOrder(true);
 			}
 		}
@@ -290,6 +290,8 @@ public class MenuRegistry
 		
 		if(!menu.getId().equals(MLConfig.menuIndex))
 			MLConfig.setDirtyIndex(true);
+		
+		this.sanityCheck(menu);
 		this.setMenuDirect(menu);
 	}
 	

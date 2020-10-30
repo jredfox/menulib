@@ -26,6 +26,7 @@ public class GuiHandler {
 	public void guiOpenPre(GuiOpenEvent e)
 	{
 		old = Minecraft.getMinecraft().currentScreen;
+		System.out.println("shouldReplace" + MenuRegistry.INSTANCE.shouldReplace(e.getGui()) + "," + e.getGui());
 		if(!MenuRegistry.INSTANCE.shouldReplace(e.getGui()))
 			return;
 		e.setGui(fake_menu);
@@ -39,6 +40,7 @@ public class GuiHandler {
 	{	
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
+		System.out.println("guiOpen:" + MenuRegistry.INSTANCE.getMenu());
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		MenuRegistry.INSTANCE.sanityCheck(menu);
 		MenuRegistry.INSTANCE.open(menu);
