@@ -49,13 +49,5 @@ public class MusicEvent extends Event {
 		MinecraftForge.EVENT_BUS.post(e);
 		return e.canPlay;
 	}
-	
-	public static enum MusicState
-	{
-		GAME(),
-		GUI(),
-		MENU(),
-		NONE()
-	}
 
 }

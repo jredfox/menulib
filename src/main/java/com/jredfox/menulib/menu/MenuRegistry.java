@@ -12,8 +12,10 @@ import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.eventhandler.GuiHandler;
+import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.misc.MLUtil;
 import com.jredfox.menulib.mod.MLConfig;
+import com.jredfox.menulib.sound.IMusicPlayerHolder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -144,6 +146,11 @@ public class MenuRegistry
 	
 	public void setMenu(IMenu nextMenu) 
 	{
+		this.setMenu(nextMenu, true);
+	}
+	
+	public void setMenu(IMenu nextMenu, boolean display) 
+	{
 		this.sanityCheck(nextMenu);
 		this.previous = this.menu;
 		this.close(this.menu);
@@ -151,7 +158,8 @@ public class MenuRegistry
 		this.setMenuDirect(nextMenu);
 		MLConfig.setDirtyIndex(true);
 		MLConfig.save();
-		this.display();
+		if(display)
+			this.display();
 	}
 	
 	/**
@@ -210,6 +218,14 @@ public class MenuRegistry
 	{
 		int index = this.getIndex() + 1;
 		return index == this.menus.size() ? null : this.menus.get(index);
+	}
+	
+	public IMenu getNearestMenu() 
+	{
+		IMenu m = this.getPrevious();
+		if(m == null)
+			m = this.getNext();
+		return m;
 	}
 	
 	public void load()
@@ -313,23 +329,21 @@ public class MenuRegistry
 			return;
 		if(!menu.isEnabled())
 		{
-			System.out.println(this.menu == menu);
+			IMenu nearest = this.getNearestMenu();
+			boolean remove = this.menus.remove(menu);
+			if(!remove)
+				return;
+			
+			this.syncChange(menu);
+			MLConfig.setDirtyOrder(true);
+			
 			if(this.isDisplaying(menu))
+				this.setMenu(nearest);//this sets the config dirty, syncs any changes
+			else if(this.isCurrentMenu(menu))
+				this.setMenu(nearest, false);//if your in the sub menus switch out of it
+			else
 			{
-				System.out.println("display");
-				IMenu prevMenu = this.getPrevious();
-				if(prevMenu == null)
-					prevMenu = this.getNext();
-				this.menus.remove(menu);
-				this.syncChange(menu);
-				MLConfig.setDirtyOrder(true);
-				this.setMenu(prevMenu);//this sets the config dirty, syncs any changes
-			}
-			else if(this.menus.remove(menu))
-			{
-				System.out.println("removed");
-				this.syncChange(menu);
-				MLConfig.setDirtyOrder(true);
+				System.out.println("regular disable:" + menu);
 			}
 		}
 		else if(!this.menus.contains(menu))
@@ -340,7 +354,12 @@ public class MenuRegistry
 		}
 		MLConfig.save();
 	}
-	
+
+	public boolean isCurrentMenu(IMenu menu) 
+	{
+		return this.menu == menu;
+	}
+
 	/**
 	 * sync the buttons & index data
 	 */

@@ -5,9 +5,9 @@ import com.evilnotch.lib.minecraft.tick.ITick;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.cap.CapReg;
 import com.jredfox.menulib.event.MusicEvent;
-import com.jredfox.menulib.event.MusicEvent.MusicState;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
+import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.IMusicPlayerHolder;
 
@@ -20,35 +20,35 @@ public class MusicPlayerHandler implements ITick{
 
 	public Minecraft mc = Minecraft.getMinecraft();
 	public ISound currentMusic;
-	public MusicState previous = MusicState.NONE;
+	public GameState previous = GameState.NONE;
 	
 	@Override
 	public void tick()
 	{
-		if(TickRegistry.isRightTickClient(20 * 4) && TickRegistry.tickCountClient != 0)
+		if(TickRegistry.isRightTickClient(20 * 10) && TickRegistry.tickCountClient != 0)
 		{
-			IMenu menu = MenuRegistry.INSTANCE.menus.get(MenuRegistry.INSTANCE.index);
+//			IMenu menu = MenuRegistry.INSTANCE.registry.get(MenuRegistry.INSTANCE.registry.size() - 1);
 //			menu.setEnabled(false);
-//			System.out.println("music menus:" + MenuRegistry.INSTANCE.menus + "," + menu);
+//			System.out.println(MenuRegistry.INSTANCE.menus);
 		}
-		MusicState state = this.getState();
+		GameState state = this.getState();
 		this.updateState(state);
-		if(state == MusicState.GAME)
+		if(state == GameState.GAME)
 		{
 			IMusicPlayerHolder player = (IMusicPlayerHolder) CapabilityRegistry.getCapability(this.mc.world, CapReg.musicPlayerWorld);
 			player.getMusicPlayer().tick();
 		}
-		else if(state == MusicState.MENU)
+		else if(state == GameState.MENU)
 		{
 			MenuRegistry.INSTANCE.getMenu().getMusicPlayer().tick();
 		}
-		else if(state == MusicState.GUI)
+		else if(state == GameState.GUI)
 		{
 			((IMusicPlayerHolder)this.mc.currentScreen).getMusicPlayer().tick();
 		}
 	}
 	
-	public void updateState(MusicState state) 
+	public void updateState(GameState state) 
 	{
 		if(this.previous != state)
 		{
@@ -79,10 +79,10 @@ public class MusicPlayerHandler implements ITick{
 	/**
 	 * grab the current MusicState
 	 */
-	public MusicState getState() 
+	public GameState getState() 
 	{
 		GuiScreen gui = this.mc.currentScreen;
-		return this.mc.world != null ? (gui instanceof IMusicPlayerHolder ? MusicState.GUI : MusicState.GAME) : (gui instanceof IMusicPlayerHolder && gui != MenuRegistry.INSTANCE.getGui() ? MusicState.GUI : MusicState.MENU);
+		return this.mc.world != null ? (gui instanceof IMusicPlayerHolder ? GameState.GUI : GameState.GAME) : (gui instanceof IMusicPlayerHolder && gui != MenuRegistry.INSTANCE.getGui() ? GameState.GUI : GameState.MENU);
 	}
 
 	@Override
