@@ -1,6 +1,7 @@
 package com.jredfox.menulib.menu;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Set;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.eventhandler.GuiHandler;
+import com.jredfox.menulib.misc.MLUtil;
 import com.jredfox.menulib.mod.MLConfig;
 
 import net.minecraft.client.Minecraft;
@@ -281,7 +283,16 @@ public class MenuRegistry
 			menu = newMenu;
 		this.setMenuDirect(menu);
 	}
-
+	
+	public static Comparator menuComparator = new Comparator<IMenu>()
+	{
+		@Override
+		public int compare(IMenu m1, IMenu m2)
+		{
+			return ((Integer)MenuRegistry.INSTANCE.registry.indexOf(m1)).compareTo(MenuRegistry.INSTANCE.registry.indexOf(m2));
+		}
+	};
+	
 	/**
 	 * sync enabling/disabling a menu
 	 */
@@ -297,20 +308,26 @@ public class MenuRegistry
 				if(prevMenu == null)
 					prevMenu = this.getNext();
 				this.menus.remove(menu);
-				this.syncIndex();//needs to sync the index even when it's removed because setting the men
-				this.setMenu(prevMenu);
+				this.syncIndex();//sync index to -1
+				this.setMenu(prevMenu);//this sets the config dirty, syncs any changes
 			}
 			else
 			{
-				this.menus.remove(menu);
-				this.syncChange(menu);
+				boolean removed = this.menus.remove(menu);
+				if(removed)
+				{
+					this.syncChange(menu);
+					MLConfig.setDirty(true);
+				}
 			}
 		}
 		else if(!this.menus.contains(menu))
 		{
-			this.menus.add(this.getAddedIndex(menu), menu);
+			MLUtil.add(this.menus, menuComparator, menu);
 			this.syncChange(menu);
+			MLConfig.setDirty(true);
 		}
+		MLConfig.save();
 	}
 	
 	public boolean isDisplaying(IMenu menu)

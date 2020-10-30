@@ -4,7 +4,7 @@ import com.evilnotch.lib.minecraft.tick.ITick;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
-import com.jredfox.menulib.misc.NumberUtil;
+import com.jredfox.menulib.misc.MLUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;

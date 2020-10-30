@@ -8,3 +8,4 @@ src/main/resources/assets/menulib/textures/main-menu/aetherii_3.png
 src/main/resources/assets/menulib/textures/main-menu/aetherii_4.png
 src/main/resources/assets/menulib/textures/main-menu/aetherii_5.png
 src/main/java/com/jredfox/menulib/misc/GuiAetherii.java
+src/main/java/com/jredfox/menulib/program/MainJava.java

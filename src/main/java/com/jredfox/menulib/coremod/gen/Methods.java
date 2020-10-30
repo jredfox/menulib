@@ -2,7 +2,7 @@ package com.jredfox.menulib.coremod.gen;
 
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
-import com.jredfox.menulib.misc.NumberUtil;
+import com.jredfox.menulib.misc.MLUtil;
 
 import net.minecraft.client.settings.GameSettings;
 
@@ -16,7 +16,7 @@ public class Methods {
     {
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
     	int frames = menu != null ? menu.getFrames() : -1;
-    	return frames > -1 ? frames : NumberUtil.capMin(this.gameSettings.limitFramerate, 30);
+    	return frames > -1 ? frames : MLUtil.capMin(this.gameSettings.limitFramerate, 30);
 	}
 
 }

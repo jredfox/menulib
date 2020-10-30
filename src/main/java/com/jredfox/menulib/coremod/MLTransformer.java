@@ -26,7 +26,7 @@ import com.evilnotch.lib.asm.util.ASMHelper;
 import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
-import com.jredfox.menulib.misc.NumberUtil;
+import com.jredfox.menulib.misc.MLUtil;
 
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.launchwrapper.IClassTransformer;
