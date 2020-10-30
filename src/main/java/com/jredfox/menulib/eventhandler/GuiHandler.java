@@ -92,7 +92,10 @@ public class GuiHandler {
 		GuiButton next = menu.getNext();
 		
 		if(previous != null && previous.id == button.id)
-			MenuRegistry.INSTANCE.previous();
+		{
+			menu.setEnabled(false);
+//			MenuRegistry.INSTANCE.previous();
+		}
 		else if(next != null && next.id == button.id)
 			MenuRegistry.INSTANCE.next();
 	}

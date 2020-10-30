@@ -310,6 +310,7 @@ public class MenuRegistry
 				this.menus.remove(menu);
 				this.syncIndex();//sync index to -1
 				this.setMenu(prevMenu);//this sets the config dirty, syncs any changes
+				MLConfig.setDirty(true);
 			}
 			else
 			{
