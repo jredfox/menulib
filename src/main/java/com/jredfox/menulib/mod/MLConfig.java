@@ -27,18 +27,21 @@ import net.minecraftforge.common.config.Property;
 
 public class MLConfig {
 	
+	//config vars
 	public static boolean displayNew = true;
 	public static ResourceLocation menuIndex;
-	
 	public static String[] menu_order;
 	public static String[] menu_user;
-	private static final String comment_order = "configure order here. to disable a menu append \"= false\"";
-	private static final String comment_user = "modid:menu <full.path.to.class>";
 	
+	//vars
+	public static File mlcfg = new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg");
+	public static ResourceLocation newMenu;
 	public static boolean dirtyIndex;
 	public static boolean dirtyOrder;
-	public static ResourceLocation newMenu;
-	public static File mlcfg = new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg");
+	
+	//comments
+	private static final String comment_order = "configure order here. to disable a menu append \"= false\"";
+	private static final String comment_user = "modid:menu <full.path.to.class>";
 	
 	public static void load()
 	{
@@ -46,18 +49,19 @@ public class MLConfig {
 		cfg.load();
 		displayNew = cfg.get("general", "displayNewMenu", displayNew).getBoolean();
 		menuIndex = new ResourceLocation(cfg.get("general", "menuIndex", "").getString());
-		menu_order = cfg.getStringList("menus_order", "general", new String[]{}, comment_order);
-		menu_user =  cfg.getStringList("menus_user", "general", new String[]{}, comment_user);
+		menu_order = cfg.get("general", "menus_order", new String[]{}, comment_order).getStringList();
+		menu_user =  cfg.get("general", "menus_user", new String[]{}, comment_user).getStringList();
 		cfg.save();
 	}
 
 	/**
-	 * saves the menuIndex and menu order
+	 * saves vars to the config depending upon what is dirty at the time
 	 */
 	public static void save()
 	{
 		if(!mlcfg.exists())
 			setDirty(true);
+		
 		if(!dirtyIndex && !dirtyOrder)
 			return;
 		
@@ -101,7 +105,7 @@ public class MLConfig {
 			Class<? extends GuiScreen> guiClass = ReflectionUtil.classForName(line.getMetaString());
 			if(guiClass == null)
 			{
-				System.out.println("skipping:" + line);
+				System.out.println("skipping user menu:" + line);
 				continue;
 			}
 			IMenu menu = new Menu(id, guiClass);
@@ -109,7 +113,7 @@ public class MLConfig {
 		}
 	}
 	
-	private static void setDirty(boolean dirty)
+	public static void setDirty(boolean dirty)
 	{
 		dirtyIndex = dirty;
 		dirtyOrder = dirty;

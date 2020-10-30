@@ -145,9 +145,9 @@ public class MenuRegistry
 	public void setMenu(IMenu nextMenu) 
 	{
 		this.sanityCheck(nextMenu);
+		this.previous = this.menu;
 		this.close(this.menu);
 		this.switchMenu(this.menu);
-		this.previous = this.menu;
 		this.setMenuDirect(nextMenu);
 		MLConfig.setDirtyIndex(true);
 		MLConfig.save();
@@ -180,6 +180,16 @@ public class MenuRegistry
 		Minecraft.getMinecraft().displayGuiScreen(GuiHandler.fake_menu);
 	}
 	
+	public boolean isDisplaying()
+	{
+		return this.menu != null && this.menu.get() != null && this.menu.get() == this.mc.currentScreen;
+	}
+	
+	public boolean isDisplaying(IMenu menu)
+	{
+		return this.menu == menu && menu.get() != null && menu.get() == this.mc.currentScreen;
+	}
+	
 	public IMenu getFirst() 
 	{
 		return this.menus.get(0);
@@ -204,7 +214,6 @@ public class MenuRegistry
 	
 	public void load()
 	{
-		new LineArray("a");
 		long ms = System.currentTimeMillis();
 		this.syncConfig();
 		this.populateMenus();
@@ -308,18 +317,13 @@ public class MenuRegistry
 				if(prevMenu == null)
 					prevMenu = this.getNext();
 				this.menus.remove(menu);
-				this.syncIndex();//sync index to -1
 				MLConfig.setDirtyOrder(true);
 				this.setMenu(prevMenu);//this sets the config dirty, syncs any changes
 			}
-			else
+			else if(this.menus.remove(menu))
 			{
-				boolean removed = this.menus.remove(menu);
-				if(removed)
-				{
-					this.syncChange(menu);
-					MLConfig.setDirtyOrder(true);
-				}
+				this.syncChange(menu);
+				MLConfig.setDirtyOrder(true);
 			}
 		}
 		else if(!this.menus.contains(menu))
@@ -329,25 +333,6 @@ public class MenuRegistry
 			MLConfig.setDirtyOrder(true);
 		}
 		MLConfig.save();
-	}
-	
-	public boolean isDisplaying(IMenu menu)
-	{
-		return menu.get() != null && menu.get() == this.mc.currentScreen;
-	}
-	
-	/**
-	 * the algorithm is flawed doesn't work in every case
-	 */
-	public int getAddedIndex(IMenu index)
-	{
-		for(int i = this.registry.indexOf(index) - 1; i >= 0 ; i--)
-		{
-			IMenu m = this.registry.get(i);
-			if(m.isEnabled())
-				return this.menus.indexOf(m) + 1;
-		}
-		return 0;
 	}
 	
 	/**
