@@ -31,13 +31,11 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void open();
 	/**
-	 * called when the menu closes.
-	 * NOTE: if your IMenu is disabled and displaying then MenuRegistry.index will be -1
+	 * called when the menu closes. be aware of if your menu isEnabled() or not when checking for MenuRegistry.index
 	 */
 	public void close();
 	/**
-	 * fired when your IMenu gets switched
-	 * NOTE: if your IMenu is disabled and displaying then MenuRegistry.index will be -1
+	 * called when the menu switches off. be aware of if your menu isEnabled() or not when checking for MenuRegistry.index
 	 */
 	public void switchMenu();
 	/**

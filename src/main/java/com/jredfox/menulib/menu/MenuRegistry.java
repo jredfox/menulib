@@ -311,17 +311,21 @@ public class MenuRegistry
 			return;
 		if(!menu.isEnabled())
 		{
+			System.out.println(this.menu == menu);
 			if(this.isDisplaying(menu))
 			{
+				System.out.println("display");
 				IMenu prevMenu = this.getPrevious();
 				if(prevMenu == null)
 					prevMenu = this.getNext();
 				this.menus.remove(menu);
+				this.syncChange(menu);
 				MLConfig.setDirtyOrder(true);
 				this.setMenu(prevMenu);//this sets the config dirty, syncs any changes
 			}
 			else if(this.menus.remove(menu))
 			{
+				System.out.println("removed");
 				this.syncChange(menu);
 				MLConfig.setDirtyOrder(true);
 			}

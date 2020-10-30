@@ -1,20 +1,15 @@
 package com.jredfox.menulib.eventhandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.ITick;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
-import com.evilnotch.lib.util.JavaUtil;
 import com.jredfox.menulib.cap.CapReg;
-import com.jredfox.menulib.cap.CapabilityMusic;
 import com.jredfox.menulib.event.MusicEvent;
 import com.jredfox.menulib.event.MusicEvent.MusicState;
+import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.IMusicPlayerHolder;
-import com.jredfox.menulib.sound.MusicEmpty;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -32,7 +27,9 @@ public class MusicPlayerHandler implements ITick{
 	{
 		if(TickRegistry.isRightTickClient(20 * 4) && TickRegistry.tickCountClient != 0)
 		{
-//			MenuRegistry.INSTANCE.registry.get(3).setEnabled(true);
+			IMenu menu = MenuRegistry.INSTANCE.menus.get(MenuRegistry.INSTANCE.index);
+//			menu.setEnabled(false);
+//			System.out.println("music menus:" + MenuRegistry.INSTANCE.menus + "," + menu);
 		}
 		MusicState state = this.getState();
 		this.updateState(state);
