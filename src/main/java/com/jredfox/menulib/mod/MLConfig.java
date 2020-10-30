@@ -27,17 +27,17 @@ import net.minecraftforge.common.config.Property;
 
 public class MLConfig {
 	
-	//config vars
+	//configurable vars
 	public static boolean displayNew = true;
 	public static ResourceLocation menuIndex;
 	public static String[] menu_order;
 	public static String[] menu_user;
 	
-	//vars
-	public static File mlcfg = new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg");
+	//config vars
 	public static ResourceLocation newMenu;
 	public static boolean dirtyIndex;
 	public static boolean dirtyOrder;
+	public static File mlcfg = new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg");
 	
 	//comments
 	private static final String comment_order = "configure order here. to disable a menu append \"= false\"";
@@ -45,7 +45,7 @@ public class MLConfig {
 	
 	public static void load()
 	{
-		Configuration cfg = new Configuration(new File(MLConfigCore.menuLibHome, MLReference.id + ".cfg"));
+		Configuration cfg = new Configuration(mlcfg);
 		cfg.load();
 		displayNew = cfg.get("general", "displayNewMenu", displayNew).getBoolean();
 		menuIndex = new ResourceLocation(cfg.get("general", "menuIndex", "").getString());
