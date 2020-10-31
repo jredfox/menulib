@@ -2,6 +2,7 @@ package com.jredfox.menulib.compat.menu;
 
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.jredfox.menulib.menu.Menu;
+import com.jredfox.menulib.menu.MenuRegistry;
 
 import net.minecraft.util.ResourceLocation;
 

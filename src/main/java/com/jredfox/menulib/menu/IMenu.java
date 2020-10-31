@@ -35,7 +35,7 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void close();
 	/**
-	 * called when the menu switches off. be aware of if your menu isEnabled() or not when checking for MenuRegistry.index
+	 * called when the menu switches off to another menu use MenuRegistry.menu to get the new menu. be aware of if your menu isEnabled() or not when checking for MenuRegistry.index
 	 */
 	public void switchMenu();
 	/**

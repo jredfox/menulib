@@ -153,23 +153,21 @@ public class MenuRegistry
 	public void setMenu(IMenu nextMenu, boolean display) 
 	{
 		this.sanityCheck(nextMenu);
-		this.previous = this.menu;
-		if(this.menu != null)
-		{
-			this.close(this.menu);
-			this.switchMenu(this.menu);
-		}
+		IMenu old = this.menu;
+		if(this.isDisplaying())
+			this.close(old);
 		this.menu = nextMenu;
 		this.syncChange(this.menu);
+		if(old != null)
+			this.switchMenu(old);
+		this.previous = old;
+		
 		if(!this.menu.getId().equals(MLConfig.menuIndex))
-		{
 			MLConfig.setDirtyIndex(true);
-		}
 		MLConfig.save();
+		
 		if(display)
-		{
 			this.display();
-		}
 	}
 
 	public void sanityCheck(IMenu nextMenu)
