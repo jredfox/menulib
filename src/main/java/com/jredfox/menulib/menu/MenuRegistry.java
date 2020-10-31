@@ -11,6 +11,7 @@ import java.util.Set;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
+import com.jredfox.menulib.compat.menu.MenuTBL;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.misc.MLUtil;
@@ -153,22 +154,22 @@ public class MenuRegistry
 	{
 		this.sanityCheck(nextMenu);
 		this.previous = this.menu;
-		this.close(this.menu);
-		this.switchMenu(this.menu);
-		this.setMenuDirect(nextMenu);
-		MLConfig.setDirtyIndex(true);
+		if(this.menu != null)
+		{
+			this.close(this.menu);
+			this.switchMenu(this.menu);
+		}
+		this.menu = nextMenu;
+		this.syncChange(this.menu);
+		if(!this.menu.getId().equals(MLConfig.menuIndex))
+		{
+			MLConfig.setDirtyIndex(true);
+		}
 		MLConfig.save();
 		if(display)
+		{
 			this.display();
-	}
-	
-	/**
-	 * do not use unless you know what you are doing
-	 */
-	public void setMenuDirect(IMenu menu) 
-	{
-		this.menu = menu;
-		this.syncChange(menu);
+		}
 	}
 
 	public void sanityCheck(IMenu nextMenu)
@@ -207,7 +208,7 @@ public class MenuRegistry
 	}
 	
 	/**
-	 * @return false for null return true if non null and enabled
+	 * @return return true if non null and enabled
 	 */
 	public boolean isEnabledSafe(IMenu menu)
 	{
@@ -320,7 +321,6 @@ public class MenuRegistry
 		this.syncConfig();
 		this.populateMenus();
 		this.setInitMenu();
-		MLConfig.save();
 		this.isLoaded = true;
 		JavaUtil.printTime(ms, "Done loading MenuRegistry:");
 	}
@@ -359,13 +359,9 @@ public class MenuRegistry
 			{
 				Integer index = this.temp.get(m.getId());
 				if(index != null)
-				{
 					list.add(index, m);
-				}
 				else
-				{
 					list.add(m);
-				}
 				MLConfig.setNewMenu(m);
 				MLConfig.setDirtyOrder(true);
 			}
@@ -386,12 +382,8 @@ public class MenuRegistry
 	{
 		IMenu cfgIndex = this.getMenu(MLConfig.menuIndex);
 		IMenu newMenu = MLConfig.displayNew && MLConfig.newMenu != null ? this.getMenu(MLConfig.newMenu) : null;
-		IMenu menu = this.isEnabledSafe(newMenu) ? newMenu : (this.isEnabledSafe(cfgIndex) ? cfgIndex : this.getFirst());
-		if(!menu.getId().equals(MLConfig.menuIndex))
-			MLConfig.setDirtyIndex(true);
-		
-		this.sanityCheck(menu);
-		this.setMenuDirect(menu);
+		IMenu menu = newMenu != null ? newMenu : (this.isEnabledSafe(cfgIndex) ? cfgIndex : this.getFirst());
+		this.setMenu(menu, false);
 	}
 	
 }

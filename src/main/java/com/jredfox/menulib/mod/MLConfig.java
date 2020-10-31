@@ -70,16 +70,11 @@ public class MLConfig {
 		
 		if(dirtyIndex)
 			saveIndex(cfg);
-		
 		if(dirtyOrder)
-		{
-			String[] orderList = new String[MenuRegistry.INSTANCE.registry.size()];
-			int index = 0;
-			for(IMenu menu : MenuRegistry.INSTANCE.registry)
-				orderList[index++] = "" + menu.getId() + (!menu.isEnabled() ? " = false" : "");
-			cfg.get("general", "menus_order", new String[]{}).set(orderList);
-		}
+			saveOrder(cfg);
+		
 		syncComments(cfg);
+		
 		cfg.save();
 		setDirty(false);
 	}
@@ -88,6 +83,15 @@ public class MLConfig {
 	{
 		menuIndex = MenuRegistry.INSTANCE.getMenu().getId();
 		cfg.get("general", "menuIndex", "").set(menuIndex.toString());
+	}
+	
+	private static void saveOrder(Configuration cfg) 
+	{
+		String[] orderList = new String[MenuRegistry.INSTANCE.registry.size()];
+		int index = 0;
+		for(IMenu menu : MenuRegistry.INSTANCE.registry)
+			orderList[index++] = "" + menu.getId() + (!menu.isEnabled() ? " = false" : "");
+		cfg.get("general", "menus_order", new String[]{}).set(orderList);
 	}
 	
 	private static void syncComments(Configuration cfg)
@@ -101,6 +105,8 @@ public class MLConfig {
 		for(String s : menu_user)
 		{
 			LineArray line = new LineArray(s);
+			if(!line.hasHead())
+				line.setHead(true);
 			ResourceLocation id = line.getResourceLocation();
 			Class<? extends GuiScreen> guiClass = ReflectionUtil.classForName(line.getMetaString());
 			if(guiClass == null)
@@ -109,6 +115,7 @@ public class MLConfig {
 				continue;
 			}
 			IMenu menu = new Menu(id, guiClass);
+			menu.setEnabled(line.getBoolean());
 			MenuRegistry.INSTANCE.register(menu);
 		}
 	}
