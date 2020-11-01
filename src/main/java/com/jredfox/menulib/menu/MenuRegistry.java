@@ -29,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class MenuRegistry
 {
 	public IMenu menu;
+	public boolean isOpen;
 	public int index;
 	public IMenu previous;
 	public boolean isLoaded;
@@ -146,10 +147,10 @@ public class MenuRegistry
 		this.syncChange(this.menu);
 		if(old != null)
 		{
-			old.close();//close the old menu
+			this.close(old);
 		}
 		this.previous = old;
-		this.menu.open();
+		this.open(this.menu);
 		
 		//save config
 		if(!this.menu.getId().equals(MLConfig.menuIndex))
@@ -373,6 +374,22 @@ public class MenuRegistry
 		IMenu newMenu = MLConfig.displayNew && MLConfig.newMenu != null ? this.getMenu(MLConfig.newMenu) : null;
 		IMenu menu = newMenu != null ? newMenu : (this.isEnabledSafe(cfgIndex) ? cfgIndex : this.getFirst());
 		this.setMenu(menu, false);
+	}
+
+	public void open(IMenu menu)
+	{
+		if(this.isOpen)
+			return;
+		menu.open();
+		this.isOpen = true;
+	}
+	
+	public void close(IMenu menu)
+	{
+		if(!this.isOpen)
+			return;
+		menu.close();
+		this.isOpen = false;
 	}
 	
 }

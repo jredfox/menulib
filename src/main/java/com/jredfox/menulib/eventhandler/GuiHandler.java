@@ -45,16 +45,9 @@ public class GuiHandler {
 	{	
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
-		if(Minecraft.getMinecraft().world != null)
-			throw new RuntimeException("main menu cannot be open when the world is open! unsupported");
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		MenuRegistry.INSTANCE.sanityCheck(menu);
-		if(flag)
-		{
-			menu.open();
-			flag = false;
-		}
-		System.out.println("open gui");
+		MenuRegistry.INSTANCE.open(menu);//open the menu if it's closed
 		menu.openGui();
 		e.setGui(MenuRegistry.INSTANCE.getGuiOpen());
 	}
@@ -116,8 +109,7 @@ public class GuiHandler {
 	{
 	    Minecraft.getMinecraft().addScheduledTask(() ->
 	    {
-	    	MenuRegistry.INSTANCE.getMenu().close();
-	    	flag = true;
+	    	MenuRegistry.INSTANCE.close(MenuRegistry.INSTANCE.getMenu());
 	    });
 	}
 	
@@ -125,7 +117,13 @@ public class GuiHandler {
 	public void shutdown(ShutdownEvent e)
 	{
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
-		System.out.println("closing IMenu:" + menu);
-		menu.close();
+		System.out.println("closing IMenu and guis:" + menu);
+		menu.closeGui();
+		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+		if(gui != null)
+		{
+			gui.onGuiClosed();
+		}
+		MenuRegistry.INSTANCE.close(menu);
 	}
 }

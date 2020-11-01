@@ -85,26 +85,19 @@ public class Menu implements IMenu {
 	}
 	
 	@Override
-	public void open() {
-//		System.out.println("open:" + this);
-	}
+	public void open() {}
 	
 	@Override
-	public void openGui() {
-//		System.out.println("openGui:" + this);
-	}
+	public void openGui() {}
 
 	@Override
 	public void close() 
 	{
-//		System.out.println("close:" + this);
 		this.clear();
 	}
 	
 	@Override
-	public void closeGui() {
-//		System.out.println("closeGui:" + this);
-	}
+	public void closeGui() {}
 	
 	@Override
 	public void clear()

@@ -16,9 +16,16 @@ public class ShutdownHandler implements ITick{
 		Minecraft mc = Minecraft.getMinecraft();
 		if(!mc.running && !hasShutdown)
 		{
-			MinecraftForge.EVENT_BUS.post(new ShutdownEvent());
-			if(!mc.running)
-				hasShutdown = true;
+			try
+			{
+				MinecraftForge.EVENT_BUS.post(new ShutdownEvent());
+				if(!mc.running)
+					hasShutdown = true;
+			}
+			catch(Throwable t)
+			{
+				t.printStackTrace();
+			}
 		}
 	}
 

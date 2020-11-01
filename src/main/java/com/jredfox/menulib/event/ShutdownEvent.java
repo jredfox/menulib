@@ -7,6 +7,6 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * obviously this fires when the application is trying to close.
  * to prevent shutdown set Minecraft.getminecraft().running to true
  */
-public class ShutdownEvent extends Event{
+public class ShutdownEvent extends Event {
 
 }
