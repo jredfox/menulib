@@ -17,7 +17,7 @@ public class MenuCMM extends Menu{
 	}
 	
 	@Override
-	public void open()
+	public void openGui()
 	{
 		if(this.gui != null)
 			this.syncGui();

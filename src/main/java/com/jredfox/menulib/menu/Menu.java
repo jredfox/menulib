@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import org.apache.logging.log4j.core.util.ReflectionUtil;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiBasicButton;
-import com.jredfox.menulib.mod.MLConfig;
 import com.jredfox.menulib.mod.MLConfigButton;
 import com.jredfox.menulib.sound.IMusicPlayer;
 import com.jredfox.menulib.sound.MusicEmpty;
@@ -86,15 +85,25 @@ public class Menu implements IMenu {
 	}
 	
 	@Override
-	public void open() {}
-
-	@Override
-	public void close() {}
+	public void open() {
+//		System.out.println("open:" + this);
+	}
 	
 	@Override
-	public void switchMenu()
+	public void openGui() {
+//		System.out.println("openGui:" + this);
+	}
+
+	@Override
+	public void close() 
 	{
+//		System.out.println("close:" + this);
 		this.clear();
+	}
+	
+	@Override
+	public void closeGui() {
+//		System.out.println("closeGui:" + this);
 	}
 	
 	@Override

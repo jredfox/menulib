@@ -43,7 +43,7 @@ public class GuiHandler {
 //		System.out.println("guiOpen:" + MenuRegistry.INSTANCE.getMenu());
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		MenuRegistry.INSTANCE.sanityCheck(menu);
-		MenuRegistry.INSTANCE.open(menu);
+		menu.openGui();
 		e.setGui(MenuRegistry.INSTANCE.getGuiOpen());
 	}
 	
@@ -59,7 +59,7 @@ public class GuiHandler {
 	{
 		if(MenuRegistry.INSTANCE.getGui() == event.gui)
 		{
-			MenuRegistry.INSTANCE.close(MenuRegistry.INSTANCE.getMenu());
+			MenuRegistry.INSTANCE.getMenu().closeGui();
 		}
 	}
 	

@@ -31,13 +31,17 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public void open();
 	/**
+	 * called when the gui event fires and the menu is open
+	 */
+	public void openGui();
+	/**
 	 * called when the menu closes. be aware of if your menu isEnabled() or not when checking for MenuRegistry.index
 	 */
 	public void close();
 	/**
-	 * called when the menu switches off to another menu use MenuRegistry.menu to get the new menu. be aware of if your menu isEnabled() or not when checking for MenuRegistry.index
+	 * called when the gui closes
 	 */
-	public void switchMenu();
+	public void closeGui();
 	/**
 	 * clear your gui field
 	 */

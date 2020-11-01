@@ -12,6 +12,7 @@ import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.compat.menu.MenuTBL;
+import com.jredfox.menulib.event.GuiEvent;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.misc.MLUtil;
@@ -23,6 +24,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 public class MenuRegistry
 {
@@ -104,26 +106,6 @@ public class MenuRegistry
 		return null;
 	}
 
-	public void open(IMenu menu) 
-	{
-		menu.open();
-	}
-
-	public void close(IMenu menu) 
-	{
-		menu.close();
-	}
-	
-	public void switchMenu(IMenu menu)
-	{
-		menu.switchMenu();
-	}
-	
-	public void clear(IMenu menu)
-	{
-		menu.clear();
-	}
-
 	public boolean isBrowsable() 
 	{
 		return this.menus.size() > 1;
@@ -153,19 +135,28 @@ public class MenuRegistry
 	public void setMenu(IMenu nextMenu, boolean display) 
 	{
 		this.sanityCheck(nextMenu);
+		if(this.isMenuIndex(nextMenu))
+			return;
 		IMenu old = this.menu;
 		if(this.isDisplaying())
-			this.close(old);
+		{
+			old.closeGui();//close the old gui
+		}
 		this.menu = nextMenu;
 		this.syncChange(this.menu);
 		if(old != null)
-			this.switchMenu(old);
+		{
+			old.close();//close the old menu
+		}
 		this.previous = old;
+		this.menu.open();
 		
+		//save config
 		if(!this.menu.getId().equals(MLConfig.menuIndex))
 			MLConfig.setDirtyIndex(true);
 		MLConfig.save();
 		
+		//display menu
 		if(display)
 			this.display();
 	}

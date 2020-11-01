@@ -17,9 +17,9 @@ public class MenuTBL extends Menu{
 	}
 
 	@Override
-	public void switchMenu()
+	public void close()
 	{
-		super.switchMenu();//set the gui to null
+		super.close();//set the gui to null
 		ReflectionUtil.setObject(tbl_instance, false, tbl_musicHandler, "hasBlMainMenu");
 	}
 }
