@@ -16,7 +16,7 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public ResourceLocation getId();
 	/**
-	 * return a list of superclasses that extend GuiScreen that are menus for example GuiMainMenu but, not Fossils menu as it extends GuiMainMenu
+	 * return a list of baseclasses that extend GuiScreen that are menus for example GuiMainMenu but, not Fossils menu as it extends GuiMainMenu
 	 */
 	public Class<? extends GuiScreen>[] getGuiClasses();
 	/**

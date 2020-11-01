@@ -38,6 +38,22 @@ public class MenuEvent extends Event{
 		}
 	}
 	
+	public static class OpenGui extends MenuEvent 
+	{
+		public OpenGui(IMenu menu) 
+		{
+			super(menu);
+		}
+	}
+	
+	public static class CloseGui extends MenuEvent 
+	{
+		public CloseGui(IMenu menu) 
+		{
+			super(menu);
+		}
+	}
+	
 	public static class SwitchMenu extends MenuEvent 
 	{
 		public SwitchMenu(IMenu menu) 

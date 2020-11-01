@@ -391,7 +391,8 @@ public class MenuRegistry
 		IMenu menu = newMenu != null ? newMenu : (this.isEnabledSafe(cfgIndex) ? cfgIndex : this.getFirst());
 		this.setMenu(menu, false);
 	}
-
+	
+    //WIP IMenu Events______________________
 	public void open(IMenu menu)
 	{
 		if(this.isOpen)
@@ -408,4 +409,28 @@ public class MenuRegistry
 		this.isOpen = false;
 	}
 	
+	public void openGui(IMenu menu)
+	{
+		
+	}
+	
+	public void closeGui(IMenu menu)
+	{
+		
+	}
+	
+	public void clear(IMenu menu)
+	{
+		
+	}
+	
+	public void switchMenu(IMenu oldMenu, IMenu newMenu)
+	{
+		
+	}
+	
+	public void SelectMenu(IMenu menu)
+	{
+		
+	}
 }
