@@ -26,13 +26,7 @@ public class MLMod {
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		
-	}
-	
-	@EventHandler
-	public void postinit(FMLPostInitializationEvent event)
-	{
-		MLRegistry.runPost();
+		MLRegistry.runInit();
 	}
 
 }

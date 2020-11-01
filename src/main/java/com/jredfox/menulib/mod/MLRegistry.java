@@ -59,9 +59,9 @@ public class MLRegistry {
 		TickRegistry.register(new ShutdownHandler(), Side.CLIENT);
 		
 		if(MLConfigCore.debugFrames)
-		{
 			TickRegistry.register(new FrameHandler(), Side.CLIENT);
-		}
+		if(proxyCMM.isLoaded)
+			CMMJsonRegistry.registry.add(new MLCMMJson());
 	}
 	
 	public static void registerCaps()
@@ -69,41 +69,33 @@ public class MLRegistry {
 		CapabilityRegistry.registerRegistry(new CapReg());
 	}
 	
-	public static void runPost() 
+	public static void runInit() 
 	{
-		post();
-		postCompat();
+		init();
+		initCompat();
 	}
 
-	public static void post()
+	public static void init()
 	{
 		MenuRegistry.INSTANCE.load();
 	}
 
-	public static void postCompat()
+	public static void initCompat()
 	{
 		if(proxyCMM.isLoaded)
-		{
 			CMMJsonRegistry.checkReload();
-		}
 	}
 	
 	@SubscribeEvent
 	public void registerMenus(MenuRegistryEvent event)
 	{
 		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("mainmenu"), GuiMainMenu.class));
-		
 		if(Loader.isModLoaded("fossil"))
 			MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("fossil:mineshaft"), ReflectionUtil.classForName("fossilsarcheology.client.gui.FAMainMenuGUI")));
 		if(Loader.isModLoaded("thebetweenlands"))
-		{
 			MenuRegistry.INSTANCE.register(new MenuTBL());
-		}
 		if(proxyCMM.isLoaded)
-		{
 			MenuRegistry.INSTANCE.register(0, new MenuCMM());
-			CMMJsonRegistry.registry.add(new MLCMMJson());
-		}
 		MenuRegistry.INSTANCE.register(new Menu(new ResourceLocation("aetherii:test"), GuiAetherii.class));
 	}
 

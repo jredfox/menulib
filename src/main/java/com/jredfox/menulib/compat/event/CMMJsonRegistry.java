@@ -28,7 +28,7 @@ public class CMMJsonRegistry {
 			
 	public static void fire(File mainmenu)
 	{
-		if(LoaderMain.currentLoadingStage.ordinal() < LoadingStage.POSTINIT.ordinal())
+		if(LoaderMain.currentLoadingStage.ordinal() < LoadingStage.INIT.ordinal())
 		{
 			reloadFlag = true;
 			return;
