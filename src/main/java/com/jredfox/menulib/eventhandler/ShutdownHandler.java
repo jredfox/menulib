@@ -1,20 +1,24 @@
 package com.jredfox.menulib.eventhandler;
 
 import com.evilnotch.lib.minecraft.tick.ITick;
-import com.jredfox.menulib.event.MinecraftShutdownEvent;
+import com.jredfox.menulib.event.ShutdownEvent;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
-public class MinecraftShutdownHandler implements ITick{
+public class ShutdownHandler implements ITick{
 
+	public static boolean hasShutdown;
 	@Override
 	public void tick()
 	{
-		if(!Minecraft.getMinecraft().running)
+		Minecraft mc = Minecraft.getMinecraft();
+		if(!mc.running && !hasShutdown)
 		{
-			MinecraftForge.EVENT_BUS.post(new MinecraftShutdownEvent());
+			MinecraftForge.EVENT_BUS.post(new ShutdownEvent());
+			if(!mc.running)
+				hasShutdown = true;
 		}
 	}
 
@@ -25,7 +29,7 @@ public class MinecraftShutdownHandler implements ITick{
 	}
 
 	@Override
-	public Phase getPhase() 
+	public Phase getPhase()
 	{
 		return Phase.END;
 	}

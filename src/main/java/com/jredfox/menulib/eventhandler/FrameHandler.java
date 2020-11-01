@@ -2,7 +2,7 @@ package com.jredfox.menulib.eventhandler;
 
 import com.evilnotch.lib.minecraft.tick.ITick;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
-import com.jredfox.menulib.event.MinecraftShutdownEvent;
+import com.jredfox.menulib.event.ShutdownEvent;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
 import com.jredfox.menulib.misc.MLUtil;

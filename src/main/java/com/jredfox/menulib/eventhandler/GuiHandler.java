@@ -5,7 +5,7 @@ import java.util.List;
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
 import com.evilnotch.lib.minecraft.event.client.ClientDisconnectEvent;
 import com.jredfox.menulib.event.GuiEvent;
-import com.jredfox.menulib.event.MinecraftShutdownEvent;
+import com.jredfox.menulib.event.ShutdownEvent;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
 
@@ -30,7 +30,7 @@ public class GuiHandler {
 	public void guiOpenPre(GuiOpenEvent e)
 	{
 		if(!Minecraft.getMinecraft().running)
-			e.setCanceled(true);
+			e.setCanceled(true);//stop mods from opening gui on close when the application is closing
 		old = Minecraft.getMinecraft().currentScreen;
 		if(!MenuRegistry.INSTANCE.shouldReplace(e.getGui()))
 			return;
@@ -47,7 +47,6 @@ public class GuiHandler {
 			return;
 		if(Minecraft.getMinecraft().world != null)
 			throw new RuntimeException("main menu cannot be open when the world is open! unsupported");
-		System.out.println("guiOpen:" + MenuRegistry.INSTANCE.getMenu());
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		MenuRegistry.INSTANCE.sanityCheck(menu);
 		if(flag)
@@ -55,6 +54,7 @@ public class GuiHandler {
 			menu.open();
 			flag = false;
 		}
+		System.out.println("open gui");
 		menu.openGui();
 		e.setGui(MenuRegistry.INSTANCE.getGuiOpen());
 	}
@@ -112,7 +112,7 @@ public class GuiHandler {
 	}
 	
 	@SubscribeEvent
-	public void guiNullifyer(FMLNetworkEvent.ClientConnectedToServerEvent e)
+	public void close(FMLNetworkEvent.ClientConnectedToServerEvent e)
 	{
 	    Minecraft.getMinecraft().addScheduledTask(() ->
 	    {
@@ -122,7 +122,7 @@ public class GuiHandler {
 	}
 	
 	@SubscribeEvent
-	public void shutdown(MinecraftShutdownEvent e)
+	public void shutdown(ShutdownEvent e)
 	{
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		System.out.println("closing IMenu:" + menu);
