@@ -10,6 +10,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
@@ -54,7 +55,8 @@ public class MLTransformer implements IClassTransformer{
 				switch (index)
 				{
 					case 0:
-						transformFramerate(name, node);
+						transformFramerate(node, name);
+						transformShutdown(node);
 					break;
 					
 					case 1:
@@ -72,11 +74,23 @@ public class MLTransformer implements IClassTransformer{
 		return bytes;
 	}
 
+	public static void transformShutdown(ClassNode node)
+	{
+		for(FieldNode f : node.fields)
+		{
+			if(f.name.equals(new MCPSidedString("running", "field_71425_J").toString()))
+			{
+				f.access = Opcodes.ACC_PUBLIC + Opcodes.ACC_VOLATILE;
+				System.out.println("patched Minecraft.running");
+			}
+		}
+	}
+
 	/**
 	 * patches the framerate to be equal to the game instead of locking it at 30 always
 	 * @throws IOException 
 	 */
-	public void transformFramerate(String name, ClassNode classNode) throws IOException 
+	public void transformFramerate(ClassNode classNode, String name) throws IOException 
 	{
 		//add getMenuFrames so minecraft can use them later
 		String methods = "com/jredfox/menulib/coremod/gen/" + new MCPSidedString("Methods", "MethodsOb").toString();
