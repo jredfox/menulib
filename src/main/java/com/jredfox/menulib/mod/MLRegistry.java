@@ -5,6 +5,8 @@ import java.io.File;
 import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.minecraft.capability.registry.CapabilityRegistry;
 import com.evilnotch.lib.minecraft.tick.TickRegistry;
+import com.evilnotch.lib.util.JavaUtil;
+import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.cap.CapReg;
 import com.jredfox.menulib.compat.event.CMMJsonRegistry;
 import com.jredfox.menulib.compat.eventhandler.MLCMMJson;

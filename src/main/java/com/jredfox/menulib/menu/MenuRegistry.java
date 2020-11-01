@@ -2,23 +2,14 @@ package com.jredfox.menulib.menu;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import com.evilnotch.lib.api.ReflectionUtil;
 import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
-import com.jredfox.menulib.compat.menu.MenuTBL;
-import com.jredfox.menulib.event.GuiEvent;
 import com.jredfox.menulib.event.MenuRegistryEvent;
 import com.jredfox.menulib.eventhandler.GuiHandler;
-import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.misc.MLUtil;
 import com.jredfox.menulib.mod.MLConfig;
-import com.jredfox.menulib.sound.IMusicPlayerHolder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

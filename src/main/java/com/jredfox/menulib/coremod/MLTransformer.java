@@ -56,7 +56,6 @@ public class MLTransformer implements IClassTransformer{
 				{
 					case 0:
 						transformFramerate(node, name);
-						transformShutdown(node);
 					break;
 					
 					case 1:
@@ -72,18 +71,6 @@ public class MLTransformer implements IClassTransformer{
 			t.printStackTrace();
 		}
 		return bytes;
-	}
-
-	public static void transformShutdown(ClassNode node)
-	{
-		for(FieldNode f : node.fields)
-		{
-			if(f.name.equals(new MCPSidedString("running", "field_71425_J").toString()))
-			{
-				f.access = Opcodes.ACC_PUBLIC + Opcodes.ACC_VOLATILE;
-				System.out.println("patched Minecraft.running");
-			}
-		}
 	}
 
 	/**
