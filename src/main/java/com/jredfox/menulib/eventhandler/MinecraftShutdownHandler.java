@@ -1,27 +1,23 @@
 package com.jredfox.menulib.eventhandler;
 
 import com.evilnotch.lib.minecraft.tick.ITick;
-import com.evilnotch.lib.minecraft.tick.TickRegistry;
 import com.jredfox.menulib.event.MinecraftShutdownEvent;
-import com.jredfox.menulib.menu.IMenu;
-import com.jredfox.menulib.menu.MenuRegistry;
-import com.jredfox.menulib.misc.MLUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
-public class FrameHandler implements ITick{
+public class MinecraftShutdownHandler implements ITick{
 
 	@Override
-	public void tick() 
+	public void tick()
 	{
-		if(TickRegistry.isRightTickClient(20 * 4))
+		if(!Minecraft.getMinecraft().running)
 		{
-			System.out.println("Client FrameRate:" + Minecraft.getMinecraft().getLimitFramerate());
+			MinecraftForge.EVENT_BUS.post(new MinecraftShutdownEvent());
 		}
 	}
-	
+
 	@Override
 	public void garbageCollect() 
 	{

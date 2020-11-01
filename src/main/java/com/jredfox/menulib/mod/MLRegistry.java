@@ -13,6 +13,7 @@ import com.jredfox.menulib.compat.menu.MenuTBL;
 import com.jredfox.menulib.coremod.MLConfigCore;
 import com.jredfox.menulib.eventhandler.FrameHandler;
 import com.jredfox.menulib.eventhandler.GuiHandler;
+import com.jredfox.menulib.eventhandler.MinecraftShutdownHandler;
 import com.jredfox.menulib.eventhandler.MusicHandler;
 import com.jredfox.menulib.eventhandler.MusicPlayerHandler;
 import com.jredfox.menulib.menu.IMenu;
@@ -78,6 +79,7 @@ public class MLRegistry {
 		MinecraftForge.EVENT_BUS.register(new GuiHandler());
 		MinecraftForge.EVENT_BUS.register(new MusicHandler());
 		TickRegistry.register(new MusicPlayerHandler(), Side.CLIENT);
+		TickRegistry.register(new MinecraftShutdownHandler(), Side.CLIENT);
 		
 		if(MLConfigCore.debugFrames)
 		{

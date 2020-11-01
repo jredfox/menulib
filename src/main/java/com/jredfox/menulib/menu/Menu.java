@@ -86,7 +86,7 @@ public class Menu implements IMenu {
 	
 	@Override
 	public void open() {
-//		System.out.println("open:" + this);
+		System.out.println("open:" + this);
 	}
 	
 	@Override
@@ -97,7 +97,7 @@ public class Menu implements IMenu {
 	@Override
 	public void close() 
 	{
-//		System.out.println("close:" + this);
+		System.out.println("close:" + this);
 		this.clear();
 	}
 	

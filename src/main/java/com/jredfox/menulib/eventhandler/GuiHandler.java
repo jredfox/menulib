@@ -3,7 +3,9 @@ package com.jredfox.menulib.eventhandler;
 import java.util.List;
 
 import com.evilnotch.lib.minecraft.basicmc.client.gui.GuiFakeMenu;
+import com.evilnotch.lib.minecraft.event.client.ClientDisconnectEvent;
 import com.jredfox.menulib.event.GuiEvent;
+import com.jredfox.menulib.event.MinecraftShutdownEvent;
 import com.jredfox.menulib.menu.IMenu;
 import com.jredfox.menulib.menu.MenuRegistry;
 
@@ -13,6 +15,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -21,12 +24,14 @@ public class GuiHandler {
 	
 	public static final GuiFakeMenu fake_menu = new GuiFakeMenu();
 	public static GuiScreen old;
+	public static boolean flag;
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void guiOpenPre(GuiOpenEvent e)
 	{
+		if(!Minecraft.getMinecraft().running)
+			e.setCanceled(true);
 		old = Minecraft.getMinecraft().currentScreen;
-//		System.out.println("shouldReplace" + MenuRegistry.INSTANCE.shouldReplace(e.getGui()) + "," + e.getGui());
 		if(!MenuRegistry.INSTANCE.shouldReplace(e.getGui()))
 			return;
 		e.setGui(fake_menu);
@@ -40,9 +45,16 @@ public class GuiHandler {
 	{	
 		if(!(e.getGui() instanceof GuiFakeMenu))
 			return;
-//		System.out.println("guiOpen:" + MenuRegistry.INSTANCE.getMenu());
+		if(Minecraft.getMinecraft().world != null)
+			throw new RuntimeException("main menu cannot be open when the world is open! unsupported");
+		System.out.println("guiOpen:" + MenuRegistry.INSTANCE.getMenu());
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		MenuRegistry.INSTANCE.sanityCheck(menu);
+		if(flag)
+		{
+			menu.open();
+			flag = false;
+		}
 		menu.openGui();
 		e.setGui(MenuRegistry.INSTANCE.getGuiOpen());
 	}
@@ -104,8 +116,16 @@ public class GuiHandler {
 	{
 	    Minecraft.getMinecraft().addScheduledTask(() ->
 	    {
-	    	MenuRegistry.INSTANCE.getMenu().clear();
+	    	MenuRegistry.INSTANCE.getMenu().close();
+	    	flag = true;
 	    });
 	}
-
+	
+	@SubscribeEvent
+	public void shutdown(MinecraftShutdownEvent e)
+	{
+		IMenu menu = MenuRegistry.INSTANCE.getMenu();
+		System.out.println("closing IMenu:" + menu);
+		menu.close();
+	}
 }
