@@ -36,6 +36,7 @@ public class MenuRegistry
 	public boolean isLoaded;
 	public List<IMenu> registry = new ArrayList();
 	public List<IMenu> menus = new ArrayList(0);
+	protected List<Class<? extends GuiScreen>> menuBases = new ArrayList(3);
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -86,17 +87,17 @@ public class MenuRegistry
 
 	public boolean isMenu(GuiScreen gui)
 	{
-		if(gui == null)
-			return false;
-		
-		for(IMenu m : this.menus)
-		{
-			if(m.getGuiClass().equals(gui.getClass()))
-				return true;
-		}
-		return false;
+		return gui != null && isMenu(gui.getClass());
 	}
 	
+	public boolean isMenu(Class<? extends GuiScreen> clazz)
+	{
+		for(Class<? extends GuiScreen> base : this.menuBases)
+			if(JavaUtil.isClassExtending(base, clazz))
+				return true;
+		return false;
+	}
+
 	public IMenu getMenu(ResourceLocation id)
 	{
 		for(IMenu m : this.registry)
@@ -308,10 +309,20 @@ public class MenuRegistry
 		long ms = System.currentTimeMillis();
 		MinecraftForge.EVENT_BUS.post(new MenuRegistryEvent());
 		this.syncConfig();
+		this.cacheMenuBases();
 		this.populateMenus();
 		this.setInitMenu();
 		this.isLoaded = true;
 		JavaUtil.printTime(ms, "Done loading MenuRegistry:");
+	}
+
+	public void cacheMenuBases()
+	{
+		this.menuBases.clear();
+		for(IMenu menu : this.registry)
+			for(Class<? extends GuiScreen> c : menu.getGuiClasses())
+				if(!this.isMenu(c))
+					this.menuBases.add(c);
 	}
 
 	/**
@@ -320,7 +331,6 @@ public class MenuRegistry
 	public void syncConfig() 
 	{
 		MLConfig.registerUserMenus();
-		
 		List<IMenu> list = new ArrayList(this.registry.size());
 		
 		//sync config order

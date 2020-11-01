@@ -17,6 +17,7 @@ public class Menu implements IMenu {
 	
 	public ResourceLocation id;
 	public Class<? extends GuiScreen> guiClass;
+	public Class<? extends GuiScreen>[] guiClasses;
 	public IMusicPlayer music;
 	public int frames;
 	
@@ -39,6 +40,7 @@ public class Menu implements IMenu {
 	{
 		this.id = id;
 		this.guiClass = guiClass;
+		this.guiClasses = new Class[] {this.guiClass};
 		try
 		{
 			this.ctr = ReflectionUtil.getDefaultConstructor(this.guiClass);
@@ -58,9 +60,9 @@ public class Menu implements IMenu {
 	}
 	
 	@Override
-	public Class<? extends GuiScreen> getGuiClass() 
+	public Class<? extends GuiScreen>[] getGuiClasses() 
 	{
-		return this.guiClass;
+		return this.guiClasses;
 	}
 	
 	@Override

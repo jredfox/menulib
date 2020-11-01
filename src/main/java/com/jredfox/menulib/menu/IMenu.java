@@ -1,5 +1,6 @@
 package com.jredfox.menulib.menu;
 
+import java.util.List;
 import java.util.Set;
 
 import com.jredfox.menulib.sound.IMusicPlayer;
@@ -15,9 +16,9 @@ public interface IMenu extends IMusicPlayerHolder{
 	 */
 	public ResourceLocation getId();
 	/**
-	 * get the gui class
+	 * return a list of superclasses that extend GuiScreen that are menus for example GuiMainMenu but, not Fossils menu as it extends GuiMainMenu
 	 */
-	public Class<? extends GuiScreen> getGuiClass();
+	public Class<? extends GuiScreen>[] getGuiClasses();
 	/**
 	 * grabs current gui populated from createGui()
 	 */
