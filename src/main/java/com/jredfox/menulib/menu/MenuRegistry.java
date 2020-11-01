@@ -13,6 +13,7 @@ import com.evilnotch.lib.util.JavaUtil;
 import com.evilnotch.lib.util.line.LineArray;
 import com.jredfox.menulib.compat.menu.MenuTBL;
 import com.jredfox.menulib.event.GuiEvent;
+import com.jredfox.menulib.event.MenuRegistryEvent;
 import com.jredfox.menulib.eventhandler.GuiHandler;
 import com.jredfox.menulib.misc.GameState;
 import com.jredfox.menulib.misc.MLUtil;
@@ -35,7 +36,6 @@ public class MenuRegistry
 	public boolean isLoaded;
 	public List<IMenu> registry = new ArrayList();
 	public List<IMenu> menus = new ArrayList(0);
-	protected Map<ResourceLocation, Integer> temp = new HashMap(0);
 	public Minecraft mc = Minecraft.getMinecraft();
 	public static MenuRegistry INSTANCE = new MenuRegistry();
 	
@@ -49,13 +49,11 @@ public class MenuRegistry
 	{
 		this.remove(menu);
 		this.registry.add(index, menu);
-		this.temp.put(menu.getId(), index);
 	}
 	
 	public void remove(IMenu menu)
 	{
 		this.registry.remove(menu);
-		this.temp.remove(menu.getId());
 	}
 
 	public IMenu getMenu()
@@ -308,6 +306,7 @@ public class MenuRegistry
 	public void load()
 	{
 		long ms = System.currentTimeMillis();
+		MinecraftForge.EVENT_BUS.post(new MenuRegistryEvent());
 		this.syncConfig();
 		this.populateMenus();
 		this.setInitMenu();
@@ -347,19 +346,26 @@ public class MenuRegistry
 		{
 			if(!list.contains(m))
 			{
-				Integer index = this.temp.get(m.getId());
-				if(index != null)
-					list.add(index, m);
-				else
-					list.add(m);
+				list.add(this.getRealtiveIndex(m, list), m);
 				MLConfig.setNewMenu(m);
 				MLConfig.setDirtyOrder(true);
 			}
 		}
-		this.temp.clear();
 		this.registry = list;
 	}
 	
+	/**
+	 * guesses the best insertion order based on the left menu of the registry then gets it from a new list
+	 */
+	protected int getRealtiveIndex(IMenu m, List<IMenu> compare) 
+	{
+		int index = this.registry.indexOf(m) - 1;
+		if(index == -1)
+			return 0;
+		IMenu pair = this.registry.get(index);
+		return compare.indexOf(pair) + 1;
+	}
+
 	public void populateMenus() 
 	{
 		this.menus = new ArrayList(this.registry.size());
