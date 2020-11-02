@@ -118,7 +118,8 @@ public class GuiHandler {
 	{
 		IMenu menu = MenuRegistry.INSTANCE.getMenu();
 		System.out.println("closing IMenu and guis:" + menu);
-		menu.closeGui();
+		if(MenuRegistry.INSTANCE.isDisplaying())
+			menu.closeGui();
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		if(gui != null)
 		{
